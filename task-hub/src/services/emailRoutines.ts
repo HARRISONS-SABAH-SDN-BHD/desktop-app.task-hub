@@ -1,3 +1,7 @@
+import { validateAttachments } from "../domain/attachments";
+import { reportFiles } from "./reportFiles";
+import { localDate } from "../domain/emailRoutines";
+import { validateReportRules } from "../domain/reportRules";
 import { invoke } from "@tauri-apps/api/core";
 import { bridge } from "./bridge";
 import {
@@ -19,6 +23,13 @@ function write(routines: EmailRoutine[]) {
   localStorage.setItem(storageKey, JSON.stringify(routines));
 }
 export const emailRoutines = {
+  async retryReports(id: string, due: string): Promise<Run> {
+    if (!bridge.native)
+      throw new Error(
+        "Report completion and retry are available in the desktop app.",
+      );
+    return invoke("retry_report_email", { id, due });
+  },
   async retryCalendar(id: string): Promise<void> {
     if (bridge.native) return invoke("retry_calendar_sync", { id });
   },
@@ -40,6 +51,10 @@ export const emailRoutines = {
   },
   async save(id: string | null, settings: RoutineSettings): Promise<void> {
     validateCc(settings.cc ?? "");
+    validateReportRules(
+      settings.report_rules ?? [],
+      settings.attachments?.length ?? 0,
+    );
     if (bridge.native) return invoke("save_email_routine", { id, settings });
     const routines = read();
     const old = routines.find((r) => r.id === id);
@@ -119,8 +134,14 @@ export const emailRoutines = {
     const answers = { ...plan.parameters };
     delete answers._sender_account;
     delete answers._attachment_ids;
+    delete answers._attachment_rules;
+    const reports = await reportFiles.previewAttachments(
+      read().find((r) => r.id === plan.id)?.settings.report_rules ?? [],
+      localDate(new Date(plan.due)),
+    );
+    validateAttachments([...plan.attachments, ...reports]);
     const run = await bridge.run("foreground_email", answers, {
-      attachments: plan.attachments,
+      attachments: [...plan.attachments, ...reports],
     });
     await this.handle(plan.id, plan.due);
     return run;

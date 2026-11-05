@@ -13,8 +13,14 @@ export function AttachmentPicker({
   onChange,
   disabled = false,
   onBusyChange,
+  title = "Attachments",
+  ariaLabel = "Email attachments",
+  maxFiles = 10,
 }: {
   value: AttachmentRef[];
+  title?: string;
+  ariaLabel?: string;
+  maxFiles?: number;
   onChange?: (items: AttachmentRef[]) => void;
   disabled?: boolean;
   onBusyChange?: (pending: boolean) => void;
@@ -27,7 +33,12 @@ export function AttachmentPicker({
     setPending(true);
     onBusyChange?.(true);
     try {
-      onChange?.(mergeAttachments(value, await select()));
+      const next = mergeAttachments(value, await select());
+      if (next.length > maxFiles)
+        throw new Error(
+          `Choose at most ${maxFiles} file${maxFiles === 1 ? "" : "s"}.`,
+        );
+      onChange?.(next);
     } catch (e) {
       setError(String(e));
     } finally {
@@ -36,10 +47,10 @@ export function AttachmentPicker({
     }
   }
   return (
-    <section className="attachment-picker" aria-label="Email attachments">
+    <section className="attachment-picker" aria-label={ariaLabel}>
       <div className="attachment-heading">
         <strong>
-          <Paperclip size={16} /> Attachments
+          <Paperclip size={16} /> {title}
         </strong>
         {onChange && (
           <button
@@ -101,8 +112,9 @@ export function AttachmentPicker({
       )}
       {onChange && (
         <p className="email-explanation">
-          Up to 10 files, 18 MB combined. Task Hub stores a copy when added.
-          Replace the attachment to use newer contents.
+          Up to {maxFiles} {maxFiles === 1 ? "file" : "files"}, 18 MB combined.
+          Task Hub stores a copy when added. Replace the attachment to use newer
+          contents.
           {!bridge.native &&
             " Browser preview keeps file details only and sends nothing."}
         </p>

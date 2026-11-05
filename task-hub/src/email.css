@@ -396,3 +396,36 @@
   padding: 6px;
   cursor: pointer;
 }
+.report-rules {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.report-rules .routine-change {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+.report-path,
+.report-rules code {
+  overflow-wrap: anywhere;
+}
+.report-suggestions {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.report-suggestions button {
+  display: grid;
+  gap: 4px;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.report-suggestions small {
+  color: var(--muted);
+  font-weight: 400;
+}
+.report-rules strong,
+.report-rules p {
+  overflow-wrap: anywhere;
+}

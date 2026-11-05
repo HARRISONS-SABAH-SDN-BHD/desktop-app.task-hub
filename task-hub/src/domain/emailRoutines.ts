@@ -1,3 +1,4 @@
+import type { ReportRule } from "./reportRules";
 import type { Parameters } from "./types";
 import type { AttachmentRef } from "./attachments";
 
@@ -15,6 +16,7 @@ export interface CalendarLink {
   error: string | null;
 }
 export interface RoutineSettings {
+  report_rules?: ReportRule[];
   calendar?: { enabled: boolean; reminder_minutes: number } | null;
   cc?: string;
   name: string;
@@ -51,6 +53,7 @@ export function localDate(date = new Date()): string {
 export function newRoutine(): RoutineSettings {
   return {
     name: "",
+    report_rules: [],
     calendar: { enabled: false, reminder_minutes: 1440 },
     recipient: "",
     cc: "",
@@ -143,6 +146,7 @@ export function previewRoutine(routine: EmailRoutine): RoutinePreview {
       message: renderTemplate(settings.message, due),
       delivery: settings.auto_send ? "Send directly" : "Draft",
       _sender_account: settings.sender_account ?? "",
+      _attachment_rules: JSON.stringify(settings.report_rules ?? []),
       _attachment_ids: (settings.attachments ?? []).map((a) => a.id).join(","),
     },
     recipient_note: active

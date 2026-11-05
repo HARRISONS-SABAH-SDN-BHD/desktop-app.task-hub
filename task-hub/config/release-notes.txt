@@ -1,0 +1,7 @@
+Current report attachments:
+- Suggest filename patterns from files in a selected folder.
+- Resolve the scheduled date/month's current file at execution time.
+- Detect missing, ambiguous, oversized and unchanged reports before sending.
+- Create missing reports from an optional user-provided template without overwriting existing files.
+- Keep generated reports blocked until completed, saved and explicitly retried.
+Existing fixed attachments, CC, Gmail delivery, schedules, tray operation and Google Calendar sync remain available.

@@ -83,7 +83,7 @@ fn bounded_read(path: &Path, limit: u64) -> Result<Vec<u8>> {
     }
     Ok(bytes)
 }
-fn stage(state: &AppState, paths: &[PathBuf]) -> Result<Vec<AttachmentRef>> {
+pub(crate) fn stage(state: &AppState, paths: &[PathBuf]) -> Result<Vec<AttachmentRef>> {
     if paths.len() > MAX_FILES {
         return Err("Select at most 10 files at a time".into());
     }

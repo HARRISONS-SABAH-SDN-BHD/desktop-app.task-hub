@@ -10,6 +10,12 @@ import {
   type RoutineSettings,
 } from "../domain/emailRoutines";
 import { emailRoutines } from "../services/emailRoutines";
+import { ReportRules } from "./ReportRules";
+import {
+  REPORT_ISSUE_PREFIX,
+  validateReportRules,
+} from "../domain/reportRules";
+import type { Run } from "../domain/types";
 import { AttachmentPicker } from "./AttachmentPicker";
 import { validateAttachments } from "../domain/attachments";
 
@@ -17,6 +23,8 @@ const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const stamp = (value: string) => new Date(value).toLocaleString();
 export function EmailRoutines({
   routines,
+  runs = [],
+  onRetry,
   calendarLinks = [],
   busy,
   native,
@@ -25,6 +33,8 @@ export function EmailRoutines({
   onRun,
 }: {
   routines: EmailRoutine[];
+  runs?: Run[];
+  onRetry: (id: string, due: string) => Promise<void>;
   calendarLinks?: CalendarLink[];
   busy: boolean;
   native: boolean;
@@ -165,6 +175,9 @@ export function EmailRoutines({
             <dd className="email-message">{plan.parameters.message}</dd>
           </dl>
           <AttachmentPicker value={plan.attachments ?? []} />
+          {!!current?.settings.report_rules?.length && (
+            <ReportRules value={current.settings.report_rules} />
+          )}
           {current?.attempt ? (
             <p className="notice">
               This occurrence was already attempted. Check Email history and
@@ -231,6 +244,12 @@ export function EmailRoutines({
                 !!routine.next_due &&
                 Date.now() - new Date(routine.next_due).getTime() > 300_000;
               const change = settings.recipient_change;
+              const attachmentFailure = runs.find(
+                (run) =>
+                  run.id === routine.attempt &&
+                  run.status === "failed" &&
+                  run.error?.startsWith(REPORT_ISSUE_PREFIX),
+              );
               const calendarLink = calendarLinks.find(
                 (link) =>
                   link.routine_id === routine.id &&
@@ -330,6 +349,14 @@ export function EmailRoutines({
                       . {change.note}
                     </p>
                   )}
+                  {!!settings.report_rules?.length && (
+                    <ReportRules value={settings.report_rules} />
+                  )}
+                  {attachmentFailure && (
+                    <p className="error" role="alert">
+                      {attachmentFailure.error}
+                    </p>
+                  )}
                   {routine.attempt && (
                     <p className="error">
                       An attempt is recorded. Inspect history and Gmail Drafts /
@@ -358,6 +385,18 @@ export function EmailRoutines({
                         {native ? "Prepare draft" : "Preview routine only"}
                       </button>
                     )}
+                    {attachmentFailure && routine.next_due && (
+                      <button
+                        className="primary"
+                        disabled={locked || !settings.enabled}
+                        onClick={() =>
+                          void act(() => onRetry(routine.id, routine.next_due!))
+                        }
+                      >
+                        Report ready — retry{" "}
+                        {settings.auto_send ? "sending" : "draft"}
+                      </button>
+                    )}
                     {routine.next_due && (
                       <button
                         className="secondary"
@@ -369,7 +408,9 @@ export function EmailRoutines({
                     )}
                     <button
                       className="secondary"
-                      disabled={locked || !!routine.attempt}
+                      disabled={
+                        locked || (!!routine.attempt && !attachmentFailure)
+                      }
                       onClick={() => edit(routine)}
                     >
                       Edit routine / recipient
@@ -437,6 +478,7 @@ function RoutineForm({
 }) {
   const [settings, setSettings] = useState(() => ({
     ...initial,
+    report_rules: initial.report_rules ?? [],
     calendar: initial.calendar ?? { enabled: false, reminder_minutes: 1440 },
     cc: initial.cc ?? "",
     attachments: initial.attachments ?? [],
@@ -474,6 +516,7 @@ function RoutineForm({
     try {
       validateCc(settings.cc);
       validateAttachments(settings.attachments);
+      validateReportRules(settings.report_rules, settings.attachments.length);
     } catch (e) {
       setError(String(e));
       return;
@@ -543,6 +586,12 @@ function RoutineForm({
           />
           <small>Separate multiple email addresses with commas.</small>
         </label>
+        <ReportRules
+          value={settings.report_rules}
+          onChange={(rules) => update("report_rules", rules)}
+          disabled={locked || attachmentBusy}
+          onBusyChange={setAttachmentBusy}
+        />
         <label>
           Subject template
           <input
@@ -563,6 +612,7 @@ function RoutineForm({
           />
         </label>
         <AttachmentPicker
+          title="Fixed attachments (same saved copy every run)"
           value={settings.attachments}
           onChange={(items) => update("attachments", items)}
           onBusyChange={setAttachmentBusy}
