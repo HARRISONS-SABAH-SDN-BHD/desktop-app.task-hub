@@ -1,5 +1,6 @@
 import {
   copyFileSync,
+  existsSync,
   mkdirSync,
   readFileSync,
   readdirSync,
@@ -72,7 +73,8 @@ export function prepareRelease({
   const source = join(input, files[0]);
   const signature = readFileSync(`${source}.sig`, "utf8").trim();
   const assetName = `TaskHub-${pkg.version}-windows-x64-setup.exe`;
-  const notes = `Task Hub ${pkg.version}\nSigned automatic updates. Existing routines, email delivery, attachments and Google Calendar sync are preserved. Save your work before installing an update.`;
+  const notesFile = new URL("../config/release-notes.txt", import.meta.url);
+  const notes = `Task Hub ${pkg.version}\n${existsSync(notesFile) ? readFileSync(notesFile, "utf8").trim() : "Signed automatic updates. Save your work before installing an update."}`;
   const manifest = releaseManifest({
     version: pkg.version,
     signature,
@@ -113,7 +115,10 @@ if (
       process.env.CARGO_TARGET_DIR ?? "src-tauri/target",
       "release/bundle/nsis",
     );
-  const output = resolve(process.argv[3] ?? "release");
+  const output = resolve(
+    process.argv[3] ??
+      `release/${JSON.parse(readFileSync(new URL("../package.json", import.meta.url))).version}`,
+  );
   try {
     console.log(JSON.stringify(prepareRelease({ input, output })));
   } catch (e) {

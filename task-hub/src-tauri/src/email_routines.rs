@@ -17,6 +17,8 @@ pub struct CalendarSettings {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct RoutineSettings {
     #[serde(default)]
+    pub report_rules: Vec<crate::attachment_rules::ReportRule>,
+    #[serde(default)]
     pub calendar: Option<CalendarSettings>,
     #[serde(default)]
     pub cc: String,
@@ -228,6 +230,7 @@ pub(crate) fn next_due(
 pub fn save(state: &AppState, id: Option<String>, settings: RoutineSettings) -> Result<()> {
     validate(&settings)?;
     crate::attachments::load(state, &settings.attachments)?;
+    crate::attachment_rules::validate(state, &settings.report_rules, settings.attachments.len())?;
     state.transaction(|store| {
         if let Some(id) = id.as_ref() {
             for link in store
@@ -241,19 +244,39 @@ pub fn save(state: &AppState, id: Option<String>, settings: RoutineSettings) -> 
             }
         }
         if let Some(id) = id {
+            let report_failure = store
+                .email_routines
+                .iter()
+                .find(|r| r.id == id)
+                .and_then(|r| r.attempt.as_ref())
+                .is_some_and(|attempt| {
+                    store.runs.iter().any(|r| {
+                        r.id == *attempt
+                            && r.status == "failed"
+                            && r.error.as_deref().is_some_and(|e| {
+                                e.starts_with(crate::attachment_rules::ISSUE_PREFIX)
+                            })
+                    })
+                });
             let routine = store
                 .email_routines
                 .iter_mut()
                 .find(|r| r.id == id)
                 .ok_or("Routine not found")?;
             // Do not erase an attempted occurrence or silently resend after edits.
-            if routine.attempt.is_some() {
+            if routine.attempt.is_some() && !report_failure {
                 return Err("Handle the existing attempt before editing this routine".into());
             }
             let schedule_changed = routine.settings.start_date != settings.start_date
                 || routine.settings.time != settings.time
                 || routine.settings.repeat != settings.repeat
                 || routine.settings.weekdays != settings.weekdays;
+            if report_failure && (schedule_changed || routine.settings.auto_send != settings.auto_send) {
+                return Err(
+                    "Retry or handle this attachment-only failure before changing its schedule or delivery mode."
+                        .into(),
+                );
+            }
             if schedule_changed || (!routine.settings.auto_send && settings.auto_send) {
                 routine.next_due = next_due(&settings, None)?;
                 if settings.auto_send {
@@ -337,6 +360,7 @@ fn preview(routine: &EmailRoutine) -> Result<RoutinePreview> {
         "recipient": recipient, "cc": routine.settings.cc, "subject": render(&routine.settings.subject, day)?,
         "message": render(&routine.settings.message, day)?, "delivery": if routine.settings.auto_send { "Send directly" } else { "Draft" },
         "_sender_account": routine.settings.sender_account.as_deref().unwrap_or_default(),
+        "_attachment_rules": serde_json::to_string(&routine.settings.report_rules).map_err(|_|"Invalid report rules")?,
         "_attachment_ids": routine.settings.attachments.iter().map(|a| a.id.as_str()).collect::<Vec<_>>().join(",")
     }))
     .map_err(|e| e.to_string())?;
@@ -359,12 +383,53 @@ pub fn get_preview(state: &AppState, id: &str) -> Result<RoutinePreview> {
     )
 }
 pub fn run(state: &AppState, id: &str, due: &str, expected: Parameters) -> Result<Run> {
-    let (task, run, direct) = claim(state, id, due, expected, false, Utc::now())?;
+    let (task, run, direct) = claim(state, id, due, expected, false, Utc::now(), None)?;
     let outcome = crate::gmail::execute(state, task, run, direct)?;
     if outcome.status == "succeeded" {
         handle(state, id, due)?;
     }
     Ok(outcome)
+}
+pub fn retry_reports(state: &AppState, id: &str, due: &str) -> Result<Run> {
+    let (attempt, settings, plan) = {
+        let store = state.lock()?;
+        let routine = store
+            .email_routines
+            .iter()
+            .find(|r| r.id == id)
+            .ok_or("Routine not found")?;
+        let attempt = routine
+            .attempt
+            .clone()
+            .ok_or("No failed report attachment attempt exists")?;
+        if routine.next_due.as_deref() != Some(due)
+            || !store.runs.iter().any(|r| {
+                r.id == attempt
+                    && r.status == "failed"
+                    && r.error
+                        .as_deref()
+                        .is_some_and(|e| e.starts_with(crate::attachment_rules::ISSUE_PREFIX))
+            })
+        {
+            return Err("This is not an attachment-only failure. Inspect history and Gmail before handling it.".into());
+        }
+        (attempt, routine.settings.clone(), preview(routine)?)
+    };
+    crate::attachment_rules::confirm_completed(state, &settings.report_rules, due)?;
+    let (task, run, direct) = claim(
+        state,
+        id,
+        due,
+        plan.parameters,
+        settings.auto_send,
+        Utc::now(),
+        Some(&attempt),
+    )?;
+    let result = crate::gmail::execute(state, task, run, direct)?;
+    if result.status == "succeeded" {
+        handle(state, id, due)?;
+    }
+    Ok(result)
 }
 fn claim(
     state: &AppState,
@@ -373,6 +438,7 @@ fn claim(
     expected: Parameters,
     automatic: bool,
     now: DateTime<Utc>,
+    retry_run: Option<&str>,
 ) -> Result<(Task, Run, bool)> {
     // Claim occurrence and run together before any visible input. A failed or
     // uncertain attempt stays blocked until the user explicitly handles it.
@@ -382,11 +448,13 @@ fn claim(
             .iter()
             .find(|r| r.id == id)
             .ok_or("Routine not found")?;
-        if !routine.settings.enabled || routine.attempt.is_some() {
+        let report_retry = retry_run.is_some_and(|id| routine.attempt.as_deref()==Some(id) && store.runs.iter().any(|r|r.id==id && r.parameters.get("_attachment_due").and_then(|v|v.as_str())==Some(due) && r.status=="failed" && r.error.as_deref().is_some_and(|e|e.starts_with(crate::attachment_rules::ISSUE_PREFIX))));
+        if retry_run.is_some() && !report_retry { return Err("Only attachment preparation failures can be retried here. Inspect Gmail and history for other failures.".into()); }
+        if !routine.settings.enabled || (routine.attempt.is_some() && !report_retry) {
             return Err("Routine is paused or this occurrence has already been attempted".into());
         }
         if routine.settings.auto_send != automatic { return Err("Automatic routines run only from their saved schedule. Turn off automatic sending to prepare a draft manually.".into()); }
-        if automatic && !automatic_eligible(routine, now) { return Err("The automatic send window has expired. Reschedule this occurrence; it was not sent.".into()); }
+        if automatic && !report_retry && !automatic_eligible(routine, now) { return Err("The automatic send window has expired. Reschedule this occurrence; it was not sent.".into()); }
         let plan = preview(routine)?;
         if plan.due != due || plan.parameters != expected {
             return Err("Routine changed. Open its preview again before starting".into());
@@ -403,6 +471,7 @@ fn claim(
         let mut inputs = plan.parameters.clone();
         inputs.remove("_sender_account");
         inputs.remove("_attachment_ids");
+        inputs.remove("_attachment_rules");
         let mut validated = inputs.clone();
         validated.insert("delivery".into(), serde_json::json!("Draft"));
         email_profile::validate_request(state, "foreground_email", &validated)?;
@@ -418,6 +487,9 @@ fn claim(
         }
         let mut run = runner::prepare(&task, &inputs)?;
         run.parameters.insert("_attachments".into(), serde_json::json!(serde_json::to_string(&routine.settings.attachments).map_err(|_| "Invalid attachments")?));
+        run.parameters.insert("_attachment_rules".into(), serde_json::json!(serde_json::to_string(&routine.settings.report_rules).map_err(|_|"Invalid report rules")?));
+        run.parameters.insert("_attachment_due".into(), serde_json::json!(due));
+        run.parameters.insert("_routine_id".into(), serde_json::json!(routine.id));
         let sender = routine.settings.sender_account.as_deref().ok_or("Connect Gmail, then edit and save this routine with its sender account")?;
         run.parameters.insert("_sender_account".into(), serde_json::json!(sender));
         if automatic { run.logs.push("Automatic sending was enabled in the saved routine. This occurrence is claimed before any browser input; failed or uncertain sends are never retried automatically.".into()); }
@@ -476,7 +548,7 @@ fn automatic_tick_with(
     let Some(plan) = plan else {
         return Ok(None);
     };
-    let (task, run, direct) = claim(state, &plan.id, &plan.due, plan.parameters, true, now)?;
+    let (task, run, direct) = claim(state, &plan.id, &plan.due, plan.parameters, true, now, None)?;
     let outcome = execute(state, task, run, direct)?;
     if outcome.status == "succeeded" {
         handle(state, &plan.id, &plan.due)?;
@@ -733,11 +805,17 @@ mod tests {
         let mut changed = original.settings.clone();
         changed.sender_account = Some("different@example.com".into());
         save(&state, Some(original.id.clone()), changed).unwrap();
-        assert!(
-            claim(&state, &plan.id, &plan.due, plan.parameters, true, now)
-                .unwrap_err()
-                .contains("Routine changed")
-        );
+        assert!(claim(
+            &state,
+            &plan.id,
+            &plan.due,
+            plan.parameters,
+            true,
+            now,
+            None
+        )
+        .unwrap_err()
+        .contains("Routine changed"));
         state
             .transaction(|store| {
                 store.email_routines[0].settings.sender_account = None;
@@ -761,8 +839,135 @@ mod tests {
         old.cc = "invalid".into();
         assert!(validate(&old).is_err());
     }
+    #[test]
+    fn only_pre_send_report_failures_can_be_retried_and_each_explicit_retry_claims_once() {
+        let (_dir, state, now) = setup_due_automatic();
+        let plan = {
+            let store = state.lock().unwrap();
+            preview(&store.email_routines[0]).unwrap()
+        };
+        let (_, mut run, _) = claim(
+            &state,
+            &plan.id,
+            &plan.due,
+            plan.parameters.clone(),
+            true,
+            now,
+            None,
+        )
+        .unwrap();
+        run.status = "failed".into();
+        run.error = Some("Gmail request outcome is uncertain".into());
+        state
+            .transaction(|store| {
+                *store.runs.iter_mut().find(|r| r.id == run.id).unwrap() = run.clone();
+                Ok(())
+            })
+            .unwrap();
+        assert!(claim(
+            &state,
+            &plan.id,
+            &plan.due,
+            plan.parameters.clone(),
+            true,
+            now,
+            Some(&run.id)
+        )
+        .is_err());
+        run.error = Some(format!(
+            "{}Report missing",
+            crate::attachment_rules::ISSUE_PREFIX
+        ));
+        state
+            .transaction(|store| {
+                *store.runs.iter_mut().find(|r| r.id == run.id).unwrap() = run.clone();
+                Ok(())
+            })
+            .unwrap();
+        // Even after the normal automatic grace expires, an explicit report retry
+        // is allowed: the previous failure is proven to be before any send.
+        let future = now + chrono::Duration::days(1);
+        let (_, retry, direct) = claim(
+            &state,
+            &plan.id,
+            &plan.due,
+            plan.parameters.clone(),
+            true,
+            future,
+            Some(&run.id),
+        )
+        .unwrap();
+        assert!(direct);
+        assert_ne!(retry.id, run.id);
+        assert!(claim(
+            &state,
+            &plan.id,
+            &plan.due,
+            plan.parameters,
+            true,
+            future,
+            Some(&run.id)
+        )
+        .is_err());
+    }
+    #[test]
+    fn generated_report_blocks_the_occurrence_and_is_not_retried_automatically() {
+        let (dir, state, now) = setup_due_automatic();
+        let folder = dir.path().join("reports");
+        std::fs::create_dir(&folder).unwrap();
+        let template = dir.path().join("blank.txt");
+        std::fs::write(&template, b"Fill in actual monthly figures").unwrap();
+        let template = crate::attachments::stage(&state, &[template])
+            .unwrap()
+            .remove(0);
+        let rule = crate::attachment_rules::ReportRule {
+            id: uuid::Uuid::new_v4().to_string(),
+            folder: crate::attachment_sources::register(&state, &folder).unwrap(),
+            pattern: "current-report.txt".into(),
+            previous_month: false,
+            template: Some(template),
+            require_changed: true,
+        };
+        state
+            .transaction(|store| {
+                store.email_routines[0].settings.report_rules = vec![rule];
+                Ok(())
+            })
+            .unwrap();
+        let result = automatic_tick_with(&state, true, now, |state, task, run, _| {
+            let error =
+                crate::attachment_rules::from_run(state, &run, crate::attachments::MAX_BYTES)
+                    .err()
+                    .unwrap();
+            runner::record_result(state, &task, run, Err(error))
+        })
+        .unwrap()
+        .unwrap();
+        assert_eq!(result.status, "failed");
+        assert!(result
+            .error
+            .unwrap()
+            .starts_with(crate::attachment_rules::ISSUE_PREFIX));
+        assert!(folder.join("current-report.txt").is_file());
+        assert!(automatic_tick_with(&state, true, now, |_, _, _, _| panic!(
+            "A pending report must never auto-retry"
+        ))
+        .unwrap()
+        .is_none());
+        let routine = state.lock().unwrap().email_routines[0].clone();
+        let mut updated = routine.settings.clone();
+        updated.report_rules[0].require_changed = false;
+        save(&state, Some(routine.id.clone()), updated.clone()).unwrap();
+        assert_eq!(
+            state.lock().unwrap().email_routines[0].attempt,
+            routine.attempt
+        );
+        updated.auto_send = false;
+        assert!(save(&state, Some(routine.id), updated).is_err());
+    }
     fn settings() -> RoutineSettings {
         RoutineSettings {
+            report_rules: Vec::new(),
             calendar: None,
             cc: String::new(),
             name: "Report".into(),

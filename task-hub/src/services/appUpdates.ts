@@ -1,3 +1,4 @@
+import { version } from "../../package.json";
 import { invoke } from "@tauri-apps/api/core";
 import { bridge } from "./bridge";
 export interface UpdateStatus {
@@ -15,7 +16,7 @@ export const appUpdates = {
       ? invoke("update_status")
       : {
           enabled: false,
-          current_version: "0.3.0",
+          current_version: version,
           phase: "idle",
           available_version: null,
           notes: null,

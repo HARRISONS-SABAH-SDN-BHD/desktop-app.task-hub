@@ -120,6 +120,17 @@ export default function App() {
       setBusy(false);
     }
   }
+  async function retryReports(id: string, due: string) {
+    setBusy(true);
+    try {
+      const outcome = await emailRoutines.retryReports(id, due);
+      setResult(outcome);
+      setSnapshot(await bridge.snapshot());
+      await refreshRoutines();
+    } finally {
+      setBusy(false);
+    }
+  }
   return (
     <div className="app-shell">
       <aside className="sidebar">
@@ -275,6 +286,8 @@ export default function App() {
             ) : page === "routines" ? (
               <EmailRoutines
                 routines={routines}
+                runs={snapshot.runs}
+                onRetry={retryReports}
                 calendarLinks={snapshot.calendar_links ?? []}
                 busy={busy}
                 senderEmail={gmailStatus.email}

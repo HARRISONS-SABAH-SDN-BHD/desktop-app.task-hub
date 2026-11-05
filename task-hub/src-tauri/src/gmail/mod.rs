@@ -95,7 +95,7 @@ fn check_sender(actual: &str, expected: &str) -> Result<()> {
     }
     Ok(())
 }
-fn deliver(state: &AppState, run: &Run, direct: bool) -> Result<(String, Vec<String>)> {
+fn deliver(state: &AppState, run: &mut Run, direct: bool) -> Result<(String, Vec<String>)> {
     let _operation = OPERATION
         .try_lock()
         .map_err(|_| "Another Gmail operation is in progress; no email request was made")?;
@@ -115,7 +115,30 @@ fn deliver(state: &AppState, run: &Run, direct: bool) -> Result<(String, Vec<Str
         "Send directly" if direct => true, // Saved routine's claimed authorization.
         _ => return Err("Email sending is not authorized for this invocation".into()),
     };
-    let attachments = crate::attachments::from_parameters(state, &run.parameters)?;
+    let mut attachments = crate::attachments::from_parameters(state, &run.parameters)?;
+    let fixed_bytes = attachments
+        .iter()
+        .map(|f| f.bytes.len() as u64)
+        .sum::<u64>();
+    let reports =
+        crate::attachment_rules::from_run(state, run, crate::attachments::MAX_BYTES - fixed_bytes)?;
+    let report_receipts = reports.receipts;
+    attachments.extend(reports.files);
+    if attachments.len() > crate::attachments::MAX_FILES {
+        return Err(format!(
+            "{}Use at most 10 attachments",
+            crate::attachment_rules::ISSUE_PREFIX
+        ));
+    }
+    if !report_receipts.is_empty() {
+        let mut names = std::collections::BTreeSet::new();
+        if attachments
+            .iter()
+            .any(|a| !names.insert(a.name.to_lowercase()))
+        {
+            return Err(format!("{}Two attachments have the same filename. Remove the duplicate fixed file or report rule.",crate::attachment_rules::ISSUE_PREFIX));
+        }
+    }
     let raw = transport::mime(
         &credential.email,
         text("recipient")?,
@@ -128,6 +151,22 @@ fn deliver(state: &AppState, run: &Run, direct: bool) -> Result<(String, Vec<Str
         &run.id,
         &attachments,
     )?;
+    if !report_receipts.is_empty() {
+        run.parameters.insert(
+            "_resolved_reports".into(),
+            serde_json::json!(serde_json::to_string(&report_receipts)
+                .map_err(|_| "Could not record report attachments")?),
+        );
+        state.transaction(|store| {
+            let current = store
+                .runs
+                .iter_mut()
+                .find(|r| r.id == run.id)
+                .ok_or("Email run not found")?;
+            current.parameters = run.parameters.clone();
+            Ok(())
+        })?;
+    }
     let client = transport::client()?;
     let token = oauth::access_token(&client, &mut credential)?;
     let id = transport::deliver(&client, "https://gmail.googleapis.com", &token, &raw, send)?;
@@ -156,8 +195,8 @@ fn deliver(state: &AppState, run: &Run, direct: bool) -> Result<(String, Vec<Str
     atomic_write(&receipt, logs.join("\n").as_bytes()).map_err(|_| "Gmail accepted the request, but Task Hub could not write its receipt. Inspect Gmail before retrying; no retry was attempted.")?;
     Ok((receipt.to_string_lossy().into_owned(), logs))
 }
-pub fn execute(state: &AppState, task: Task, run: Run, direct: bool) -> Result<Run> {
-    let outcome = deliver(state, &run, direct);
+pub fn execute(state: &AppState, task: Task, mut run: Run, direct: bool) -> Result<Run> {
+    let outcome = deliver(state, &mut run, direct);
     runner::record_result(state, &task, run, outcome)
 }
 pub fn manual(
