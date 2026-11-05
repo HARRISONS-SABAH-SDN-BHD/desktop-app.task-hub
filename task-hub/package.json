@@ -1,0 +1,46 @@
+{
+  "name": "task-hub",
+  "private": true,
+  "version": "0.3.0",
+  "type": "module",
+  "scripts": {
+    "schema:generate": "node scripts/generate-validator.mjs",
+    "prebuild": "npm run schema:generate",
+    "pretest": "npm run schema:generate",
+    "format": "prettier --write src config tests scripts *.json *.ts *.html .github",
+    "dev": "vite --configLoader runner --host 127.0.0.1 --port 1420 --strictPort",
+    "typecheck": "tsc --noEmit",
+    "build": "npm run typecheck && vite build --configLoader runner",
+    "preview": "vite preview --configLoader runner --host 127.0.0.1",
+    "test": "vitest run --configLoader runner",
+    "test:ui": "npm run build && playwright test",
+    "tauri": "tauri",
+    "desktop": "tauri dev",
+    "desktop:build": "tauri build",
+    "check": "npm run test && npm run test:release && npm run build",
+    "release:prepare": "node scripts/prepare-release.mjs",
+    "release:build": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+    "test:release": "node --test tests/release.test.mjs"
+  },
+  "dependencies": {
+    "@fontsource/dm-sans": "^5.3.0",
+    "@fontsource/manrope": "^5.3.0",
+    "@tauri-apps/api": "^2.8.0",
+    "ajv": "^8.17.1",
+    "lucide-react": "^0.468.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.51.0",
+    "@tauri-apps/cli": "^2.8.0",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "prettier": "^3.9.10",
+    "typescript": "~5.7.3",
+    "vite": "^6.1.0",
+    "vitest": "^3.0.5"
+  }
+}

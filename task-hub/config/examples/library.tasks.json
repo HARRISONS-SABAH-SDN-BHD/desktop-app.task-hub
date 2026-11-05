@@ -1,0 +1,440 @@
+{
+  "schema_version": 1,
+  "tasks": [
+    {
+      "id": "draft_email",
+      "title": "Draft an email",
+      "description": "Turn a repeat message into a ready-to-review email draft.",
+      "category": "Communication",
+      "icon": "mail",
+      "steps": [
+        {
+          "id": "recipient",
+          "type": "email",
+          "prompt": "Who is this for?",
+          "description": "Enter one recipient. Open the draft in your email app to review and send.",
+          "placeholder": "teammate@example.com"
+        },
+        {
+          "id": "subject",
+          "type": "text",
+          "prompt": "What's the subject?",
+          "placeholder": "Weekly project update"
+        },
+        {
+          "id": "message",
+          "type": "textarea",
+          "prompt": "Write your message",
+          "placeholder": "Hi team,\n\nHere's our update for the week…"
+        }
+      ],
+      "action": {
+        "type": "export",
+        "format": "eml",
+        "fields": {
+          "recipient": "{recipient}",
+          "title": "{subject}",
+          "body": "{message}"
+        }
+      }
+    },
+    {
+      "id": "calendar_event",
+      "title": "Plan a calendar event",
+      "description": "Prepare a meeting you can import into Outlook or Google Calendar.",
+      "category": "Planning",
+      "icon": "calendar",
+      "steps": [
+        {
+          "id": "title",
+          "type": "text",
+          "prompt": "Name your event",
+          "placeholder": "Project check-in"
+        },
+        {
+          "id": "start",
+          "type": "datetime",
+          "prompt": "When does it start?",
+          "description": "Times use this computer's local timezone and are saved as UTC."
+        },
+        {
+          "id": "end",
+          "type": "datetime",
+          "prompt": "When does it end?"
+        },
+        {
+          "id": "location",
+          "type": "text",
+          "prompt": "Where is it happening?",
+          "required": false,
+          "placeholder": "Meeting room or video link"
+        },
+        {
+          "id": "notes",
+          "type": "textarea",
+          "prompt": "Add an agenda",
+          "required": false,
+          "placeholder": "Topics to discuss…"
+        }
+      ],
+      "action": {
+        "type": "export",
+        "format": "ics",
+        "fields": {
+          "title": "{title}",
+          "start": "{start}",
+          "end": "{end}",
+          "location": "{location}",
+          "body": "{notes}"
+        }
+      }
+    },
+    {
+      "id": "word_report",
+      "title": "Create a Word report",
+      "description": "Put your notes into a clean, editable Microsoft Word document.",
+      "category": "Documents",
+      "icon": "document",
+      "steps": [
+        {
+          "id": "title",
+          "type": "text",
+          "prompt": "Give your report a title",
+          "placeholder": "Monthly operations report"
+        },
+        {
+          "id": "section",
+          "type": "select",
+          "prompt": "What kind of report?",
+          "options": ["Progress update", "Meeting summary", "Project review"],
+          "allow_other": true
+        },
+        {
+          "id": "content",
+          "type": "textarea",
+          "prompt": "Add your report content",
+          "description": "Each new line becomes a paragraph. This starter formats your content; it doesn't generate it with AI.",
+          "placeholder": "Executive summary\n\nKey achievements\n…"
+        }
+      ],
+      "action": {
+        "type": "export",
+        "format": "docx",
+        "fields": {
+          "title": "{title}",
+          "body": "{section}\n\n{content}"
+        }
+      }
+    },
+    {
+      "id": "excel_workbook",
+      "title": "Build an Excel workbook",
+      "description": "Transform CSV data into an organized, editable spreadsheet.",
+      "category": "Documents",
+      "icon": "sheet",
+      "steps": [
+        {
+          "id": "title",
+          "type": "text",
+          "prompt": "Name your workbook",
+          "placeholder": "Weekly performance"
+        },
+        {
+          "id": "data",
+          "type": "textarea",
+          "prompt": "Paste your CSV data",
+          "description": "Include a header row. Quoted fields and commas are supported. Values are stored as text to prevent formula injection.",
+          "default": "Metric,Value,Owner\nTasks completed,24,Operations\nHours saved,8,Team"
+        }
+      ],
+      "action": {
+        "type": "export",
+        "format": "xlsx",
+        "fields": {
+          "title": "{title}",
+          "body": "{data}"
+        }
+      }
+    },
+    {
+      "id": "presentation",
+      "title": "Make a presentation",
+      "description": "Create a PowerPoint deck, ready to edit or import into Google Slides.",
+      "category": "Documents",
+      "icon": "slides",
+      "steps": [
+        {
+          "id": "title",
+          "type": "text",
+          "prompt": "What's your presentation called?",
+          "placeholder": "Quarterly business review"
+        },
+        {
+          "id": "slides",
+          "type": "textarea",
+          "prompt": "Outline your slides",
+          "description": "Separate slides with a line containing ---. The first line of each section is its heading.",
+          "default": "Overview\nWhat we set out to do\nOur key priorities\n---\nResults\nWhat we achieved\nWhat we learned\n---\nNext steps\nActions and owners\nUpcoming milestones"
+        }
+      ],
+      "action": {
+        "type": "export",
+        "format": "pptx",
+        "fields": {
+          "title": "{title}",
+          "body": "{slides}"
+        }
+      }
+    },
+    {
+      "id": "reminder",
+      "title": "Set a reminder",
+      "description": "Create a calendar reminder with an alert before it's due.",
+      "category": "Planning",
+      "icon": "bell",
+      "steps": [
+        {
+          "id": "title",
+          "type": "text",
+          "prompt": "What do you want to remember?",
+          "placeholder": "Submit the monthly report"
+        },
+        {
+          "id": "when",
+          "type": "datetime",
+          "prompt": "When is it due?"
+        },
+        {
+          "id": "minutes",
+          "type": "select",
+          "prompt": "When should the alert appear?",
+          "options": ["5", "15", "30", "60"],
+          "default": "15",
+          "description": "Minutes before the due time. Import the file into your calendar to activate the alert."
+        }
+      ],
+      "action": {
+        "type": "export",
+        "format": "ics",
+        "fields": {
+          "title": "{title}",
+          "start": "{when}",
+          "minutes": "{minutes}",
+          "body": "Reminder created with Task Hub"
+        }
+      }
+    },
+    {
+      "id": "send_email",
+      "title": "Send an email",
+      "description": "Send a repeat message through your configured SMTP account.",
+      "category": "Communication",
+      "icon": "mail",
+      "steps": [
+        {
+          "id": "recipient",
+          "type": "email",
+          "prompt": "Who should receive it?",
+          "description": "Requires SMTP environment settings. Running this workflow sends a real email.",
+          "placeholder": "teammate@example.com"
+        },
+        {
+          "id": "subject",
+          "type": "text",
+          "prompt": "What's the subject?",
+          "placeholder": "Weekly project update"
+        },
+        {
+          "id": "message",
+          "type": "textarea",
+          "prompt": "Write your message",
+          "placeholder": "Hi team,\n\nHere's our update…"
+        }
+      ],
+      "action": {
+        "type": "smtp",
+        "fields": {
+          "recipient": "{recipient}",
+          "title": "{subject}",
+          "body": "{message}"
+        }
+      }
+    },
+    {
+      "id": "system_snapshot",
+      "title": "Capture a system snapshot",
+      "description": "Run a registered local script and save basic system diagnostics.",
+      "category": "Utilities",
+      "icon": "terminal",
+      "steps": [
+        {
+          "id": "sections",
+          "type": "multi_select",
+          "prompt": "What should we include?",
+          "options": ["Operating system", "Runtime", "Working directory"],
+          "default": ["Operating system", "Runtime"]
+        },
+        {
+          "id": "label",
+          "type": "text",
+          "prompt": "Add a label",
+          "default": "System snapshot",
+          "description": "Passed to the script as JSON data, never as executable shell text."
+        }
+      ],
+      "action": {
+        "type": "script",
+        "script_id": "system-info"
+      }
+    },
+    {
+      "id": "foreground_email",
+      "title": "Use Gmail or Outlook",
+      "description": "Open your mailbox, click Compose, and visibly type a draft or send after your review.",
+      "category": "Foreground",
+      "icon": "mail",
+      "steps": [
+        {
+          "id": "provider",
+          "type": "select",
+          "prompt": "Which mailbox should we open?",
+          "options": ["Gmail", "Outlook personal", "Outlook work"],
+          "default": "Gmail",
+          "description": "Uses your chosen browser. Sign in manually before running; English UI is required."
+        },
+        {
+          "id": "browser",
+          "type": "select",
+          "prompt": "Which browser has your signed-in mailbox?",
+          "options": ["Microsoft Edge", "Google Chrome", "Mozilla Firefox"],
+          "default": "Microsoft Edge",
+          "description": "Uses the normal browser session. Sign in and finish browser setup manually before running."
+        },
+        {
+          "id": "recipient",
+          "type": "email",
+          "prompt": "Who should receive it?",
+          "placeholder": "teammate@example.com"
+        },
+        {
+          "id": "subject",
+          "type": "text",
+          "prompt": "What's the subject?",
+          "placeholder": "Weekly project update"
+        },
+        {
+          "id": "message",
+          "type": "textarea",
+          "prompt": "Write your message",
+          "description": "This content will be typed into the visible compose window."
+        },
+        {
+          "id": "delivery",
+          "type": "select",
+          "prompt": "Leave a draft or send it?",
+          "options": ["Draft", "Send after review", "Send directly"],
+          "default": "Draft",
+          "description": "Draft leaves the compose window open. Send after review pauses after filling. Send directly requires authorization on the initial review screen."
+        }
+      ],
+      "action": {
+        "type": "foreground",
+        "recipe": "web_email",
+        "fields": {
+          "provider": "{provider}",
+          "recipient": "{recipient}",
+          "title": "{subject}",
+          "body": "{message}",
+          "delivery": "{delivery}",
+          "browser": "{browser}"
+        }
+      }
+    },
+    {
+      "id": "foreground_word",
+      "title": "Write inside Microsoft Word",
+      "description": "Open Word, type your report in the editor, and save it through Save As.",
+      "category": "Foreground",
+      "icon": "document",
+      "steps": [
+        {
+          "id": "title",
+          "type": "text",
+          "prompt": "Give your report a title"
+        },
+        {
+          "id": "content",
+          "type": "textarea",
+          "prompt": "Add your report content",
+          "description": "Type up to 12,000 characters. Task Hub opens a new document and leaves it visible."
+        }
+      ],
+      "action": {
+        "type": "foreground",
+        "recipe": "word_report",
+        "fields": {
+          "title": "{title}",
+          "body": "{content}"
+        }
+      }
+    },
+    {
+      "id": "foreground_excel",
+      "title": "Enter data in Microsoft Excel",
+      "description": "Open Excel and visibly enter your CSV data cell by cell, then save the workbook.",
+      "category": "Foreground",
+      "icon": "sheet",
+      "steps": [
+        {
+          "id": "title",
+          "type": "text",
+          "prompt": "Name your workbook"
+        },
+        {
+          "id": "data",
+          "type": "textarea",
+          "prompt": "Paste your CSV data",
+          "default": "Metric,Value\nCompleted tasks,24\nHours saved,8",
+          "description": "Up to 100 rows / 500 cells. Cells are literal text, including formula-looking strings."
+        }
+      ],
+      "action": {
+        "type": "foreground",
+        "recipe": "excel_report",
+        "fields": {
+          "title": "{title}",
+          "body": "{data}"
+        }
+      }
+    },
+    {
+      "id": "foreground_powerpoint",
+      "title": "Build slides in PowerPoint",
+      "description": "Open PowerPoint, type into slide placeholders, and save the presentation.",
+      "category": "Foreground",
+      "icon": "slides",
+      "steps": [
+        {
+          "id": "title",
+          "type": "text",
+          "prompt": "What's your presentation called?"
+        },
+        {
+          "id": "slides",
+          "type": "textarea",
+          "prompt": "Outline your slides",
+          "default": "Overview\nOur priorities\nWhat we achieved\n---\nNext steps\nActions and owners",
+          "description": "Separate slides with a line containing ---. First line is the heading. Up to 20 content slides, 10 content lines each."
+        }
+      ],
+      "action": {
+        "type": "foreground",
+        "recipe": "powerpoint_deck",
+        "fields": {
+          "title": "{title}",
+          "body": "{slides}"
+        }
+      }
+    }
+  ]
+}

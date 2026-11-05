@@ -1,0 +1,59 @@
+{
+  "tasks": [
+    {
+      "id": "foreground_email",
+      "title": "Email automation",
+      "description": "Prepare a Gmail draft in Google Chrome, or send after reviewing the filled email.",
+      "category": "Email",
+      "icon": "mail",
+      "steps": [
+        {
+          "id": "recipient",
+          "type": "email",
+          "prompt": "Who should receive it?",
+          "placeholder": "teammate@example.com"
+        },
+        {
+          "id": "cc",
+          "type": "text",
+          "prompt": "CC (optional)",
+          "required": false,
+          "placeholder": "colleague@example.com, team@example.com"
+        },
+        {
+          "id": "subject",
+          "type": "text",
+          "prompt": "What's the subject?",
+          "placeholder": "Weekly project update"
+        },
+        {
+          "id": "message",
+          "type": "textarea",
+          "prompt": "Write your message",
+          "description": "This content will be typed into the visible compose window."
+        },
+        {
+          "id": "delivery",
+          "type": "select",
+          "prompt": "Leave a draft or send it?",
+          "options": ["Draft", "Send after review"],
+          "default": "Draft",
+          "description": "Draft leaves the email open. Send after review waits for your approval after filling the draft."
+        }
+      ],
+      "action": {
+        "type": "foreground",
+        "recipe": "web_email",
+        "fields": {
+          "provider": "Gmail",
+          "recipient": "{recipient}",
+          "title": "{subject}",
+          "body": "{message}",
+          "delivery": "{delivery}",
+          "browser": "Google Chrome"
+        }
+      }
+    }
+  ],
+  "schema_version": 1
+}

@@ -1,0 +1,53 @@
+name: Release installer
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: task-hub-release
+  cancel-in-progress: false
+jobs:
+  windows-release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+      - run: npm ci
+      - name: Validate release identity and signing secret
+        shell: pwsh
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_UPDATER_SIGNING_KEY }}
+        run: |
+          if (!$env:TAURI_SIGNING_PRIVATE_KEY) { throw 'Add the TAURI_UPDATER_SIGNING_KEY repository secret before publishing.' }
+          if ($env:GITHUB_REPOSITORY -ne 'devDaniel0330/task-hub') { throw 'Update the app feed and release configuration before publishing from a different repository.' }
+          $version=(Get-Content package.json -Raw | ConvertFrom-Json).version
+          if ($env:GITHUB_REF_TYPE -eq 'tag' -and $env:GITHUB_REF_NAME -ne "v$version") { throw 'The tag must match the application version.' }
+      - run: npm run check
+      - run: cargo test --locked --manifest-path src-tauri/Cargo.toml --no-default-features --lib
+      - name: Build signed installer and feed
+        run: npm run release:build
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_UPDATER_SIGNING_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_UPDATER_SIGNING_PASSWORD }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: task-hub-signed-release
+          path: release/
+      - name: Publish immutable GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version=(Get-Content package.json -Raw | ConvertFrom-Json).version
+          $assets=@(Get-ChildItem release -File | Where-Object { $_.Name -ne 'Publish-updates.txt' } | ForEach-Object { $_.FullName })
+          gh release create "v$version" @assets --repo $env:GITHUB_REPOSITORY --target $env:GITHUB_SHA --title "Task Hub $version" --notes-file release/release-notes.txt --latest
+          if ($LASTEXITCODE -ne 0) { throw 'Release creation failed. Published versions must not be overwritten; bump the version for another release.' }
