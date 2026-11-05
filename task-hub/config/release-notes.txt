@@ -1,7 +1,5 @@
-Current report attachments:
-- Suggest filename patterns from files in a selected folder.
-- Resolve the scheduled date/month's current file at execution time.
-- Detect missing, ambiguous, oversized and unchanged reports before sending.
-- Create missing reports from an optional user-provided template without overwriting existing files.
-- Keep generated reports blocked until completed, saved and explicitly retried.
-Existing fixed attachments, CC, Gmail delivery, schedules, tray operation and Google Calendar sync remain available.
+Readability and usability update:
+- Larger text, clearer contrast and easier-to-click controls.
+- Numbered routine setup sections with message, file and schedule settings grouped together.
+- Shorter introductory instructions with extra scheduling guidance available on demand.
+Email delivery, current-report rules, calendar sync and scheduling behavior are unchanged.

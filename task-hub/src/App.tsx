@@ -162,7 +162,7 @@ export default function App() {
             </span>
           </div>
         </div>
-        <div className="nav-label">EMAIL MVP</div>
+        <div className="nav-label">WORKSPACE</div>
         <nav>
           {pages.map((item) => (
             <button
@@ -189,7 +189,7 @@ export default function App() {
           <div className="engine-status">
             <span className="tiny-dot" />
             {bridge.native ? "Desktop engine connected" : "Preview mode"}
-            <span>EMAIL MVP</span>
+            <span>WORKSPACE</span>
           </div>
         </div>
       </aside>
