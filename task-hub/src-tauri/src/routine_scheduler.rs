@@ -10,6 +10,12 @@ pub fn start(app: AppHandle) {
             Ok(Some(run)) => {
                 let (title, message) = if run.status == "succeeded" {
                     ("Scheduled email sent", "Gmail API accepted the scheduled email. See Task Hub’s email history for details.")
+                } else if run
+                    .error
+                    .as_deref()
+                    .is_some_and(|e| e.starts_with(crate::attachment_rules::ISSUE_PREFIX))
+                {
+                    ("Report needs your attention", "Email was not sent. Open Task Hub for the report filename and folder. Complete any template copies, save them, then choose Report ready — retry in the routine.")
                 } else {
                     ("Scheduled email needs attention", "The scheduled attempt stopped and will not retry automatically. Check Task Hub history and Gmail’s Sent folder before trying again.")
                 };

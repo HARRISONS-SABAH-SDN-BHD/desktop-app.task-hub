@@ -1,6 +1,9 @@
 // Legacy formats/recipe validation remain available for compatibility tests.
 #[cfg_attr(not(test), allow(dead_code))]
 mod adapters;
+mod attachment_patterns;
+mod attachment_rules;
+mod attachment_sources;
 mod attachments;
 #[cfg(feature = "desktop")]
 mod background;
@@ -72,6 +75,67 @@ mod desktop {
         let owner = 0;
         tauri::async_runtime::spawn_blocking(move || {
             attachments::pick(&app.state::<AppState>(), owner)
+        })
+        .await
+        .map_err(|e| e.to_string())?
+    }
+    #[tauri::command]
+    async fn pick_report_folder(
+        app: tauri::AppHandle,
+    ) -> Result<Option<attachment_sources::Folder>> {
+        #[cfg(windows)]
+        let owner = app
+            .get_webview_window("main")
+            .ok_or("Application window unavailable")?
+            .hwnd()
+            .map_err(|_| "Could not identify the report folder picker owner")?
+            .0 as isize;
+        #[cfg(not(windows))]
+        let owner = 0;
+        tauri::async_runtime::spawn_blocking(move || {
+            attachment_sources::pick(&app.state::<AppState>(), owner)
+        })
+        .await
+        .map_err(|e| e.to_string())?
+    }
+    #[tauri::command]
+    fn open_report_folder(
+        app: tauri::AppHandle,
+        state: State<'_, AppState>,
+        folder_id: String,
+    ) -> Result<()> {
+        let path = attachment_sources::root(&state, &folder_id)?;
+        app.opener()
+            .open_path(path.to_string_lossy().as_ref(), None::<&str>)
+            .map_err(|_| "Could not open the selected report folder".into())
+    }
+    #[tauri::command]
+    async fn suggest_report_patterns(
+        app: tauri::AppHandle,
+        folder_id: String,
+    ) -> Result<Vec<attachment_patterns::Suggestion>> {
+        tauri::async_runtime::spawn_blocking(move || {
+            attachment_rules::suggestions(&app.state::<AppState>(), &folder_id)
+        })
+        .await
+        .map_err(|e| e.to_string())?
+    }
+    #[tauri::command]
+    async fn inspect_report_rule(
+        app: tauri::AppHandle,
+        rule: attachment_rules::ReportRule,
+        date: String,
+    ) -> Result<attachment_rules::RuleCheck> {
+        tauri::async_runtime::spawn_blocking(move || {
+            attachment_rules::inspect(&app.state::<AppState>(), &rule, &date)
+        })
+        .await
+        .map_err(|e| e.to_string())?
+    }
+    #[tauri::command]
+    async fn retry_report_email(app: tauri::AppHandle, id: String, due: String) -> Result<Run> {
+        tauri::async_runtime::spawn_blocking(move || {
+            email_routines::retry_reports(&app.state::<AppState>(), &id, &due)
         })
         .await
         .map_err(|e| e.to_string())?
@@ -301,6 +365,11 @@ mod desktop {
                 cancel_gmail_connection,
                 disconnect_gmail,
                 open_gmail_setup,
+                pick_report_folder,
+                open_report_folder,
+                suggest_report_patterns,
+                inspect_report_rule,
+                retry_report_email,
                 pick_email_attachments
             ])
             .run(tauri::generate_context!())
