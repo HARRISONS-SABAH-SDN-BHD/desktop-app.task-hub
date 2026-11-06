@@ -1,3 +1,4 @@
+import { Help } from "./Help";
 import { useRef, useState } from "react";
 import { AttachmentPicker } from "./AttachmentPicker";
 import { bridge } from "../services/bridge";
@@ -22,12 +23,12 @@ export function ReportRules({
   return (
     <section className="report-rules" aria-label="Current report attachments">
       <h3>Current report files</h3>
-      <p className="email-explanation">
+      <Help label="Finding current reports">
         Find a different report for each occurrence in a folder you select.
         Filename suggestions use names only; no report contents are studied or
         sent to an AI service. Subfolders are not searched. Remove an old report
         from fixed attachments when replacing it with a current-report rule.
-      </p>
+      </Help>
       {value.map((rule, index) => (
         <ReportRuleEditor
           key={rule.id}
@@ -143,12 +144,12 @@ function ReportRuleEditor({
             {error}
           </p>
         )}
-        <p>
+        <Help label="Missing report behavior">
           {rule.template
             ? `If missing: create a copy of ${rule.template.name} and wait for completion.`
             : "If missing: stop without sending."}{" "}
           Files are resolved again when the email runs.
-        </p>
+        </Help>
       </div>
     );
   return (
@@ -228,7 +229,7 @@ function ReportRuleEditor({
           onChange={(e) => update({ pattern: e.target.value })}
         />
       </label>
-      <p className="email-explanation">
+      <Help label="Filename patterns">
         Use <code>{"{{date}}"}</code> for 5-11-2026 or{" "}
         <code>{"{{iso_date}}"}</code> for 2026-11-05. Examples:{" "}
         <code>{"{{day}}-{{month_number}}-{{year}}.xlsx"}</code> or{" "}
@@ -236,7 +237,7 @@ function ReportRuleEditor({
         <code>{"{{dd}}"}</code> / <code>{"{{mm}}"}</code> for leading zeros.{" "}
         <code>*</code> matches extra text, but more than one match stops the
         email.
-      </p>
+      </Help>
       <label>
         Report period
         <select
@@ -267,13 +268,13 @@ function ReportRuleEditor({
         disabled={disabled || pending}
         onBusyChange={onBusyChange}
       />
-      <p className="email-explanation">
+      <Help label="Missing report templates">
         If no report exists, Task Hub can create a copy of this template with
         the expected filename. The extension must match, and the pattern must be
         exact. Complete and save the new report, then explicitly retry the
         email. Template contents are copied; report figures are not invented.
         Existing files are never overwritten or renamed.
-      </p>
+      </Help>
       <div className="routine-time-grid">
         <label>
           Test report date

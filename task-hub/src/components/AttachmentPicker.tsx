@@ -1,3 +1,4 @@
+import { Help } from "./Help";
 import { useRef, useState } from "react";
 import { Paperclip, X } from "lucide-react";
 import { bridge } from "../services/bridge";
@@ -111,13 +112,13 @@ export function AttachmentPicker({
         <p className="muted">No files attached.</p>
       )}
       {onChange && (
-        <p className="email-explanation">
+        <Help label="File limits and saved copies">
           Up to {maxFiles} {maxFiles === 1 ? "file" : "files"}, 18 MB combined.
           Task Hub stores a copy when added. Replace the attachment to use newer
           contents.
           {!bridge.native &&
             " Browser preview keeps file details only and sends nothing."}
-        </p>
+        </Help>
       )}
       {error && (
         <p role="alert" className="error">

@@ -1,3 +1,4 @@
+import { Help } from "./Help";
 import { useEffect, useState } from "react";
 import { appUpdates, type UpdateStatus } from "../services/appUpdates";
 export function AppUpdates({ busy }: { busy: boolean }) {
@@ -64,17 +65,17 @@ export function AppUpdates({ busy }: { busy: boolean }) {
             browser previews do not install updates.
           </p>
         )}
-        <p>
+        <Help label="Automatic update checks">
           The installed app checks automatically after startup and every six
           hours. New releases are downloaded and verified, then wait for your
           click to install and restart.
-        </p>
-        <p>
+        </Help>
+        <Help label="Installing safely">
           Finish editing and save your work first. Installation is blocked while
           email or Google operations are running. Task Hub backs up local
           routines and history before installing; your attachments and Google
           connection stay on this computer.
-        </p>
+        </Help>
         <p role="status">
           {status?.phase === "ready"
             ? `Version ${status.available_version} is ready to install.`
@@ -119,10 +120,10 @@ export function AppUpdates({ busy }: { busy: boolean }) {
             {error || status?.error}
           </p>
         )}
-        <p className="email-explanation">
+        <Help label="When update checks fail">
           If an update check fails, your current app keeps working. Schedule
           timing and delivery rules remain the same.
-        </p>
+        </Help>
       </section>
     </div>
   );

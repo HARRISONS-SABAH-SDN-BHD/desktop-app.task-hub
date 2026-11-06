@@ -522,3 +522,59 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+.context-help {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  margin: 10px 0;
+  color: var(--muted);
+  font-weight: 400;
+}
+.help-label {
+  font-size: 15px;
+}
+.help-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  min-height: 30px;
+  flex: 0 0 30px;
+  border: 1px solid #7897ae;
+  border-radius: 50%;
+  background: #192d3b;
+  color: #e8faff;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+}
+.help-button:hover,
+.help-button[aria-expanded="true"] {
+  border-color: var(--cyan);
+  background: #204443;
+}
+.help-content-panel {
+  flex-basis: 100%;
+  padding: 16px 20px;
+  border: 1px solid #577386;
+  border-radius: 10px;
+  background: #172534;
+  color: #e1ebf6;
+  line-height: 1.75;
+  font-size: 16px;
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+.help-content-panel[hidden] {
+  display: none;
+}
+.routine-essential {
+  font-size: 16px;
+  color: #d3e6ee;
+  margin-bottom: 10px;
+}

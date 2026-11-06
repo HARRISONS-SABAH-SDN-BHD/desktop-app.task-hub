@@ -6,6 +6,8 @@ import {
   CheckCircle2,
   AlertCircle,
 } from "lucide-react";
+import { Help } from "./Help";
+import { REPORT_ISSUE_PREFIX } from "../domain/reportRules";
 import type { Run, Schedule } from "../domain/types";
 export function time(value: string) {
   return new Date(value).toLocaleString(undefined, {
@@ -40,10 +42,34 @@ export function RunDetail({
         </span>
       </div>
       <p className="muted">{time(run.started_at)}</p>
-      <pre className="console" aria-label="Execution log">
-        {run.logs.join("\n")}
-        {run.error ? `\nERROR: ${run.error}` : ""}
-      </pre>
+      {run.error?.startsWith(REPORT_ISSUE_PREFIX) ? (
+        <div className="routine-change" role="alert">
+          <strong>Email not sent — report needs attention</strong>
+          <p>
+            Complete and save the report, then return to Email routines and
+            select Report ready — retry.
+          </p>
+          <Help label="Report details">
+            {run.error.slice(REPORT_ISSUE_PREFIX.length)}
+          </Help>
+        </div>
+      ) : run.error ? (
+        <p role="alert" className="error">
+          {run.error}
+        </p>
+      ) : (
+        <p>
+          {native
+            ? "Email operation completed. See the details below for the delivery result."
+            : "Preview completed. No email was sent."}
+        </p>
+      )}
+      <Help label="Execution details">
+        <pre className="console" aria-label="Execution log">
+          {run.logs.join("\n")}
+          {run.error ? `\nERROR: ${run.error}` : ""}
+        </pre>
+      </Help>
       {run.artifact && (
         <div className="artifact">
           <div>

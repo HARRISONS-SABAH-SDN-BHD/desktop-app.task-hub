@@ -24,6 +24,9 @@ test("automatic sending is explicitly enabled, persisted, and not executed by br
   await page
     .getByRole("checkbox", { name: "Automatically send when due", exact: true })
     .check();
+  await page
+    .getByRole("button", { name: "Help: Automatic sending", exact: true })
+    .click();
   await expect(
     page.getByText(/Saving authorizes Task Hub to send/),
   ).toBeVisible();

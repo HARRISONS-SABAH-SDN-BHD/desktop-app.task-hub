@@ -1,3 +1,4 @@
+import { Help } from "./Help";
 import { useState, type FormEvent } from "react";
 import { CalendarClock, Plus, ArrowLeft } from "lucide-react";
 import {
@@ -88,16 +89,16 @@ export function EmailRoutines({
           your schedule.
         </p>
       </div>
-      <details className="notice routine-notice">
-        <summary>How scheduled emails work</summary>
-        <p>
-          Closing the window keeps Task Hub running in the system tray. Use its
-          tray menu to reopen or quit. The computer must stay awake with
-          internet access; browsers may be closed and Windows may be locked.
-          Draft routines wait for your click; automatic routines send when due.
-          Occurrences over five minutes late need rescheduling.
-        </p>
-      </details>
+      <p className="routine-essential">
+        Keep your computer awake and online for scheduled emails.
+      </p>
+      <Help label="How scheduled emails work">
+        Closing the window keeps Task Hub running in the system tray. Use its
+        tray menu to reopen or quit. The computer must stay awake with internet
+        access; browsers may be closed and Windows may be locked. Draft routines
+        wait for your click; automatic routines send when due. Occurrences over
+        five minutes late need rescheduling.
+      </Help>
       {native && (
         <div className="routine-actions">
           <button
@@ -356,11 +357,20 @@ export function EmailRoutines({
                     <ReportRules value={settings.report_rules} />
                   )}
                   {attachmentFailure && (
-                    <p className="error" role="alert">
-                      {attachmentFailure.error}
-                    </p>
+                    <div className="routine-change">
+                      <p role="alert">
+                        <strong>Email not sent — report needs attention</strong>
+                      </p>
+                      <p>
+                        Complete and save the report, then select Report ready —
+                        retry.
+                      </p>
+                      <Help label="Report details">
+                        {attachmentFailure.error}
+                      </Help>
+                    </div>
                   )}
-                  {routine.attempt && (
+                  {routine.attempt && !attachmentFailure && (
                     <p className="error">
                       An attempt is recorded. Inspect history and Gmail Drafts /
                       Sent before handling this occurrence.
@@ -534,10 +544,10 @@ function RoutineForm({
   return (
     <form className="email-panel routine-form" onSubmit={save}>
       <h2>Set up your email routine</h2>
-      <p className="form-intro">
+      <Help label="Setting up a routine">
         Choose who receives the email, what to include, and when it should run.
         Optional settings can be left as they are.
-      </p>
+      </Help>
       <fieldset disabled={locked || attachmentBusy} className="email-fields">
         <h3 className="form-section-title">1. Email details</h3>
         <label>
@@ -615,10 +625,10 @@ function RoutineForm({
           />
         </label>
         <h3 className="form-section-title">3. Add files (optional)</h3>
-        <p className="email-explanation">
+        <Help label="Choosing attachments">
           Use a saved copy for files that stay the same. Use a current-report
           rule for files that change each month.
-        </p>
+        </Help>
         <AttachmentPicker
           title="Fixed attachments (same saved copy every run)"
           value={settings.attachments}
@@ -632,7 +642,7 @@ function RoutineForm({
           disabled={locked || attachmentBusy}
           onBusyChange={setAttachmentBusy}
         />
-        <p className="email-explanation">
+        <Help label="Message date fields">
           Available fields:{" "}
           <code>
             {
@@ -641,7 +651,7 @@ function RoutineForm({
           </code>
           . Dates come from the scheduled occurrence. Templates reuse your text;
           they do not generate report figures or read files.
-        </p>
+        </Help>
         <h3 className="form-section-title">4. Choose the schedule</h3>
         <div className="routine-form-grid">
           <label>
@@ -715,13 +725,16 @@ function RoutineForm({
           Automatically send when due
         </label>
         {settings.auto_send && (
-          <p className="routine-change">
-            Saving authorizes Task Hub to send the saved recipient and message
-            on each scheduled occurrence without asking again. It uses this
-            saved sender account through Gmail’s API in the background. Failed
-            or uncertain sends are not retried automatically. Enabling automatic
-            sending schedules the next future occurrence.
-          </p>
+          <div className="routine-change">
+            <strong>Emails will be sent automatically when due.</strong>
+            <Help label="Automatic sending">
+              Saving authorizes Task Hub to send the saved recipient and message
+              on each scheduled occurrence without asking again. It uses this
+              saved sender account through Gmail’s API in the background. Failed
+              or uncertain sends are not retried automatically. Enabling
+              automatic sending schedules the next future occurrence.
+            </Help>
+          </div>
         )}
         <h3 className="form-section-title">5. Calendar reminder (optional)</h3>
         <label className="routine-check">
@@ -758,7 +771,7 @@ function RoutineForm({
                 <option value={10080}>1 week before</option>
               </select>
             </label>
-            <p className="email-explanation">
+            <Help label="Calendar reminders">
               Creates a private event in your connected account’s primary Google
               Calendar. Enable Google Calendar API and reconnect with Calendar
               access in Gmail connection first. Changes sync from Task Hub; edit
@@ -766,7 +779,7 @@ function RoutineForm({
               it removes its calendar event when Task Hub is running and
               connected. Email contents, recipients and files are not copied to
               the calendar.
-            </p>
+            </Help>
           </>
         )}
         <h3 className="form-section-title">6. Recipient changes (optional)</h3>

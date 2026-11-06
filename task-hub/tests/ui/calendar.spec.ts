@@ -17,6 +17,9 @@ test("calendar sync is optional, persists its reminder, and remains preview-only
   await page
     .getByLabel("Calendar reminder", { exact: true })
     .selectOption("60");
+  await page
+    .getByRole("button", { name: "Help: Calendar reminders", exact: true })
+    .click();
   await expect(
     page.getByText(/recipients and files are not copied to the calendar/),
   ).toBeVisible();
@@ -63,6 +66,9 @@ test("calendar access is a separate opt-in on Google sign-in and background oper
   await expect(
     page.getByRole("region", { name: "Gmail account connection" }),
   ).toContainText("system tray");
+  await page
+    .getByText("Google Cloud setup instructions", { exact: true })
+    .click();
   await expect(
     page.getByRole("button", {
       name: "Enable Google Calendar API",

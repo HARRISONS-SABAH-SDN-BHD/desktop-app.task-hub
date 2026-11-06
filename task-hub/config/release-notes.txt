@@ -1,5 +1,5 @@
-Readability and usability update:
-- Larger text, clearer contrast and easier-to-click controls.
-- Numbered routine setup sections with message, file and schedule settings grouped together.
-- Shorter introductory instructions with extra scheduling guidance available on demand.
-Email delivery, current-report rules, calendar sync and scheduling behavior are unchanged.
+Simpler screens and contextual help:
+- Short labels and visible status messages throughout routines, files, account connection, updates and email results.
+- Longer explanations in keyboard-accessible question-mark help controls.
+- Clear report-completion instructions without the unrelated generic Sent-mail warning.
+Email delivery and scheduling behavior are unchanged.

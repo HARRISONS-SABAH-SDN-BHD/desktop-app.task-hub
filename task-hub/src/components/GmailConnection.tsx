@@ -1,3 +1,4 @@
+import { Help } from "./Help";
 import { useEffect, useState, type FormEvent } from "react";
 import { gmailConnection, type GmailStatus } from "../services/gmailConnection";
 
@@ -63,24 +64,24 @@ export function GmailConnection({
             ? `Connected: ${status.email}`
             : "Connect your Gmail account"}
         </h2>
-        <p>
+        <Help label="Background sending">
           Closing the window keeps Task Hub running in the system tray. Use the
           tray menu to reopen or quit it. Internet access is required; browsers
           may be closed and Windows may be locked. A powered-off or sleeping
           computer cannot run schedules.
-        </p>
-        <p>
+        </Help>
+        <Help label="Account security">
           Refresh tokens and the desktop client secret are stored in Windows
           Credential Manager. They are never saved in routines, email history,
           or browser storage.
-        </p>
+        </Help>
         {!native && (
           <p className="notice">
             Preview only. No Google account is connected and no emails are sent.
             Configure and connect through the desktop app.
           </p>
         )}
-        <details open={!status.connected} className="gmail-setup">
+        <details className="gmail-setup">
           <summary>Google Cloud setup instructions</summary>
           <ol>
             <li>
@@ -113,11 +114,11 @@ export function GmailConnection({
               routines to bind them to this connected sender.
             </li>
           </ol>
-          <p>
+          <Help label="Sign-in expiry">
             Google may expire refresh tokens after seven days for External
             projects in Testing. Reconnect when needed. Distribution beyond test
             users may require Google verification.
-          </p>
+          </Help>
           <div className="button-row routine-actions">
             <button
               className="secondary"
@@ -210,11 +211,11 @@ export function GmailConnection({
             Disconnect locally
           </button>
         )}
-        <p>
+        <Help label="Disconnecting your account">
           Disconnect locally removes the stored credentials and stops background
           delivery. You can also remove Task Hub’s access in your Google
           account’s connected-app settings.
-        </p>
+        </Help>
         {error && (
           <p className="error" role="alert">
             {error}

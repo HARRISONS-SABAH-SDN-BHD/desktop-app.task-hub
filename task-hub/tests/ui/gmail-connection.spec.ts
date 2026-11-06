@@ -12,6 +12,9 @@ test("Gmail setup explains desktop OAuth and keeps real sign-in disabled in brow
   await expect(
     page.getByRole("region", { name: "Gmail account connection" }),
   ).toContainText("Windows may be locked");
+  await page
+    .getByText("Google Cloud setup instructions", { exact: true })
+    .click();
   await expect(page.getByText("Desktop app", { exact: true })).toBeVisible();
   await expect(page.getByLabel("Desktop OAuth client ID")).toBeVisible();
   await expect(
