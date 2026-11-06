@@ -84,17 +84,20 @@ export function EmailRoutines({
         <span className="eyebrow">SAVE ONCE · RUN ON SCHEDULE</span>
         <h1>Email routines</h1>
         <p>
-          Reuse recipients and message templates. Get a reminder when an email
-          is due.
+          Save an email once, then prepare a draft or send it automatically on
+          your schedule.
         </p>
       </div>
-      <p className="notice routine-notice">
-        Closing the window keeps Task Hub running in the system tray. Use its
-        tray menu to reopen or quit. The computer must stay awake with internet
-        access; browsers may be closed and Windows may be locked. Draft routines
-        wait for your click; automatic routines send when due. Occurrences over
-        five minutes late need rescheduling.
-      </p>
+      <details className="notice routine-notice">
+        <summary>How scheduled emails work</summary>
+        <p>
+          Closing the window keeps Task Hub running in the system tray. Use its
+          tray menu to reopen or quit. The computer must stay awake with
+          internet access; browsers may be closed and Windows may be locked.
+          Draft routines wait for your click; automatic routines send when due.
+          Occurrences over five minutes late need rescheduling.
+        </p>
+      </details>
       {native && (
         <div className="routine-actions">
           <button
@@ -530,8 +533,13 @@ function RoutineForm({
   const change = settings.recipient_change;
   return (
     <form className="email-panel routine-form" onSubmit={save}>
-      <h2>Saved email routine</h2>
+      <h2>Set up your email routine</h2>
+      <p className="form-intro">
+        Choose who receives the email, what to include, and when it should run.
+        Optional settings can be left as they are.
+      </p>
       <fieldset disabled={locked || attachmentBusy} className="email-fields">
+        <h3 className="form-section-title">1. Email details</h3>
         <label>
           Sender account
           <select
@@ -586,12 +594,7 @@ function RoutineForm({
           />
           <small>Separate multiple email addresses with commas.</small>
         </label>
-        <ReportRules
-          value={settings.report_rules}
-          onChange={(rules) => update("report_rules", rules)}
-          disabled={locked || attachmentBusy}
-          onBusyChange={setAttachmentBusy}
-        />
+        <h3 className="form-section-title">2. Write your message</h3>
         <label>
           Subject template
           <input
@@ -611,12 +614,23 @@ function RoutineForm({
             onChange={(e) => update("message", e.target.value)}
           />
         </label>
+        <h3 className="form-section-title">3. Add files (optional)</h3>
+        <p className="email-explanation">
+          Use a saved copy for files that stay the same. Use a current-report
+          rule for files that change each month.
+        </p>
         <AttachmentPicker
           title="Fixed attachments (same saved copy every run)"
           value={settings.attachments}
           onChange={(items) => update("attachments", items)}
           onBusyChange={setAttachmentBusy}
           disabled={locked}
+        />
+        <ReportRules
+          value={settings.report_rules}
+          onChange={(rules) => update("report_rules", rules)}
+          disabled={locked || attachmentBusy}
+          onBusyChange={setAttachmentBusy}
         />
         <p className="email-explanation">
           Available fields:{" "}
@@ -628,6 +642,7 @@ function RoutineForm({
           . Dates come from the scheduled occurrence. Templates reuse your text;
           they do not generate report figures or read files.
         </p>
+        <h3 className="form-section-title">4. Choose the schedule</h3>
         <div className="routine-form-grid">
           <label>
             First date
@@ -708,7 +723,7 @@ function RoutineForm({
             sending schedules the next future occurrence.
           </p>
         )}
-        <h3>Calendar reminder</h3>
+        <h3 className="form-section-title">5. Calendar reminder (optional)</h3>
         <label className="routine-check">
           <input
             type="checkbox"
@@ -754,7 +769,7 @@ function RoutineForm({
             </p>
           </>
         )}
-        <h3>Recipient change reminder</h3>
+        <h3 className="form-section-title">6. Recipient changes (optional)</h3>
         <label>
           Recipient change
           <select

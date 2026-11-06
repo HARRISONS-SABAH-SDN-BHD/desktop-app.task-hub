@@ -24,7 +24,7 @@
 }
 .email-panel-heading p {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 14px;
   margin-top: 4px;
 }
 .email-panel-heading > svg {
@@ -97,7 +97,7 @@
 .email-mode small {
   display: block;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 14px;
   line-height: 1.5;
   margin-top: 6px;
 }
@@ -110,7 +110,7 @@
   margin-top: 24px;
 }
 .email-actions .muted {
-  font-size: 11px;
+  font-size: 14px;
 }
 .email-guide {
   padding: 22px 4px;
@@ -132,11 +132,11 @@
 }
 .email-guide li strong {
   color: #dce3ec;
-  font-size: 13px;
+  font-size: 14px;
 }
 .email-guide li p {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 14px;
   margin-top: 5px;
 }
 .email-scope {
@@ -151,7 +151,7 @@
 }
 .email-scope p {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 14px;
   margin-top: 6px;
 }
 .email-review {
@@ -160,7 +160,7 @@
 }
 .email-review dt {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 14px;
   margin-top: 10px;
 }
 .email-review dd {
@@ -191,7 +191,7 @@
 .email-explanation {
   color: var(--muted);
   margin-top: 20px;
-  font-size: 12px;
+  font-size: 14px;
 }
 .email-result-actions {
   margin-top: 0;
@@ -428,4 +428,97 @@
 .report-rules strong,
 .report-rules p {
   overflow-wrap: anywhere;
+}
+.form-intro {
+  color: var(--muted);
+  margin: 10px 0 28px;
+  max-width: 68ch;
+}
+.form-section-title {
+  font-size: 21px;
+  line-height: 1.4;
+  padding-top: 28px;
+  margin-top: 10px;
+  border-top: 1px solid var(--line);
+  color: #f3f7fc;
+}
+.email-fields > label {
+  display: grid;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.email-fields > label.routine-check {
+  display: flex;
+}
+.email-fields input,
+.email-fields textarea,
+.email-fields select {
+  font-size: 16px;
+  min-height: 48px;
+}
+.email-fields input[type="checkbox"],
+.email-fields input[type="radio"] {
+  min-height: 20px;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.email-explanation,
+.routine-card p,
+.routine-notice,
+.gmail-setup,
+.routine-form small {
+  font-size: 15px;
+  line-height: 1.7;
+}
+.routine-notice summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #e6eaf1;
+}
+.routine-notice p {
+  margin-top: 12px;
+}
+.routine-form {
+  max-width: 980px;
+}
+.routine-form-grid {
+  gap: 20px;
+}
+.report-rules {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #0d1521;
+}
+.report-rules h3 {
+  font-size: 20px;
+}
+.report-rules .routine-change {
+  color: #e2eaf5;
+  border-left-color: var(--cyan);
+  background: #14252d;
+  padding: 20px;
+}
+.attachment-heading {
+  flex-wrap: wrap;
+}
+.email-fields label small {
+  font-weight: 400;
+  color: var(--muted);
+}
+@media (max-width: 760px) {
+  .email-panel {
+    padding: 20px;
+  }
+  .report-rules {
+    padding: 14px;
+  }
+  .report-rules .routine-change {
+    padding: 14px;
+  }
+  .routine-time-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

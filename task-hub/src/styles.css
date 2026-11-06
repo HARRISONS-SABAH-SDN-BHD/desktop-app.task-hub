@@ -8,11 +8,11 @@
   color: #e6eaf1;
   background: #0b1019;
   font-synthesis: none;
-  font-size: 14px;
+  font-size: 16px;
   color-scheme: dark;
   --cyan: #64ded3;
-  --muted: #8b96a8;
-  --line: #232b3a;
+  --muted: #b0bdce;
+  --line: #354257;
   --panel: #121925;
 }
 
@@ -42,15 +42,15 @@
   font-size: 17px;
 }
 .request-heading p {
-  font-size: 11px;
+  font-size: 14px;
   color: #99b0bf;
   margin-top: 6px;
 }
 .request-heading > .status {
-  font-size: 8px;
+  font-size: 14px;
 }
 .request-composer textarea {
-  font-size: 12px;
+  font-size: 14px;
   min-height: 150px;
 }
 .request-footer {
@@ -61,7 +61,7 @@
   margin-top: 16px;
 }
 .request-footer > span {
-  font-size: 10px;
+  font-size: 14px;
   color: #849bae;
   line-height: 1.7;
 }
@@ -91,14 +91,14 @@
   border-radius: 8px;
 }
 .send-review > p {
-  font-size: 11px;
+  font-size: 14px;
   color: #a8d5c8;
 }
 .send-review dl {
   display: grid;
   grid-template-columns: 80px 1fr;
   gap: 9px;
-  font-size: 12px;
+  font-size: 14px;
 }
 .send-review dt {
   color: #86a0b1;
@@ -132,7 +132,7 @@
     grid-template-columns: 1fr;
   }
   .send-review dt {
-    font-size: 10px;
+    font-size: 14px;
   }
 }
 * {
@@ -278,14 +278,14 @@ p {
   font-weight: 600;
 }
 .workspace strong {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 550;
 }
 .workspace div:nth-child(2) {
   flex: 1;
 }
 .workspace div:nth-child(2) > span {
-  font-size: 10px;
+  font-size: 14px;
   color: #95a0b1;
   display: flex;
   align-items: center;
@@ -304,7 +304,7 @@ p {
   flex-shrink: 0;
 }
 .nav-label {
-  font-size: 9px;
+  font-size: 14px;
   letter-spacing: 1.7px;
   font-weight: 600;
   color: #637086;
@@ -324,7 +324,7 @@ nav button {
   padding: 12px 13px;
   border-radius: 7px;
   text-align: left;
-  font-size: 12px;
+  font-size: 14px;
   border: 1px solid transparent;
 }
 nav button:hover {
@@ -339,7 +339,7 @@ nav button span {
   flex: 1;
 }
 nav button small {
-  font-size: 10px;
+  font-size: 14px;
   background: #263e40;
   border: 1px solid #365153;
   border-radius: 5px;
@@ -361,11 +361,11 @@ nav button small {
   margin-bottom: 11px;
 }
 .local-card strong {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
 }
 .local-card p {
-  font-size: 11px;
+  font-size: 14px;
   color: #7e90a2;
   margin-top: 6px;
   line-height: 1.7;
@@ -377,7 +377,7 @@ nav button small {
   background: none;
   gap: 10px;
   color: #8f9bad;
-  font-size: 11px;
+  font-size: 14px;
   padding: 24px 12px;
 }
 .help-button span {
@@ -389,7 +389,7 @@ nav button small {
   align-items: center;
   gap: 6px;
   border-top: 1px solid var(--line);
-  font-size: 9px;
+  font-size: 14px;
   color: #69778d;
   padding: 18px 2px;
 }
@@ -416,7 +416,7 @@ nav button small {
   justify-content: space-between;
   border-bottom: 1px solid var(--line);
   padding: 0 42px;
-  font-size: 11px;
+  font-size: 14px;
   color: #768298;
 }
 .topbar > div {
@@ -432,7 +432,7 @@ nav button small {
   display: flex;
   align-items: center;
   gap: 7px;
-  font-size: 8px;
+  font-size: 14px;
   letter-spacing: 1.2px;
   color: #8ca7aa;
   background: #152326;
@@ -453,7 +453,7 @@ main {
   margin: auto;
 }
 .preview-strip {
-  font-size: 10px;
+  font-size: 14px;
   color: #a0aeba;
   border-bottom: 1px solid #253442;
   background: #121f2c;
@@ -463,7 +463,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 9px;
+  font-size: 14px;
   letter-spacing: 1.15px;
   color: #798a9e;
   margin-bottom: 33px;
@@ -477,7 +477,7 @@ main {
   display: flex;
   gap: 19px;
   letter-spacing: 0;
-  font-size: 10px;
+  font-size: 14px;
   color: #728095;
 }
 .overview-stats strong {
@@ -489,7 +489,7 @@ main {
   margin-bottom: 15px;
 }
 .eyebrow {
-  font-size: 9px;
+  font-size: 14px;
   letter-spacing: 1.9px;
   color: #75cfc8;
   font-weight: 600;
@@ -499,7 +499,7 @@ main {
   color: #8d9aab;
 }
 .page-heading > p {
-  font-size: 12px;
+  font-size: 14px;
   color: #8b96a8;
   margin-top: 16px;
 }
@@ -537,16 +537,16 @@ main {
   border-radius: 11px;
 }
 .feature-banner strong {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 550;
 }
 .feature-banner p {
-  font-size: 10px;
+  font-size: 14px;
   color: #8ca3ad;
   margin-top: 5px;
 }
 .banner-label {
-  font-size: 8px;
+  font-size: 14px;
   letter-spacing: 1.3px;
   color: #7fa3a7;
   margin-left: auto;
@@ -578,7 +578,7 @@ main {
   padding: 2px 6px;
 }
 .catalog-heading p {
-  font-size: 11px;
+  font-size: 14px;
   color: #6f7d91;
   margin-top: 5px;
 }
@@ -598,7 +598,7 @@ main {
   padding: 0;
   border: 0;
   width: 100%;
-  font-size: 11px;
+  font-size: 14px;
   outline: 0;
   color: #dbe5ef;
 }
@@ -606,7 +606,7 @@ main {
   border-color: var(--cyan);
 }
 .search kbd {
-  font-size: 10px;
+  font-size: 14px;
   border: 1px solid #303b4c;
   padding: 0 4px;
   border-radius: 3px;
@@ -622,7 +622,7 @@ main {
 .tabs button {
   background: none;
   color: #7d8a9d;
-  font-size: 11px;
+  font-size: 14px;
   padding: 0 12px 13px;
   white-space: nowrap;
   border-bottom: 2px solid transparent;
@@ -713,7 +713,7 @@ main {
   --tone-border: #3d4859;
 }
 .category-label {
-  font-size: 8px;
+  font-size: 14px;
   border: 1px solid #2c3544;
   background: #1c2432;
   color: #919caf;
@@ -721,12 +721,12 @@ main {
   padding: 4px 7px;
 }
 .task-card h3 {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 650;
   line-height: 1.5;
 }
 .task-card > p {
-  font-size: 11px;
+  font-size: 14px;
   line-height: 1.75;
   color: #8390a4;
   margin-top: 8px;
@@ -741,7 +741,7 @@ main {
   border-top: 1px solid #273040;
   padding: 14px 0;
   color: #758297;
-  font-size: 8px;
+  font-size: 14px;
   letter-spacing: 0.4px;
 }
 .card-footer > svg {
@@ -757,7 +757,7 @@ main {
   justify-content: center;
   gap: 7px;
   color: #576a80;
-  font-size: 9px;
+  font-size: 14px;
   margin-top: 29px;
 }
 .catalog-note .tiny-dot {
@@ -771,10 +771,10 @@ main {
   padding: 16px 42px;
   color: #526176;
   border-top: 1px solid #1c2635;
-  font-size: 9px;
+  font-size: 14px;
 }
 .app-footer > span:last-child {
-  font-size: 8px;
+  font-size: 14px;
   letter-spacing: 1px;
   display: flex;
   align-items: center;
@@ -801,7 +801,7 @@ main {
   gap: 8px;
   background: none;
   color: #91a1b4;
-  font-size: 12px;
+  font-size: 14px;
   padding: 0;
   margin: 4px 0 30px;
 }
@@ -827,7 +827,7 @@ main {
 .progress-label {
   display: flex;
   justify-content: space-between;
-  font-size: 10px;
+  font-size: 14px;
   color: #8794a8;
 }
 .progress-label span:first-child {
@@ -860,7 +860,7 @@ main {
 }
 .step-description {
   color: #8696ac;
-  font-size: 12px;
+  font-size: 14px;
   margin-bottom: 27px;
 }
 .wizard-panel input:not([type="radio"]):not([type="checkbox"]),
@@ -873,7 +873,7 @@ select {
   border-radius: 7px;
   padding: 13px 14px;
   color: #e2eaf4;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.7;
 }
 textarea {
@@ -891,7 +891,7 @@ textarea {
   border: 1px solid #344055;
   border-radius: 8px;
   padding: 17px 18px;
-  font-size: 13px;
+  font-size: 14px;
   cursor: pointer;
   background: #101825;
   min-height: 57px;
@@ -912,7 +912,7 @@ textarea {
   outline-offset: 2px;
 }
 .option small {
-  font-size: 10px;
+  font-size: 14px;
   color: #8198aa;
   margin-left: 10px;
 }
@@ -955,7 +955,7 @@ textarea {
   gap: 8px;
   border-radius: 7px;
   padding: 10px 14px;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 550;
   min-height: 37px;
 }
@@ -976,14 +976,14 @@ textarea {
   background: #24334a;
 }
 .wizard-footnote {
-  font-size: 10px;
+  font-size: 14px;
   text-align: center;
   color: #536b80;
   margin-top: 22px;
 }
 .muted {
   color: #8a99ad;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.8;
 }
 .review {
@@ -997,11 +997,11 @@ textarea {
   gap: 20px;
 }
 .review dt {
-  font-size: 11px;
+  font-size: 14px;
   color: #8092aa;
 }
 .review dd {
-  font-size: 12px;
+  font-size: 14px;
   margin: 0;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
@@ -1018,7 +1018,7 @@ textarea {
   border-radius: 8px;
   background: #17302e4d;
   color: #97bbb6;
-  font-size: 11px;
+  font-size: 14px;
   line-height: 1.7;
 }
 .notice {
@@ -1035,7 +1035,7 @@ textarea {
   margin-top: 22px;
 }
 .schedule-fields label {
-  font-size: 11px;
+  font-size: 14px;
   color: #9daec2;
 }
 .schedule-fields input,
@@ -1043,7 +1043,7 @@ textarea {
   margin-top: 8px;
 }
 .error {
-  font-size: 12px;
+  font-size: 14px;
   color: #f1a6a6;
   background: #42252d;
   padding: 12px 14px;
@@ -1060,7 +1060,7 @@ textarea {
   background: #4a2631;
   color: #f6bec5;
   padding: 14px 42px;
-  font-size: 12px;
+  font-size: 14px;
 }
 .global-error span {
   flex: 1;
@@ -1083,7 +1083,7 @@ textarea {
   color: #acbacb;
 }
 .empty p {
-  font-size: 12px;
+  font-size: 14px;
 }
 .history-list {
   display: grid;
@@ -1108,13 +1108,13 @@ textarea {
 }
 .history-row strong {
   display: block;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
 }
 .history-row div > span {
   display: block;
   margin-top: 6px;
-  font-size: 10px;
+  font-size: 14px;
   color: #8190a8;
 }
 .history-symbol {
@@ -1136,7 +1136,7 @@ textarea {
   text-transform: capitalize;
   display: inline-block;
   white-space: nowrap;
-  font-size: 10px;
+  font-size: 14px;
   line-height: 1;
   border: 1px solid #39525a;
   border-radius: 20px;
@@ -1211,7 +1211,7 @@ textarea {
   min-width: 0;
 }
 .artifact p {
-  font-size: 11px;
+  font-size: 14px;
   color: #adbdce;
   margin-top: 7px;
   overflow-wrap: anywhere;
@@ -1233,7 +1233,7 @@ textarea {
 }
 .editor-toolbar small {
   color: #71849d;
-  font-size: 9px;
+  font-size: 14px;
   padding-left: 15px;
 }
 .editor-toolbar .tiny-dot {
@@ -1257,7 +1257,7 @@ textarea {
 .success-message {
   padding: 13px 0;
   color: #91d9be;
-  font-size: 12px;
+  font-size: 14px;
 }
 .help-grid {
   display: grid;
@@ -1272,17 +1272,17 @@ textarea {
   padding: 24px;
 }
 .help-grid h3 {
-  font-size: 15px;
+  font-size: 16px;
   color: #b9dfdc;
 }
 .help-grid p {
   margin-top: 13px;
   color: #8e9fb4;
-  font-size: 12px;
+  font-size: 14px;
 }
 .help-content code {
   overflow-wrap: anywhere;
-  font-size: 11px;
+  font-size: 14px;
 }
 .toast {
   position: fixed;
@@ -1293,7 +1293,7 @@ textarea {
   border: 1px solid #528873;
   border-radius: 9px;
   color: #b0e9d1;
-  font-size: 12px;
+  font-size: 14px;
   box-shadow: 0 10px 35px #0004;
 }
 ::-webkit-scrollbar {
@@ -1319,7 +1319,7 @@ textarea {
     padding: 23px 23px 0;
   }
   .task-card > p {
-    font-size: 12px;
+    font-size: 14px;
   }
   .task-card h3 {
     font-size: 16px;
@@ -1406,10 +1406,10 @@ textarea {
   }
   .preview-strip {
     padding: 8px 20px;
-    font-size: 9px;
+    font-size: 14px;
   }
   .overview-stats {
-    font-size: 8px;
+    font-size: 14px;
   }
   .overview-stats > div {
     display: none;
@@ -1433,7 +1433,7 @@ textarea {
     padding: 18px;
   }
   .feature-banner p {
-    font-size: 9px;
+    font-size: 14px;
   }
   .feature-symbol {
     flex-shrink: 0;
@@ -1478,7 +1478,7 @@ textarea {
     gap: 10px;
   }
   .history-row .status {
-    font-size: 8px;
+    font-size: 14px;
     padding: 6px;
   }
   .history-row > svg {
@@ -1509,10 +1509,69 @@ textarea {
   border-radius: 8px;
   background: #392b2544;
   color: #e2baa4;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.6;
 }
 .direct-send-consent input {
   margin-top: 4px;
   flex-shrink: 0;
+}
+/* Readable controls and a clear hierarchy across the email workspace. */
+body {
+  line-height: 1.65;
+}
+button,
+input,
+textarea,
+select {
+  font-size: 16px;
+}
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+summary:focus-visible {
+  outline: 3px solid var(--cyan);
+  outline-offset: 3px;
+}
+button {
+  min-height: 44px;
+}
+.primary,
+.secondary {
+  white-space: normal;
+}
+.status,
+.runtime-badge,
+.eyebrow {
+  letter-spacing: 0.06em;
+}
+.history-row,
+.routine-card {
+  min-width: 0;
+}
+.routine-card .button-row {
+  flex-wrap: wrap;
+}
+.app-footer {
+  flex-wrap: wrap;
+  gap: 12px;
+}
+@media (max-width: 760px) {
+  .topbar {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 68px;
+    gap: 8px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .runtime-badge {
+    display: none;
+  }
+}
+input::placeholder,
+textarea::placeholder {
+  color: #a9b8ca;
+  opacity: 1;
 }
