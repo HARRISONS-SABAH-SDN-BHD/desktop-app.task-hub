@@ -28,6 +28,7 @@ test("calendar sync is optional, persists its reminder, and remains preview-only
     page.getByRole("heading", { name: "Calendar report", exact: true }),
   ).toBeVisible();
   await page.reload();
+  await page.getByText("Routine details", { exact: true }).click();
   await expect(
     page.getByText("Google Calendar: Preview only — no event created", {
       exact: true,

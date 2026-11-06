@@ -47,6 +47,19 @@ export function EmailRoutines({
     id: string | null;
     settings: RoutineSettings;
   } | null>(null);
+  const [query, setQuery] = useState("");
+  const visibleRoutines = [...routines]
+    .reverse()
+    .filter(({ settings }) =>
+      [
+        settings.name,
+        settings.recipient,
+        settings.cc ?? "",
+        settings.subject,
+      ].some((value) =>
+        value.toLowerCase().includes(query.trim().toLowerCase()),
+      ),
+    );
   const [plan, setPlan] = useState<RoutinePreview | null>(null);
   const [notice, setNotice] = useState("");
   const [pending, setPending] = useState(false);
@@ -133,6 +146,7 @@ export function EmailRoutines({
           onSave={(settings) =>
             void act(async () => {
               await emailRoutines.save(editing.id, settings);
+              setQuery("");
               setEditing(null);
             })
           }
@@ -225,9 +239,37 @@ export function EmailRoutines({
         </section>
       ) : (
         <>
-          <button className="primary" disabled={locked} onClick={() => edit()}>
-            <Plus size={16} /> New email routine
-          </button>
+          <div className="routine-toolbar">
+            <button
+              className="primary"
+              disabled={locked}
+              onClick={() => edit()}
+            >
+              <Plus size={16} /> New email routine
+            </button>
+            {!!routines.length && (
+              <label className="routine-search">
+                <span>Find a routine</span>
+                <input
+                  type="search"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Search name, recipient or subject"
+                />
+              </label>
+            )}
+          </div>
+          {!!routines.length && (
+            <p className="muted" role="status">
+              {visibleRoutines.length} of {routines.length} routines · Newest
+              first
+            </p>
+          )}
+          {!!routines.length && !visibleRoutines.length && (
+            <p className="empty">
+              No matching routines. Try another name, email address or subject.
+            </p>
+          )}
           {!routines.length && (
             <div className="empty">
               <CalendarClock size={30} />
@@ -239,7 +281,7 @@ export function EmailRoutines({
             </div>
           )}
           <div className="routine-list">
-            {routines.map((routine) => {
+            {visibleRoutines.map((routine) => {
               const { settings } = routine;
               const due = isRoutineDue(routine);
               const missedAutomatic =
@@ -283,46 +325,6 @@ export function EmailRoutines({
                   <p>
                     Default recipient: <strong>{settings.recipient}</strong>
                   </p>
-                  {settings.cc && (
-                    <p>
-                      CC: <strong>{settings.cc}</strong>
-                    </p>
-                  )}
-                  {(settings.calendar?.enabled || calendarLink) && (
-                    <p className={calendarLink?.error ? "error" : "muted"}>
-                      Google Calendar:{" "}
-                      {!native
-                        ? "Preview only — no event created"
-                        : (calendarLink?.error ??
-                          (calendarLink?.synced_hash
-                            ? "Synced"
-                            : "Sync pending."))}
-                    </p>
-                  )}
-                  {native && calendarLink?.error && (
-                    <button
-                      className="secondary"
-                      disabled={locked}
-                      onClick={() =>
-                        void act(() => emailRoutines.retryCalendar(routine.id))
-                      }
-                    >
-                      Retry calendar sync
-                    </button>
-                  )}
-                  {!!settings.attachments?.length && (
-                    <p>
-                      Attachments:{" "}
-                      {settings.attachments.map((file) => file.name).join(", ")}
-                    </p>
-                  )}
-                  <p>
-                    Sender:{" "}
-                    <strong>
-                      {settings.sender_account ||
-                        "Not selected — edit and save this routine after connecting Gmail"}
-                    </strong>
-                  </p>
                   <p>
                     <strong>
                       {settings.auto_send
@@ -353,9 +355,56 @@ export function EmailRoutines({
                       . {change.note}
                     </p>
                   )}
-                  {!!settings.report_rules?.length && (
-                    <ReportRules value={settings.report_rules} />
-                  )}
+                  <details className="routine-details">
+                    <summary>Routine details</summary>
+                    {settings.cc && (
+                      <p>
+                        CC: <strong>{settings.cc}</strong>
+                      </p>
+                    )}
+                    {(settings.calendar?.enabled || calendarLink) && (
+                      <p className={calendarLink?.error ? "error" : "muted"}>
+                        Google Calendar:{" "}
+                        {!native
+                          ? "Preview only — no event created"
+                          : (calendarLink?.error ??
+                            (calendarLink?.synced_hash
+                              ? "Synced"
+                              : "Sync pending."))}
+                      </p>
+                    )}
+                    {native && calendarLink?.error && (
+                      <button
+                        className="secondary"
+                        disabled={locked}
+                        onClick={() =>
+                          void act(() =>
+                            emailRoutines.retryCalendar(routine.id),
+                          )
+                        }
+                      >
+                        Retry calendar sync
+                      </button>
+                    )}
+                    {!!settings.attachments?.length && (
+                      <p>
+                        Attachments:{" "}
+                        {settings.attachments
+                          .map((file) => file.name)
+                          .join(", ")}
+                      </p>
+                    )}
+                    <p>
+                      Sender:{" "}
+                      <strong>
+                        {settings.sender_account ||
+                          "Not selected — edit and save this routine after connecting Gmail"}
+                      </strong>
+                    </p>
+                    {!!settings.report_rules?.length && (
+                      <ReportRules value={settings.report_rules} />
+                    )}
+                  </details>
                   {attachmentFailure && (
                     <div className="routine-change">
                       <p role="alert">
@@ -428,41 +477,44 @@ export function EmailRoutines({
                     >
                       Edit routine / recipient
                     </button>
-                    {routine.next_due && (
+                    <details className="routine-manage">
+                      <summary>More actions</summary>
+                      {routine.next_due && (
+                        <button
+                          className="secondary"
+                          disabled={locked}
+                          onClick={() => {
+                            if (
+                              window.confirm(
+                                "Mark this occurrence handled without sending? Missed dates will be skipped and the next future occurrence will be scheduled.",
+                              )
+                            )
+                              void act(() =>
+                                emailRoutines.handle(
+                                  routine.id,
+                                  routine.next_due!,
+                                ),
+                              );
+                          }}
+                        >
+                          Mark handled / skip
+                        </button>
+                      )}
                       <button
                         className="secondary"
                         disabled={locked}
                         onClick={() => {
                           if (
                             window.confirm(
-                              "Mark this occurrence handled without sending? Missed dates will be skipped and the next future occurrence will be scheduled.",
+                              `Delete the saved routine “${settings.name}”? Email history will remain.`,
                             )
                           )
-                            void act(() =>
-                              emailRoutines.handle(
-                                routine.id,
-                                routine.next_due!,
-                              ),
-                            );
+                            void act(() => emailRoutines.remove(routine.id));
                         }}
                       >
-                        Mark handled / skip
+                        Delete routine
                       </button>
-                    )}
-                    <button
-                      className="secondary"
-                      disabled={locked}
-                      onClick={() => {
-                        if (
-                          window.confirm(
-                            `Delete the saved routine “${settings.name}”? Email history will remain.`,
-                          )
-                        )
-                          void act(() => emailRoutines.remove(routine.id));
-                      }}
-                    >
-                      Delete routine
-                    </button>
+                    </details>
                   </div>
                 </article>
               );

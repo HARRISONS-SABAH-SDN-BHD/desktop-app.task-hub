@@ -1,5 +1,6 @@
-Simpler screens and contextual help:
-- Short labels and visible status messages throughout routines, files, account connection, updates and email results.
-- Longer explanations in keyboard-accessible question-mark help controls.
-- Clear report-completion instructions without the unrelated generic Sent-mail warning.
-Email delivery and scheduling behavior are unchanged.
+Easier routine browsing:
+- Compact cards arranged side by side on wider screens.
+- Newest routines appear first; editing preserves creation order.
+- Search routines by name, recipient, CC or subject.
+- Expand routine details and more actions when needed.
+Email delivery, report preparation and schedules continue as before.

@@ -578,3 +578,104 @@
   color: #d3e6ee;
   margin-bottom: 10px;
 }
+
+/* Compact, responsive routine overview. */
+.routine-toolbar {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+.routine-search {
+  display: grid;
+  gap: 6px;
+  flex: 1;
+  max-width: 420px;
+  min-width: min(100%, 260px);
+}
+.routine-search input {
+  box-sizing: border-box;
+  background: #0b131e;
+  color: #e6edf5;
+  border: 1px solid #3b5066;
+  border-radius: 8px;
+  padding: 10px 12px;
+  width: 100%;
+  min-height: 46px;
+  font-size: 16px;
+}
+.routine-list {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
+  align-items: start;
+  gap: 16px;
+  margin-top: 16px;
+}
+.routine-card {
+  padding: 20px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.routine-card-heading {
+  flex-wrap: wrap;
+  align-items: start;
+  gap: 8px;
+}
+.routine-card h2 {
+  font-size: 21px;
+  margin-bottom: 0;
+}
+.routine-card p {
+  margin: 10px 0;
+  line-height: 1.5;
+}
+.routine-card .status {
+  flex-shrink: 0;
+}
+.routine-details {
+  border-top: 1px solid #304154;
+  padding-top: 12px;
+  margin-top: 16px;
+}
+.routine-details summary,
+.routine-manage summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #a9d8f5;
+  padding: 6px 0;
+}
+.routine-details summary:focus-visible,
+.routine-manage summary:focus-visible {
+  outline: 2px solid #5edee6;
+  outline-offset: 4px;
+}
+.routine-card .routine-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+.routine-card .routine-actions button {
+  padding: 10px 12px;
+  min-height: 44px;
+}
+.routine-manage {
+  width: 100%;
+}
+.routine-manage[open] {
+  display: block;
+}
+.routine-manage button {
+  margin: 8px 8px 0 0;
+}
+@media (max-width: 600px) {
+  .routine-toolbar {
+    align-items: stretch;
+  }
+  .routine-search {
+    max-width: none;
+  }
+  .routine-card {
+    padding: 18px;
+  }
+}

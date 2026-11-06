@@ -92,7 +92,11 @@ export const emailRoutines = {
       renderTemplate(settings.subject, day);
       renderTemplate(settings.message, day);
     }
-    write([...routines.filter((r) => r.id !== id), routine]);
+    write(
+      old
+        ? routines.map((item) => (item.id === id ? routine : item))
+        : [...routines, routine],
+    );
   },
   async preview(id: string): Promise<RoutinePreview> {
     if (bridge.native) return invoke("preview_email_routine", { id });

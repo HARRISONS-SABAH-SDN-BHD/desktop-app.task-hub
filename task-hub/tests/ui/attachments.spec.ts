@@ -30,6 +30,7 @@ test("saved routine retains attachment details after reload and uses them in the
   await page
     .getByRole("button", { name: "Email routines", exact: true })
     .click();
+  await page.getByText("Routine details", { exact: true }).click();
   await expect(
     page.getByText("Attachments: monthly.csv", { exact: true }),
   ).toBeVisible();
