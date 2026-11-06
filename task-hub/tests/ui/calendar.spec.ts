@@ -67,9 +67,7 @@ test("calendar access is a separate opt-in on Google sign-in and background oper
   await expect(
     page.getByRole("region", { name: "Gmail account connection" }),
   ).toContainText("system tray");
-  await page
-    .getByText("Google Cloud setup instructions", { exact: true })
-    .click();
+  await page.getByText("Publisher setup instructions", { exact: true }).click();
   await expect(
     page.getByRole("button", {
       name: "Enable Google Calendar API",

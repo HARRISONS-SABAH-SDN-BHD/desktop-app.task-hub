@@ -1,0 +1,22 @@
+Publisher setup (once for Task Hub, not once per user)
+
+1. Use a Google OAuth Desktop app registration, with Gmail API enabled.
+2. For optional calendars, enable Google Calendar API and the existing calendar scope.
+3. Set these build environment variables before building the installer:
+   TASK_HUB_GOOGLE_CLIENT_ID = the Desktop app client ID
+   TASK_HUB_GOOGLE_CLIENT_SECRET = its Desktop app client secret, if issued
+   GitHub releases use repository secrets with these same names.
+4. Build the installer. The native app uses this registration automatically;
+   users only choose Connect Gmail and sign in to their own account.
+5. In Testing, add allowed users to your Google project's test-user list.
+   Production distribution requires completing Google's applicable verification.
+
+Use Desktop app credentials only. Desktop clients are public clients: bundled
+client metadata is extractable. Never bundle a service-account key, web-client
+secret, account password or user refresh token. Each user's tokens remain in
+Windows Credential Manager. Existing account connections and routines are preserved.
+
+Unconfigured developer builds expose a separate developer setup section.
+Do not distribute an unconfigured build expecting one-click Google sign-in.
+
+Local release builds can instead set TASK_HUB_GOOGLE_CREDENTIALS_PATH to the downloaded Desktop OAuth JSON outside the repository. The release script imports it without copying it into source.

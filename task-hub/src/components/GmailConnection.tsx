@@ -13,6 +13,8 @@ export function GmailConnection({
   busy: boolean;
   refresh: () => Promise<void>;
 }) {
+  const managed = status.publisher_configured === true;
+  const [advanced, setAdvanced] = useState(false);
   const [clientId, setClientId] = useState(status.client_id);
   const [clientSecret, setClientSecret] = useState("");
   const [calendarAccess, setCalendarAccess] = useState(
@@ -42,7 +44,11 @@ export function GmailConnection({
   function connect(event: FormEvent) {
     event.preventDefault();
     void act(() =>
-      gmailConnection.connect(clientId.trim(), clientSecret, calendarAccess),
+      gmailConnection.connect(
+        managed ? "" : clientId.trim(),
+        managed ? "" : clientSecret,
+        calendarAccess,
+      ),
     );
   }
   return (
@@ -81,102 +87,132 @@ export function GmailConnection({
             Configure and connect through the desktop app.
           </p>
         )}
-        <details className="gmail-setup">
-          <summary>Google Cloud setup instructions</summary>
-          <ol>
-            <li>
-              Create or select a Google Cloud project and enable{" "}
-              <strong>Gmail API</strong>. For calendar sync, also enable{" "}
-              <strong>Google Calendar API</strong>.
-            </li>
-            <li>
-              In <strong>Google Auth Platform</strong>, configure branding and
-              audience. For an External app in Testing, add your Gmail address
-              as a test user.
-            </li>
-            <li>
-              Configure data access for <code>openid</code>, <code>email</code>,
-              and <code>https://www.googleapis.com/auth/gmail.compose</code>.
-              Gmail compose access allows creating drafts and sending email. For
-              optional calendar sync, also configure{" "}
-              <code>https://www.googleapis.com/auth/calendar.events.owned</code>
-              , then reconnect with Calendar access enabled.
-            </li>
-            <li>
-              Create an OAuth client with application type{" "}
-              <strong>Desktop app</strong>. Copy its client ID and, if provided,
-              its client secret into the fields below. Use desktop credentials,
-              not a web application client.
-            </li>
-            <li>
-              Click <strong>Connect Gmail</strong>, finish Google sign-in and
-              consent in your browser, then return here. Edit and save existing
-              routines to bind them to this connected sender.
-            </li>
-          </ol>
-          <Help label="Sign-in expiry">
-            Google may expire refresh tokens after seven days for External
-            projects in Testing. Reconnect when needed. Distribution beyond test
-            users may require Google verification.
-          </Help>
-          <div className="button-row routine-actions">
-            <button
-              className="secondary"
-              onClick={() => void act(() => gmailConnection.openSetup("cloud"))}
-              disabled={pending}
-            >
-              Open Google Cloud setup
-            </button>
-            <button
-              className="secondary"
-              onClick={() => void act(() => gmailConnection.openSetup("oauth"))}
-              disabled={pending}
-            >
-              Google’s desktop OAuth guide
-            </button>
-            <button
-              className="secondary"
-              onClick={() =>
-                void act(() => gmailConnection.openSetup("calendar"))
-              }
-              disabled={pending}
-            >
-              Enable Google Calendar API
-            </button>
-          </div>
-        </details>
+        {!managed && (
+          <details className="gmail-setup">
+            <summary>Publisher setup instructions</summary>
+            <ol>
+              <li>
+                Create or select a Google Cloud project and enable{" "}
+                <strong>Gmail API</strong>. For calendar sync, also enable{" "}
+                <strong>Google Calendar API</strong>.
+              </li>
+              <li>
+                In <strong>Google Auth Platform</strong>, configure branding and
+                audience. For an External app in Testing, add your Gmail address
+                as a test user.
+              </li>
+              <li>
+                Configure data access for <code>openid</code>,{" "}
+                <code>email</code>, and{" "}
+                <code>https://www.googleapis.com/auth/gmail.compose</code>.
+                Gmail compose access allows creating drafts and sending email.
+                For optional calendar sync, also configure{" "}
+                <code>
+                  https://www.googleapis.com/auth/calendar.events.owned
+                </code>
+                , then reconnect with Calendar access enabled.
+              </li>
+              <li>
+                Create an OAuth client with application type{" "}
+                <strong>Desktop app</strong>. Copy its client ID and, if
+                provided, its client secret into the fields below. Use desktop
+                credentials, not a web application client.
+              </li>
+              <li>
+                Click <strong>Connect Gmail</strong>, finish Google sign-in and
+                consent in your browser, then return here. Edit and save
+                existing routines to bind them to this connected sender.
+              </li>
+            </ol>
+            <Help label="Sign-in expiry">
+              Google may expire refresh tokens after seven days for External
+              projects in Testing. Reconnect when needed. Distribution beyond
+              test users may require Google verification.
+            </Help>
+            <div className="button-row routine-actions">
+              <button
+                className="secondary"
+                onClick={() =>
+                  void act(() => gmailConnection.openSetup("cloud"))
+                }
+                disabled={pending}
+              >
+                Open Google Cloud setup
+              </button>
+              <button
+                className="secondary"
+                onClick={() =>
+                  void act(() => gmailConnection.openSetup("oauth"))
+                }
+                disabled={pending}
+              >
+                Google’s desktop OAuth guide
+              </button>
+              <button
+                className="secondary"
+                onClick={() =>
+                  void act(() => gmailConnection.openSetup("calendar"))
+                }
+                disabled={pending}
+              >
+                Enable Google Calendar API
+              </button>
+            </div>
+          </details>
+        )}
         <p>
           Google Calendar:{" "}
           {status.calendar_access
             ? "Access granted. Enable sync in individual routines."
             : "Not connected. Enable Calendar access below and reconnect to grant it."}
         </p>
+        {!managed && (
+          <>
+            <p className="notice">
+              The app publisher needs to finish Google sign-in setup before
+              distributing Task Hub. Users do not need their own Google Cloud
+              project.
+            </p>
+            <button
+              type="button"
+              className="secondary"
+              aria-expanded={advanced}
+              onClick={() => setAdvanced(!advanced)}
+            >
+              Developer connection settings
+            </button>
+          </>
+        )}
         <form onSubmit={connect}>
           <fieldset
             disabled={busy || pending || status.busy}
             className="email-fields"
           >
-            <label>
-              Desktop OAuth client ID
-              <input
-                required
-                value={clientId}
-                onChange={(e) => setClientId(e.target.value)}
-                autoComplete="off"
-                placeholder="123456-example.apps.googleusercontent.com"
-                maxLength={250}
-              />
-            </label>
-            <label>
-              Desktop client secret (if provided)
-              <input
-                type="password"
-                value={clientSecret}
-                onChange={(e) => setClientSecret(e.target.value)}
-                autoComplete="off"
-                maxLength={1024}
-              />
-            </label>
+            {!managed && advanced && (
+              <>
+                <label>
+                  Desktop OAuth client ID
+                  <input
+                    required
+                    value={clientId}
+                    onChange={(e) => setClientId(e.target.value)}
+                    autoComplete="off"
+                    placeholder="123456-example.apps.googleusercontent.com"
+                    maxLength={250}
+                  />
+                </label>
+                <label>
+                  Desktop client secret (if provided)
+                  <input
+                    type="password"
+                    value={clientSecret}
+                    onChange={(e) => setClientSecret(e.target.value)}
+                    autoComplete="off"
+                    maxLength={1024}
+                  />
+                </label>
+              </>
+            )}
             <label className="routine-check">
               <input
                 type="checkbox"
@@ -185,7 +221,13 @@ export function GmailConnection({
               />
               Enable Google Calendar access
             </label>
-            <button className="primary" type="submit" disabled={!native}>
+            <button
+              className="primary"
+              type="submit"
+              disabled={
+                !native || (!managed && (!advanced || !clientId.trim()))
+              }
+            >
               {pending
                 ? "Waiting for Google sign-in…"
                 : status.connected

@@ -1,6 +1,4 @@
-Easier routine browsing:
-- Compact cards arranged side by side on wider screens.
-- Newest routines appear first; editing preserves creation order.
-- Search routines by name, recipient, CC or subject.
-- Expand routine details and more actions when needed.
-Email delivery, report preparation and schedules continue as before.
+Simpler Google sign-in:
+- Users connect their own Google account without creating a Google Cloud project or entering client credentials.
+- Shared Desktop OAuth registration is configured by the publisher at build time.
+- Existing connections, email routines and delivery behavior are preserved.

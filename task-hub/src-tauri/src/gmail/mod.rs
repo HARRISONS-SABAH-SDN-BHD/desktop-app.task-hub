@@ -31,6 +31,7 @@ struct Credentials {
 #[derive(Serialize)]
 pub struct ConnectionStatus {
     pub calendar_access: bool,
+    pub publisher_configured: bool,
     pub connected: bool,
     pub email: Option<String>,
     pub client_id: String,
@@ -61,6 +62,7 @@ pub fn status(state: &AppState) -> Result<ConnectionStatus> {
                 .unwrap_or_default()
         });
     Ok(ConnectionStatus {
+        publisher_configured: publisher_client().is_some(),
         calendar_access: credential.as_ref().is_some_and(|c| c.calendar_access),
         connected: credential.is_some(),
         email: credential.map(|c| c.email),
@@ -71,6 +73,18 @@ pub fn status(state: &AppState) -> Result<ConnectionStatus> {
 pub fn ready() -> bool {
     OPERATION.try_lock().is_ok() && vault::read().ok().flatten().is_some()
 }
+// Desktop OAuth clients are public clients. Only the publisher's desktop
+// registration is bundled; user tokens remain in the Windows credential vault.
+fn publisher_client() -> Option<(&'static str, Option<&'static str>)> {
+    let id = option_env!("TASK_HUB_GOOGLE_CLIENT_ID")?.trim();
+    if oauth::validate_client_id(id).is_err() {
+        return None;
+    }
+    let secret = option_env!("TASK_HUB_GOOGLE_CLIENT_SECRET")
+        .map(str::trim)
+        .filter(|value| !value.is_empty());
+    Some((id, secret))
+}
 pub fn connect(
     state: &AppState,
     id: String,
@@ -78,6 +92,10 @@ pub fn connect(
     calendar_access: bool,
     open: impl FnOnce(String) -> Result<()>,
 ) -> Result<()> {
+    let (id, secret) = match publisher_client() {
+        Some((id, secret)) => (id.to_owned(), secret.map(str::to_owned)),
+        None => (id, secret),
+    };
     oauth::connect(state, id, secret, calendar_access, open)
 }
 pub fn cancel_connect() {

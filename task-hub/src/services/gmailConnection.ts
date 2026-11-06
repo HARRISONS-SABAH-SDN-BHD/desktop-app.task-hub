@@ -2,6 +2,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { bridge } from "./bridge";
 export interface GmailStatus {
   calendar_access?: boolean;
+  publisher_configured?: boolean;
   connected: boolean;
   email: string | null;
   client_id: string;
