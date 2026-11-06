@@ -8,7 +8,7 @@ use reqwest::blocking::Client;
 use serde_json::{json, Value};
 use std::time::Duration;
 
-pub(super) fn client() -> Result<Client> {
+pub(crate) fn client() -> Result<Client> {
     Client::builder()
         .timeout(Duration::from_secs(30))
         .connect_timeout(Duration::from_secs(10))

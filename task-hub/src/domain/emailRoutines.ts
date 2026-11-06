@@ -16,6 +16,7 @@ export interface CalendarLink {
   error: string | null;
 }
 export interface RoutineSettings {
+  provider?: "gmail" | "microsoft";
   report_rules?: ReportRule[];
   calendar?: { enabled: boolean; reminder_minutes: number } | null;
   cc?: string;
@@ -145,6 +146,7 @@ export function previewRoutine(routine: EmailRoutine): RoutinePreview {
       subject: renderTemplate(settings.subject, due),
       message: renderTemplate(settings.message, due),
       delivery: settings.auto_send ? "Send directly" : "Draft",
+      _provider: settings.provider ?? "gmail",
       _sender_account: settings.sender_account ?? "",
       _attachment_rules: JSON.stringify(settings.report_rules ?? []),
       _attachment_ids: (settings.attachments ?? []).map((a) => a.id).join(","),

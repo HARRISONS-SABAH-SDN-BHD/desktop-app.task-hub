@@ -12,6 +12,7 @@ mod email_routines;
 #[cfg_attr(not(test), allow(dead_code))]
 mod foreground;
 mod gmail;
+mod microsoft;
 mod model;
 #[cfg(feature = "desktop")]
 mod notifications;
@@ -147,6 +148,34 @@ mod desktop {
     #[tauri::command]
     fn approve_foreground_send(state: State<'_, AppState>, run_id: String) -> Result<()> {
         state.foreground.approve(&run_id)
+    }
+    #[tauri::command]
+    fn microsoft_status(state: State<'_, AppState>) -> Result<microsoft::Status> {
+        microsoft::status(&state)
+    }
+    #[tauri::command]
+    async fn connect_microsoft(
+        app: tauri::AppHandle,
+        client_id: String,
+        tenant_id: String,
+    ) -> Result<()> {
+        tauri::async_runtime::spawn_blocking(move || {
+            microsoft::connect(&app.state::<AppState>(), client_id, tenant_id, |url| {
+                app.opener()
+                    .open_url(url, None::<&str>)
+                    .map_err(|_| "Could not open Microsoft sign-in".into())
+            })
+        })
+        .await
+        .map_err(|e| e.to_string())?
+    }
+    #[tauri::command]
+    fn cancel_microsoft_connection() {
+        microsoft::cancel();
+    }
+    #[tauri::command]
+    fn disconnect_microsoft() -> Result<()> {
+        microsoft::disconnect()
     }
     #[tauri::command]
     fn gmail_status(state: State<'_, AppState>) -> Result<gmail::ConnectionStatus> {
@@ -360,6 +389,10 @@ mod desktop {
                 run_email_routine,
                 test_email_notification,
                 retry_calendar_sync,
+                microsoft_status,
+                connect_microsoft,
+                cancel_microsoft_connection,
+                disconnect_microsoft,
                 gmail_status,
                 connect_gmail,
                 cancel_gmail_connection,

@@ -30,6 +30,7 @@ export function EmailRoutines({
   busy,
   native,
   senderEmail,
+  microsoftEmail = null,
   refresh,
   onRun,
 }: {
@@ -40,6 +41,7 @@ export function EmailRoutines({
   busy: boolean;
   native: boolean;
   senderEmail: string | null;
+  microsoftEmail?: string | null;
   refresh: () => Promise<void>;
   onRun: (plan: RoutinePreview) => Promise<void>;
 }) {
@@ -139,6 +141,7 @@ export function EmailRoutines({
       {editing ? (
         <RoutineForm
           settings={editing.settings}
+          microsoftEmail={microsoftEmail}
           senderEmail={senderEmail}
           native={native}
           locked={locked}
@@ -199,7 +202,7 @@ export function EmailRoutines({
           {current?.attempt ? (
             <p className="notice">
               This occurrence was already attempted. Check Email history and
-              Gmail’s Drafts and Sent folders. It will not run again
+              your provider’s Drafts and Sent folders. It will not run again
               automatically. Use “Mark handled / skip” after checking the
               outcome.
             </p>
@@ -207,8 +210,8 @@ export function EmailRoutines({
             <>
               <p>
                 {current?.settings.auto_send
-                  ? "Automatic sending is enabled. The saved email will be sent through Gmail’s API at its scheduled time, without an approval prompt."
-                  : "Task Hub creates the draft through Gmail’s API without opening a browser. Nothing is sent. Edit the routine to change future drafts."}
+                  ? "Automatic sending is enabled. The saved email will be sent through the selected provider’s API at its scheduled time, without an approval prompt."
+                  : "Task Hub creates the draft through the selected provider’s API without opening a browser. Nothing is sent. Edit the routine to change future drafts."}
               </p>
               {!current?.settings.auto_send && (
                 <button
@@ -322,6 +325,11 @@ export function EmailRoutines({
                               : "Upcoming"}
                     </span>
                   </div>
+                  <p className="muted">
+                    {settings.provider === "microsoft"
+                      ? "Microsoft 365"
+                      : "Gmail"}
+                  </p>
                   <p>
                     Default recipient: <strong>{settings.recipient}</strong>
                   </p>
@@ -398,7 +406,7 @@ export function EmailRoutines({
                       Sender:{" "}
                       <strong>
                         {settings.sender_account ||
-                          "Not selected — edit and save this routine after connecting Gmail"}
+                          "Not selected — edit and save this routine after connecting an email account"}
                       </strong>
                     </p>
                     {!!settings.report_rules?.length && (
@@ -421,8 +429,8 @@ export function EmailRoutines({
                   )}
                   {routine.attempt && !attachmentFailure && (
                     <p className="error">
-                      An attempt is recorded. Inspect history and Gmail Drafts /
-                      Sent before handling this occurrence.
+                      An attempt is recorded. Inspect history and provider
+                      Drafts / Sent before handling this occurrence.
                     </p>
                   )}
                   {missedAutomatic && !routine.attempt && (
@@ -530,6 +538,7 @@ function RoutineForm({
   settings: initial,
   native,
   senderEmail,
+  microsoftEmail = null,
   locked,
   onSave,
   onCancel,
@@ -537,18 +546,25 @@ function RoutineForm({
   settings: RoutineSettings;
   native: boolean;
   senderEmail: string | null;
+  microsoftEmail?: string | null;
   locked: boolean;
   onSave: (settings: RoutineSettings) => void;
   onCancel: () => void;
 }) {
   const [settings, setSettings] = useState(() => ({
     ...initial,
+    provider:
+      initial.provider ??
+      (initial.sender_account || senderEmail || !microsoftEmail
+        ? "gmail"
+        : "microsoft"),
     report_rules: initial.report_rules ?? [],
     calendar: initial.calendar ?? { enabled: false, reminder_minutes: 1440 },
     cc: initial.cc ?? "",
     attachments: initial.attachments ?? [],
     sender_account:
-      initial.sender_account ?? (native ? senderEmail : "preview@example.com"),
+      initial.sender_account ??
+      (native ? (senderEmail ?? microsoftEmail) : "preview@example.com"),
   }));
   const [error, setError] = useState("");
   const [attachmentBusy, setAttachmentBusy] = useState(false);
@@ -561,9 +577,14 @@ function RoutineForm({
   function save(event: FormEvent) {
     event.preventDefault();
     setError("");
-    if (native && (!senderEmail || settings.sender_account !== senderEmail)) {
+    if (
+      native &&
+      (!settings.sender_account ||
+        settings.sender_account !==
+          (settings.provider === "microsoft" ? microsoftEmail : senderEmail))
+    ) {
       setError(
-        "Connect the intended Gmail sender, then choose that account before saving this routine.",
+        "Connect the intended email sender, then choose that account before saving this routine.",
       );
       return;
     }
@@ -605,20 +626,55 @@ function RoutineForm({
         <label>
           Sender account
           <select
+            aria-label="Sender account"
             required
-            value={settings.sender_account ?? ""}
-            onChange={(e) => update("sender_account", e.target.value || null)}
+            value={
+              settings.sender_account
+                ? (settings.provider ?? "gmail") + ":" + settings.sender_account
+                : ""
+            }
+            onChange={(event) => {
+              const [provider, ...parts] = event.target.value.split(":");
+              setSettings((current) => ({
+                ...current,
+                provider: provider === "microsoft" ? "microsoft" : "gmail",
+                sender_account: parts.join(":") || null,
+                calendar:
+                  provider === "microsoft"
+                    ? {
+                        enabled: false,
+                        reminder_minutes: current.calendar.reminder_minutes,
+                      }
+                    : current.calendar,
+              }));
+            }}
           >
-            <option value="">Choose a connected Gmail account</option>
+            <option value="">Choose a connected sender</option>
             {settings.sender_account &&
-              settings.sender_account !== senderEmail && (
-                <option value={settings.sender_account}>
-                  {settings.sender_account}
-                  {native ? " (not connected)" : " (preview only)"}
+              settings.sender_account !==
+                (settings.provider === "microsoft"
+                  ? microsoftEmail
+                  : senderEmail) && (
+                <option
+                  value={
+                    (settings.provider ?? "gmail") +
+                    ":" +
+                    settings.sender_account
+                  }
+                >
+                  {settings.sender_account}{" "}
+                  {native ? "(not connected)" : "(preview only)"}
                 </option>
               )}
             {senderEmail && (
-              <option value={senderEmail}>{senderEmail} (connected)</option>
+              <option value={"gmail:" + senderEmail}>
+                Gmail — {senderEmail}
+              </option>
+            )}
+            {microsoftEmail && (
+              <option value={"microsoft:" + microsoftEmail}>
+                Microsoft 365 — {microsoftEmail}
+              </option>
             )}
           </select>
         </label>
@@ -782,16 +838,24 @@ function RoutineForm({
             <Help label="Automatic sending">
               Saving authorizes Task Hub to send the saved recipient and message
               on each scheduled occurrence without asking again. It uses this
-              saved sender account through Gmail’s API in the background. Failed
-              or uncertain sends are not retried automatically. Enabling
-              automatic sending schedules the next future occurrence.
+              saved sender account through the selected provider’s API in the
+              background. Failed or uncertain sends are not retried
+              automatically. Enabling automatic sending schedules the next
+              future occurrence.
             </Help>
           </div>
         )}
         <h3 className="form-section-title">5. Calendar reminder (optional)</h3>
+        {settings.provider === "microsoft" && (
+          <p>
+            Outlook calendar sync is not included yet. Google Calendar sync is
+            available for Gmail routines.
+          </p>
+        )}
         <label className="routine-check">
           <input
             type="checkbox"
+            disabled={settings.provider === "microsoft"}
             checked={settings.calendar.enabled}
             onChange={(e) =>
               update("calendar", {

@@ -27,6 +27,9 @@ fn digest(value: &Value) -> String {
 }
 fn desired(routine: &EmailRoutine, zone: &str) -> Result<Option<Value>> {
     let s = &routine.settings;
+    if s.provider != "gmail" {
+        return Ok(None);
+    }
     let Some(calendar) = s.calendar.as_ref().filter(|c| c.enabled && s.enabled) else {
         return Ok(None);
     };
@@ -190,7 +193,8 @@ fn tick(state: &AppState) -> Result<()> {
             .email_routines
             .iter()
             .filter(|r| {
-                r.settings.enabled
+                r.settings.provider == "gmail"
+                    && r.settings.enabled
                     && r.settings.calendar.as_ref().is_some_and(|c| c.enabled)
                     && r.settings
                         .sender_account

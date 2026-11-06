@@ -137,6 +137,7 @@ export const emailRoutines = {
       throw new Error("Routine changed. Open its preview again");
     const answers = { ...plan.parameters };
     delete answers._sender_account;
+    delete answers._provider;
     delete answers._attachment_ids;
     delete answers._attachment_rules;
     const reports = await reportFiles.previewAttachments(

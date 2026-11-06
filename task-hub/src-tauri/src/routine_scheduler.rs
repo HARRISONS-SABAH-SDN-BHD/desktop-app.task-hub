@@ -9,7 +9,7 @@ pub fn start(app: AppHandle) {
         match email_routines::automatic_tick(&state, gmail::ready()) {
             Ok(Some(run)) => {
                 let (title, message) = if run.status == "succeeded" {
-                    ("Scheduled email sent", "Gmail API accepted the scheduled email. See Task Hub’s email history for details.")
+                    ("Scheduled email sent", "The mail provider accepted the scheduled email. See Task Hub’s email history for details.")
                 } else if run
                     .error
                     .as_deref()
@@ -17,7 +17,7 @@ pub fn start(app: AppHandle) {
                 {
                     ("Report needs your attention", "Email was not sent. Open Task Hub for the report filename and folder. Complete any template copies, save them, then choose Report ready — retry in the routine.")
                 } else {
-                    ("Scheduled email needs attention", "The scheduled attempt stopped and will not retry automatically. Check Task Hub history and Gmail’s Sent folder before trying again.")
+                    ("Scheduled email needs attention", "The scheduled attempt stopped and will not retry automatically. Check Task Hub history and the provider’s Sent folder before trying again.")
                 };
                 if let Err(error) = notifications::show(&app, title, message) {
                     eprintln!("Email notification: {error}");

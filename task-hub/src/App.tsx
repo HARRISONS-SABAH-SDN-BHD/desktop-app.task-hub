@@ -1,3 +1,8 @@
+import { MicrosoftConnection } from "./components/MicrosoftConnection";
+import {
+  microsoftConnection,
+  emptyMicrosoftStatus,
+} from "./services/microsoftConnection";
 import { useEffect, useState } from "react";
 import {
   Mail,
@@ -27,6 +32,7 @@ import {
 const pages = [
   { id: "routines", title: "Email routines", icon: CalendarClock },
   { id: "history", title: "Email history", icon: HistoryIcon },
+  { id: "microsoft", title: "Microsoft 365", icon: Mail },
   { id: "connection", title: "Gmail connection", icon: CircleHelp },
   { id: "updates", title: "App updates", icon: Download },
 ] as const;
@@ -43,6 +49,7 @@ export default function App() {
   const [manualBusy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [routines, setRoutines] = useState<EmailRoutine[]>([]);
+  const [microsoftStatus, setMicrosoftStatus] = useState(emptyMicrosoftStatus);
   const [gmailStatus, setGmailStatus] = useState<GmailStatus>({
     connected: false,
     email: null,
@@ -50,7 +57,12 @@ export default function App() {
     busy: false,
   });
   async function refreshConnection() {
-    setGmailStatus(await gmailConnection.status());
+    const [google, microsoft] = await Promise.all([
+      gmailConnection.status(),
+      microsoftConnection.status(),
+    ]);
+    setGmailStatus(google);
+    setMicrosoftStatus(microsoft);
   }
   const busy =
     manualBusy ||
@@ -90,10 +102,23 @@ export default function App() {
         .catch((e) => {
           if (active) setError(String(e));
         });
+    const refreshMicrosoft = () =>
+      microsoftConnection
+        .status()
+        .then((status) => {
+          if (active) setMicrosoftStatus(status);
+        })
+        .catch((e) => {
+          if (active) setError(String(e));
+        });
+    void refreshMicrosoft();
     void refreshAccount();
     const timer = window.setInterval(() => void refresh(), 750);
     const routineTimer = window.setInterval(() => void refreshSaved(), 5000);
-    const accountTimer = window.setInterval(() => void refreshAccount(), 5000);
+    const accountTimer = window.setInterval(() => {
+      void refreshAccount();
+      void refreshMicrosoft();
+    }, 2000);
     return () => {
       active = false;
       clearInterval(timer);
@@ -207,8 +232,8 @@ export default function App() {
         <main>
           {!bridge.native && (
             <div className="preview-strip">
-              Browser preview records a preview only. Connect Gmail through the
-              desktop app for background delivery.
+              Browser preview records a preview only. Connect your email account
+              through the desktop app for background delivery.
             </div>
           )}
           <div className="content">
@@ -224,11 +249,13 @@ export default function App() {
             />
             {bridge.native &&
               !gmailStatus.connected &&
-              page !== "connection" && (
+              !microsoftStatus.connected &&
+              page !== "connection" &&
+              page !== "microsoft" && (
                 <div className="routine-due-banner" role="status">
                   <span>
-                    Connect Gmail to enable background drafts and scheduled
-                    sending.
+                    Connect an email account to enable background drafts and
+                    scheduled sending.
                   </span>
                   <button
                     className="secondary"
@@ -236,6 +263,13 @@ export default function App() {
                     onClick={() => navigate("connection")}
                   >
                     Connect Gmail
+                  </button>
+                  <button
+                    className="secondary"
+                    disabled={busy}
+                    onClick={() => navigate("microsoft")}
+                  >
+                    Connect Microsoft 365
                   </button>
                 </div>
               )}
@@ -290,6 +324,7 @@ export default function App() {
                 onRetry={retryReports}
                 calendarLinks={snapshot.calendar_links ?? []}
                 busy={busy}
+                microsoftEmail={microsoftStatus.email}
                 senderEmail={gmailStatus.email}
                 native={bridge.native}
                 refresh={refreshRoutines}
@@ -300,6 +335,13 @@ export default function App() {
                 runs={runs}
                 native={bridge.native}
                 onSelect={setResult}
+              />
+            ) : page === "microsoft" ? (
+              <MicrosoftConnection
+                status={microsoftStatus}
+                native={bridge.native}
+                busy={busy}
+                refresh={refreshConnection}
               />
             ) : page === "updates" ? (
               <AppUpdates busy={busy} />
@@ -319,7 +361,7 @@ export default function App() {
               ? "Closing the window keeps schedules running. Quit from the system tray."
               : "One task. A clearer workflow."}
           </span>
-          <span>GMAIL API · BACKGROUND EMAIL · WINDOWS</span>
+          <span>GMAIL / MICROSOFT 365 · BACKGROUND EMAIL · WINDOWS</span>
         </footer>
       </div>
     </div>

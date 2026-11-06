@@ -1,0 +1,37 @@
+Microsoft 365 setup for Harrisons IT
+
+1. Open https://entra.microsoft.com and select the Harrisons directory.
+2. Go to Identity > Applications > App registrations > New registration.
+3. Name: Task Hub. Supported accounts: this organizational directory only.
+4. On Overview, copy Application (client) ID and Directory (tenant) ID.
+5. Under Authentication > Advanced settings, enable Allow public client flows.
+   Task Hub uses Microsoft's device-code flow and no client secret.
+6. API permissions > Add a permission > Microsoft Graph > Delegated permissions:
+   User.Read, Mail.ReadWrite, Mail.Send. Task Hub also requests offline_access.
+   Review and grant consent as required by company policy. These are delegated
+   permissions for the signed-in mailbox, not application access to all mailboxes.
+7. Confirm the user has a licensed Exchange Online mailbox and that company
+   policy permits Task Hub/device-code authentication. Do not disable security
+   controls just to bypass a sign-in rejection.
+8. In Task Hub > Microsoft 365, enter the two IDs and connect. Enter the displayed
+   code on the official Microsoft sign-in page. Sign in as your work account.
+9. Edit the email routine and select Microsoft 365 as its sender. Test with a
+   draft first. Drafts appear in Outlook Drafts; accepted sends go to Sent Items.
+
+For a shared installer, the publisher sets build environment variables
+TASK_HUB_MICROSOFT_CLIENT_ID and TASK_HUB_MICROSOFT_TENANT_ID. GitHub Actions
+reads repository secrets with those names. End users then need only sign in.
+The IDs are not passwords. Never supply a Microsoft client secret to this app.
+
+Limits: one connected Microsoft mailbox plus one Gmail account; no shared
+mailboxes or send-as aliases. Microsoft email requests must stay below 4 MB
+encoded, approximately 2 MB total attachments. Large files stop before mail
+submission. Fixed files and report rules use the same preparation checks as
+Gmail. Outlook calendar synchronization is not implemented in this release.
+Keep Task Hub in the tray, the computer awake and online for scheduled runs.
+IT/account registration is required before a real Microsoft sign-in can be tested.
+
+References:
+https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-device-code
+https://learn.microsoft.com/en-us/graph/api/user-sendmail?view=graph-rest-1.0
+https://learn.microsoft.com/en-us/graph/api/user-post-messages?view=graph-rest-1.0

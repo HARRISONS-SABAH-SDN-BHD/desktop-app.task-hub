@@ -1,7 +1,7 @@
 //! Background Gmail transport. No UI Automation, keyboard input or browser session.
 pub mod calendar;
 mod oauth;
-mod transport;
+pub(crate) mod transport;
 mod vault;
 use crate::{
     email_profile,
@@ -109,7 +109,7 @@ pub fn disconnect() -> Result<()> {
 }
 fn check_sender(actual: &str, expected: &str) -> Result<()> {
     if !validation::valid_email(expected) || !actual.eq_ignore_ascii_case(expected) {
-        return Err("The connected Gmail account does not match this email's saved sender. Reconnect that account, or edit and save the routine with the intended sender. Nothing was submitted to Gmail.".into());
+        return Err("The connected account does not match this email's saved sender. Reconnect that account, or edit and save the routine with the intended sender. Nothing was submitted to the mail provider.".into());
     }
     Ok(())
 }
@@ -117,15 +117,37 @@ fn deliver(state: &AppState, run: &mut Run, direct: bool) -> Result<(String, Vec
     let _operation = OPERATION
         .try_lock()
         .map_err(|_| "Another Gmail operation is in progress; no email request was made")?;
-    let mut credential =
-        vault::read()?.ok_or("Connect Gmail in Task Hub before preparing or sending email")?;
+    let microsoft = run
+        .parameters
+        .get("_provider")
+        .and_then(|v| v.as_str())
+        .unwrap_or("gmail");
+    if !matches!(microsoft, "gmail" | "microsoft") {
+        return Err("Unsupported email provider; nothing was submitted".into());
+    }
+    let microsoft = microsoft == "microsoft";
+    let mut google_credential = if microsoft {
+        None
+    } else {
+        Some(vault::read()?.ok_or("Connect Gmail before running this routine")?)
+    };
+    let mut microsoft_credential = if microsoft {
+        Some(crate::microsoft::credentials()?)
+    } else {
+        None
+    };
+    let sender = if let Some(c) = &microsoft_credential {
+        c.email.clone()
+    } else {
+        google_credential.as_ref().unwrap().email.clone()
+    };
     let text = |name: &str| {
         run.parameters
             .get(name)
             .and_then(|v| v.as_str())
             .ok_or_else(|| format!("Missing email field: {name}"))
     };
-    check_sender(&credential.email, text("_sender_account")?)?;
+    check_sender(&sender, text("_sender_account")?)?;
     let delivery = text("delivery")?;
     let send = match delivery {
         "Draft" => false,
@@ -158,7 +180,7 @@ fn deliver(state: &AppState, run: &mut Run, direct: bool) -> Result<(String, Vec
         }
     }
     let raw = transport::mime(
-        &credential.email,
+        &sender,
         text("recipient")?,
         run.parameters
             .get("cc")
@@ -185,19 +207,40 @@ fn deliver(state: &AppState, run: &mut Run, direct: bool) -> Result<(String, Vec
             Ok(())
         })?;
     }
-    let client = transport::client()?;
-    let token = oauth::access_token(&client, &mut credential)?;
-    let id = transport::deliver(&client, "https://gmail.googleapis.com", &token, &raw, send)?;
-    let summary = if send {
-        "Gmail API accepted the email for sending. Final delivery depends on the recipient's provider."
+    let (provider, id, summary) = if let Some(credential) = &mut microsoft_credential {
+        let id = crate::microsoft::deliver(credential, &raw, send)?;
+        (
+            "Microsoft 365",
+            id,
+            if send {
+                "Microsoft Graph accepted the email for sending. Final delivery depends on the recipient's provider."
+            } else {
+                "Draft created in Outlook through Microsoft Graph. Nothing was sent."
+            },
+        )
     } else {
-        "Draft created in Gmail through the API. Nothing was sent."
+        let credential = google_credential.as_mut().unwrap();
+        let client = transport::client()?;
+        let token = oauth::access_token(&client, credential)?;
+        let id = transport::deliver(&client, "https://gmail.googleapis.com", &token, &raw, send)?;
+        (
+            "Gmail",
+            id,
+            if send {
+                "Gmail API accepted the email for sending. Final delivery depends on the recipient's provider."
+            } else {
+                "Draft created in Gmail through the API. Nothing was sent."
+            },
+        )
     };
     let mut logs = vec![
-        "Using Gmail API in the background; no browser or desktop input is used.".into(),
-        format!("Connected sender: {}", credential.email),
+        format!("Using {provider} API in the background; no browser or desktop input is used."),
+        format!("Connected sender: {sender}"),
         summary.into(),
-        format!("Gmail {} ID: {id}", if send { "message" } else { "draft" }),
+        format!(
+            "{provider} {} ID: {id}",
+            if send { "message" } else { "draft" }
+        ),
     ];
     if !attachments.is_empty() {
         logs.push(format!(
@@ -209,8 +252,12 @@ fn deliver(state: &AppState, run: &mut Run, direct: bool) -> Result<(String, Vec
                 .join(", ")
         ));
     }
-    let receipt = state.output.join(format!("{}.gmail.txt", run.id));
-    atomic_write(&receipt, logs.join("\n").as_bytes()).map_err(|_| "Gmail accepted the request, but Task Hub could not write its receipt. Inspect Gmail before retrying; no retry was attempted.")?;
+    let receipt = state.output.join(format!(
+        "{}.{}.txt",
+        run.id,
+        if microsoft { "microsoft" } else { "gmail" }
+    ));
+    atomic_write(&receipt, logs.join("\n").as_bytes()).map_err(|_| "The mail provider accepted the request, but Task Hub could not write its receipt. Inspect Drafts / Sent before retrying; no retry was attempted.")?;
     Ok((receipt.to_string_lossy().into_owned(), logs))
 }
 pub fn execute(state: &AppState, task: Task, mut run: Run, direct: bool) -> Result<Run> {

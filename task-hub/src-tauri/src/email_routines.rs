@@ -3,6 +3,10 @@ use crate::{email_profile, model::*, runner, storage::AppState, validation};
 use chrono::{DateTime, Datelike, Days, Local, NaiveDate, NaiveTime, TimeZone, Utc};
 use serde::{Deserialize, Serialize};
 
+fn default_provider() -> String {
+    "gmail".into()
+}
+
 fn default_calendar_reminder() -> u32 {
     1440
 }
@@ -16,6 +20,8 @@ pub struct CalendarSettings {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct RoutineSettings {
+    #[serde(default = "default_provider")]
+    pub provider: String,
     #[serde(default)]
     pub report_rules: Vec<crate::attachment_rules::ReportRule>,
     #[serde(default)]
@@ -111,6 +117,12 @@ fn validate(settings: &RoutineSettings) -> Result<()> {
         return Err(
             "Calendar reminders must be between 0 and 40320 minutes before the event".into(),
         );
+    }
+    if !matches!(settings.provider.as_str(), "gmail" | "microsoft") {
+        return Err("Choose Gmail or Microsoft 365 as the email provider".into());
+    }
+    if settings.provider == "microsoft" && settings.calendar.as_ref().is_some_and(|c| c.enabled) {
+        return Err("Google Calendar sync is available for Gmail routines only. Outlook calendar sync is not included in this version.".into());
     }
     crate::attachments::validate_list(&settings.attachments)?;
     if settings
@@ -359,6 +371,7 @@ fn preview(routine: &EmailRoutine) -> Result<RoutinePreview> {
     let parameters = serde_json::from_value(serde_json::json!({
         "recipient": recipient, "cc": routine.settings.cc, "subject": render(&routine.settings.subject, day)?,
         "message": render(&routine.settings.message, day)?, "delivery": if routine.settings.auto_send { "Send directly" } else { "Draft" },
+        "_provider": routine.settings.provider,
         "_sender_account": routine.settings.sender_account.as_deref().unwrap_or_default(),
         "_attachment_rules": serde_json::to_string(&routine.settings.report_rules).map_err(|_|"Invalid report rules")?,
         "_attachment_ids": routine.settings.attachments.iter().map(|a| a.id.as_str()).collect::<Vec<_>>().join(",")
@@ -470,6 +483,7 @@ fn claim(
         // claimed routine whose saved setting authorizes it gets this task.
         let mut inputs = plan.parameters.clone();
         inputs.remove("_sender_account");
+        inputs.remove("_provider");
         inputs.remove("_attachment_ids");
         inputs.remove("_attachment_rules");
         let mut validated = inputs.clone();
@@ -490,6 +504,7 @@ fn claim(
         run.parameters.insert("_attachment_rules".into(), serde_json::json!(serde_json::to_string(&routine.settings.report_rules).map_err(|_|"Invalid report rules")?));
         run.parameters.insert("_attachment_due".into(), serde_json::json!(due));
         run.parameters.insert("_routine_id".into(), serde_json::json!(routine.id));
+        run.parameters.insert("_provider".into(), serde_json::json!(routine.settings.provider));
         let sender = routine.settings.sender_account.as_deref().ok_or("Connect Gmail, then edit and save this routine with its sender account")?;
         run.parameters.insert("_sender_account".into(), serde_json::json!(sender));
         if automatic { run.logs.push("Automatic sending was enabled in the saved routine. This occurrence is claimed before any browser input; failed or uncertain sends are never retried automatically.".into()); }
@@ -522,13 +537,48 @@ fn automatic_eligible(routine: &EmailRoutine, now: DateTime<Utc>) -> bool {
         })
 }
 pub fn automatic_tick(state: &AppState, account_ready: bool) -> Result<Option<Run>> {
-    automatic_tick_with(state, account_ready, Utc::now(), crate::gmail::execute)
+    if crate::gmail::busy() {
+        return Ok(None);
+    }
+    let google = if account_ready {
+        crate::gmail::status(state)?.email
+    } else {
+        None
+    };
+    let microsoft = crate::microsoft::connected_sender();
+    automatic_tick_filtered(
+        state,
+        account_ready || microsoft.is_some(),
+        Utc::now(),
+        crate::gmail::execute,
+        |routine| {
+            let account = if routine.settings.provider == "microsoft" {
+                &microsoft
+            } else {
+                &google
+            };
+            account
+                .as_deref()
+                .zip(routine.settings.sender_account.as_deref())
+                .is_some_and(|(a, b)| a.eq_ignore_ascii_case(b))
+        },
+    )
 }
+#[cfg(test)]
 fn automatic_tick_with(
     state: &AppState,
     ready: bool,
     now: DateTime<Utc>,
     execute: impl FnOnce(&AppState, Task, Run, bool) -> Result<Run>,
+) -> Result<Option<Run>> {
+    automatic_tick_filtered(state, ready, now, execute, |_| true)
+}
+fn automatic_tick_filtered(
+    state: &AppState,
+    ready: bool,
+    now: DateTime<Utc>,
+    execute: impl FnOnce(&AppState, Task, Run, bool) -> Result<Run>,
+    available: impl Fn(&EmailRoutine) -> bool,
 ) -> Result<Option<Run>> {
     if !ready {
         return Ok(None);
@@ -541,7 +591,7 @@ fn automatic_tick_with(
         store
             .email_routines
             .iter()
-            .find(|r| automatic_eligible(r, now))
+            .find(|r| automatic_eligible(r, now) && available(r))
             .map(preview)
             .transpose()?
     };
@@ -656,6 +706,44 @@ pub fn acknowledge_reminders(state: &AppState, reminders: &[DueReminder]) -> Res
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn old_routines_default_to_gmail_and_provider_is_bound_to_the_plan() {
+        let mut value = serde_json::to_value(settings()).unwrap();
+        value.as_object_mut().unwrap().remove("provider");
+        let old: RoutineSettings = serde_json::from_value(value).unwrap();
+        assert_eq!(old.provider, "gmail");
+        let (_dir, state, now) = setup_due_automatic();
+        state
+            .transaction(|store| {
+                store.email_routines[0].settings.provider = "microsoft".into();
+                Ok(())
+            })
+            .unwrap();
+        let routine = state.lock().unwrap().email_routines[0].clone();
+        assert_eq!(
+            preview(&routine).unwrap().parameters["_provider"],
+            "microsoft"
+        );
+        assert!(automatic_tick_filtered(
+            &state,
+            true,
+            now,
+            |_, _, _, _| panic!("disconnected provider must not execute"),
+            |_| false
+        )
+        .unwrap()
+        .is_none());
+        assert!(state.lock().unwrap().email_routines[0].attempt.is_none());
+        let mut unsupported = settings();
+        unsupported.provider = "smtp".into();
+        assert!(validate(&unsupported).is_err());
+        unsupported.provider = "microsoft".into();
+        unsupported.calendar = Some(CalendarSettings {
+            enabled: true,
+            reminder_minutes: 60,
+        });
+        assert!(validate(&unsupported).is_err());
+    }
     fn setup_due_automatic() -> (tempfile::TempDir, AppState, DateTime<Utc>) {
         let dir = tempfile::tempdir().unwrap();
         let state = AppState::initialize(dir.path().into()).unwrap();
@@ -967,6 +1055,7 @@ mod tests {
     }
     fn settings() -> RoutineSettings {
         RoutineSettings {
+            provider: "gmail".into(),
             report_rules: Vec::new(),
             calendar: None,
             cc: String::new(),
