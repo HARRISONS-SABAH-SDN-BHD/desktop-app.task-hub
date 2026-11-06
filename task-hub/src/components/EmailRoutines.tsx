@@ -302,6 +302,8 @@ export function EmailRoutines({
               const calendarLink = calendarLinks.find(
                 (link) =>
                   link.routine_id === routine.id &&
+                  (link.provider ?? "gmail") ===
+                    (settings.provider ?? "gmail") &&
                   link.sender.toLowerCase() ===
                     settings.sender_account?.toLowerCase(),
               );
@@ -372,7 +374,10 @@ export function EmailRoutines({
                     )}
                     {(settings.calendar?.enabled || calendarLink) && (
                       <p className={calendarLink?.error ? "error" : "muted"}>
-                        Google Calendar:{" "}
+                        {settings.provider === "microsoft"
+                          ? "Outlook Calendar"
+                          : "Google Calendar"}
+                        :{" "}
                         {!native
                           ? "Preview only — no event created"
                           : (calendarLink?.error ??
@@ -846,16 +851,9 @@ function RoutineForm({
           </div>
         )}
         <h3 className="form-section-title">5. Calendar reminder (optional)</h3>
-        {settings.provider === "microsoft" && (
-          <p>
-            Outlook calendar sync is not included yet. Google Calendar sync is
-            available for Gmail routines.
-          </p>
-        )}
         <label className="routine-check">
           <input
             type="checkbox"
-            disabled={settings.provider === "microsoft"}
             checked={settings.calendar.enabled}
             onChange={(e) =>
               update("calendar", {
@@ -864,7 +862,9 @@ function RoutineForm({
               })
             }
           />
-          Sync to Google Calendar
+          {settings.provider === "microsoft"
+            ? "Sync to Outlook Calendar"
+            : "Sync to Google Calendar"}
         </label>
         {settings.calendar.enabled && (
           <>
@@ -888,13 +888,14 @@ function RoutineForm({
               </select>
             </label>
             <Help label="Calendar reminders">
-              Creates a private event in your connected account’s primary Google
-              Calendar. Enable Google Calendar API and reconnect with Calendar
-              access in Gmail connection first. Changes sync from Task Hub; edit
-              routines here. Disabling sync, disabling the routine, or deleting
-              it removes its calendar event when Task Hub is running and
-              connected. Email contents, recipients and files are not copied to
-              the calendar.
+              Creates a private reminder in your connected account’s primary
+              calendar. For Gmail, enable Google Calendar API and reconnect with
+              Calendar access. For Microsoft 365, enable Outlook calendar access
+              and reconnect; IT may need to approve Calendars.ReadWrite. Changes
+              sync from Task Hub; edit routines here. Disabling sync, disabling
+              the routine, or deleting it removes its calendar event when Task
+              Hub is running and connected. Email contents, recipients and files
+              are not copied to the calendar.
             </Help>
           </>
         )}

@@ -9,6 +9,7 @@ export interface RecipientChange {
   note: string;
 }
 export interface CalendarLink {
+  provider?: "gmail" | "microsoft";
   routine_id: string;
   sender: string;
   event_id: string;

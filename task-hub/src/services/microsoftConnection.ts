@@ -1,6 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import { bridge } from "./bridge";
 export interface MicrosoftStatus {
+  calendar_access?: boolean;
   connected: boolean;
   email: string | null;
   client_id: string;
@@ -22,10 +23,14 @@ export const microsoftConnection = {
   async status(): Promise<MicrosoftStatus> {
     return bridge.native ? invoke("microsoft_status") : emptyMicrosoftStatus;
   },
-  async connect(clientId: string, tenantId: string): Promise<void> {
+  async connect(
+    clientId: string,
+    tenantId: string,
+    calendarAccess = false,
+  ): Promise<void> {
     if (!bridge.native)
       throw new Error("Microsoft sign-in is available in the desktop app.");
-    return invoke("connect_microsoft", { clientId, tenantId });
+    return invoke("connect_microsoft", { clientId, tenantId, calendarAccess });
   },
   async cancel(): Promise<void> {
     if (bridge.native) return invoke("cancel_microsoft_connection");

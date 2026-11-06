@@ -14,6 +14,8 @@ use sha2::{Digest, Sha256};
 pub const SCOPE: &str = "https://www.googleapis.com/auth/calendar.events.owned";
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct CalendarLink {
+    #[serde(default = "default_provider")]
+    pub provider: String,
     pub routine_id: String,
     pub sender: String,
     pub event_id: String,
@@ -21,6 +23,9 @@ pub struct CalendarLink {
     pub error: Option<String>,
     #[serde(default)]
     pub retry_after: i64,
+}
+fn default_provider() -> String {
+    "gmail".into()
 }
 fn digest(value: &Value) -> String {
     format!("{:x}", Sha256::digest(value.to_string().as_bytes()))
@@ -200,10 +205,9 @@ fn tick(state: &AppState) -> Result<()> {
                         .sender_account
                         .as_deref()
                         .is_some_and(|a| a.eq_ignore_ascii_case(&sender))
-                    && !store
-                        .calendar_links
-                        .iter()
-                        .any(|link| link.routine_id == r.id && link.sender == sender)
+                    && !store.calendar_links.iter().any(|link| {
+                        link.provider == "gmail" && link.routine_id == r.id && link.sender == sender
+                    })
             })
             .map(|r| r.id.clone())
             .collect::<Vec<_>>()
@@ -214,9 +218,10 @@ fn tick(state: &AppState) -> Result<()> {
                 if !store
                     .calendar_links
                     .iter()
-                    .any(|l| l.routine_id == *id && l.sender == sender)
+                    .any(|l| l.provider == "gmail" && l.routine_id == *id && l.sender == sender)
                 {
                     store.calendar_links.push(CalendarLink {
+                        provider: "gmail".into(),
                         routine_id: id.clone(),
                         sender: sender.clone(),
                         event_id: format!("taskhub{}", uuid::Uuid::new_v4().simple()),
@@ -236,7 +241,7 @@ fn tick(state: &AppState) -> Result<()> {
         store
             .calendar_links
             .iter()
-            .filter(|l| l.sender == sender && l.retry_after <= now)
+            .filter(|l| l.provider == "gmail" && l.sender == sender && l.retry_after <= now)
             .map(|link| {
                 let routine = store.email_routines.iter().find(|r| {
                     r.id == link.routine_id
@@ -341,6 +346,7 @@ mod tests {
     #[test]
     fn unowned_events_are_never_changed_or_deleted() {
         let link = CalendarLink {
+            provider: "gmail".into(),
             routine_id: "routine1".into(),
             sender: "sender@example.com".into(),
             event_id: "abc".into(),
@@ -397,6 +403,7 @@ mod tests {
     }
     fn link() -> CalendarLink {
         CalendarLink {
+            provider: "gmail".into(),
             routine_id: "routine1".into(),
             sender: "sender@example.com".into(),
             event_id: "taskhub123".into(),

@@ -17,6 +17,12 @@ export function MicrosoftConnection({
 }) {
   const [clientId, setClientId] = useState(status.client_id);
   const [tenantId, setTenantId] = useState(status.tenant_id);
+  const [calendarAccess, setCalendarAccess] = useState(
+    status.calendar_access ?? false,
+  );
+  useEffect(() => {
+    if (status.calendar_access) setCalendarAccess(true);
+  }, [status.calendar_access]);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   useEffect(() => {
@@ -41,6 +47,7 @@ export function MicrosoftConnection({
       microsoftConnection.connect(
         status.publisher_configured ? "" : clientId.trim(),
         status.publisher_configured ? "" : tenantId.trim(),
+        calendarAccess,
       ),
     );
   }
@@ -160,6 +167,14 @@ export function MicrosoftConnection({
                 </label>
               </>
             )}
+            <label className="routine-check">
+              <input
+                type="checkbox"
+                checked={calendarAccess}
+                onChange={(event) => setCalendarAccess(event.target.checked)}
+              />
+              Enable Outlook calendar access
+            </label>
             <button className="primary" type="submit" disabled={!native}>
               {pending
                 ? "Waiting for Microsoft sign-in…"
@@ -189,8 +204,9 @@ export function MicrosoftConnection({
         <Help label="Attachments and calendar">
           This version supports Microsoft emails up to a 4 MB encoded request,
           usually about 2 MB of attachments. Larger messages stop before
-          submission. Microsoft routines do not sync to Google Calendar; Outlook
-          calendar sync is not included yet.
+          submission. Enable Outlook calendar access and reconnect to grant
+          calendar permission. Then enable sync in each routine. Calendar sync
+          uses your primary Outlook calendar and does not invite recipients.
         </Help>
       </section>
     </div>

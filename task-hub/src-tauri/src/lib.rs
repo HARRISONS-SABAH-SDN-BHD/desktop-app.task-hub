@@ -158,13 +158,20 @@ mod desktop {
         app: tauri::AppHandle,
         client_id: String,
         tenant_id: String,
+        calendar_access: Option<bool>,
     ) -> Result<()> {
         tauri::async_runtime::spawn_blocking(move || {
-            microsoft::connect(&app.state::<AppState>(), client_id, tenant_id, |url| {
-                app.opener()
-                    .open_url(url, None::<&str>)
-                    .map_err(|_| "Could not open Microsoft sign-in".into())
-            })
+            microsoft::connect(
+                &app.state::<AppState>(),
+                client_id,
+                tenant_id,
+                calendar_access.unwrap_or(false),
+                |url| {
+                    app.opener()
+                        .open_url(url, None::<&str>)
+                        .map_err(|_| "Could not open Microsoft sign-in".into())
+                },
+            )
         })
         .await
         .map_err(|e| e.to_string())?
@@ -365,6 +372,7 @@ mod desktop {
                 background::setup(app.handle())?;
                 routine_scheduler::start(app.handle().clone());
                 gmail::calendar::start(app.handle().clone());
+                microsoft::calendar::start(app.handle().clone());
                 updates::start(app.handle().clone());
                 Ok(())
             })

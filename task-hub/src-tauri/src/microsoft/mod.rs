@@ -1,4 +1,5 @@
 //! Microsoft 365 delegated OAuth and Graph delivery; no desktop interaction.
+pub mod calendar;
 mod oauth;
 mod transport;
 mod vault;
@@ -17,9 +18,12 @@ pub(crate) struct Credentials {
     refresh_token: String,
     pub email: String,
     subject: String,
+    #[serde(default)]
+    calendar_access: bool,
 }
 #[derive(Serialize)]
 pub struct Status {
+    pub calendar_access: bool,
     pub connected: bool,
     pub email: Option<String>,
     pub client_id: String,
@@ -42,6 +46,7 @@ pub fn status(state: &AppState) -> Result<Status> {
         .and_then(|b| serde_json::from_slice::<serde_json::Value>(&b).ok());
     let shared = publisher();
     Ok(Status {
+        calendar_access: credential.as_ref().is_some_and(|c| c.calendar_access),
         connected: credential.is_some(),
         email: credential.as_ref().map(|c| c.email.clone()),
         client_id: shared
@@ -80,12 +85,13 @@ pub fn connect(
     state: &AppState,
     id: String,
     tenant: String,
+    calendar_access: bool,
     open: impl FnOnce(String) -> Result<()>,
 ) -> Result<()> {
     let _operation = crate::gmail::lock_for_update()?;
     CANCEL.store(false, Ordering::SeqCst);
     let (id, tenant) = publisher().unwrap_or((id, tenant));
-    let result = oauth::connect(state, id.trim(), tenant.trim(), open);
+    let result = oauth::connect(state, id.trim(), tenant.trim(), calendar_access, open);
     if let Ok(mut code) = SIGN_IN_CODE.lock() {
         *code = None;
     }

@@ -121,9 +121,6 @@ fn validate(settings: &RoutineSettings) -> Result<()> {
     if !matches!(settings.provider.as_str(), "gmail" | "microsoft") {
         return Err("Choose Gmail or Microsoft 365 as the email provider".into());
     }
-    if settings.provider == "microsoft" && settings.calendar.as_ref().is_some_and(|c| c.enabled) {
-        return Err("Google Calendar sync is available for Gmail routines only. Outlook calendar sync is not included in this version.".into());
-    }
     crate::attachments::validate_list(&settings.attachments)?;
     if settings
         .sender_account
@@ -742,7 +739,7 @@ mod tests {
             enabled: true,
             reminder_minutes: 60,
         });
-        assert!(validate(&unsupported).is_err());
+        assert!(validate(&unsupported).is_ok());
     }
     fn setup_due_automatic() -> (tempfile::TempDir, AppState, DateTime<Utc>) {
         let dir = tempfile::tempdir().unwrap();

@@ -30,6 +30,27 @@ struct Token {
     refresh_token: Option<String>,
     scope: Option<String>,
 }
+fn scopes(calendar: bool) -> String {
+    format!(
+        "{SCOPE}{}",
+        if calendar {
+            " https://graph.microsoft.com/Calendars.ReadWrite"
+        } else {
+            ""
+        }
+    )
+}
+fn has_calendar(token: &Token) -> bool {
+    token
+        .scope
+        .as_deref()
+        .unwrap_or_default()
+        .split_whitespace()
+        .any(|s| {
+            s.eq_ignore_ascii_case("Calendars.ReadWrite")
+                || s.eq_ignore_ascii_case("https://graph.microsoft.com/Calendars.ReadWrite")
+        })
+}
 fn check_scope(token: &Token) -> Result<()> {
     let scopes = token.scope.as_deref().unwrap_or_default();
     if token.access_token.is_empty()
@@ -68,6 +89,7 @@ pub(super) fn connect(
     state: &AppState,
     id: &str,
     tenant: &str,
+    calendar_access: bool,
     open: impl FnOnce(String) -> Result<()>,
 ) -> Result<()> {
     validate_registration(id, tenant)?;
@@ -76,7 +98,10 @@ pub(super) fn connect(
         .post(format!(
             "https://login.microsoftonline.com/{tenant}/oauth2/v2.0/devicecode"
         ))
-        .form(&[("client_id", id), ("scope", SCOPE)])
+        .form(&[
+            ("client_id", id),
+            ("scope", scopes(calendar_access).as_str()),
+        ])
         .send()
         .map_err(|_| "Could not start Microsoft sign-in. Check internet access.")?;
     if !response.status().is_success() {
@@ -125,6 +150,9 @@ pub(super) fn connect(
         }
     };
     check_scope(&token)?;
+    if calendar_access && !has_calendar(&token) {
+        return Err("Outlook calendar access was not granted. Ask IT to approve Calendars.ReadWrite and reconnect.".into());
+    }
     let refresh = token.refresh_token.filter(|v| !v.is_empty()).ok_or(
         "Microsoft did not grant offline access. Reconnect and ask IT to approve Task Hub.",
     )?;
@@ -162,6 +190,7 @@ pub(super) fn connect(
         refresh_token: refresh,
         email: email.to_lowercase(),
         subject: user.id,
+        calendar_access,
     })
 }
 pub(super) fn access_token(
@@ -175,7 +204,7 @@ pub(super) fn access_token(
             ("client_id", credential.client_id.as_str()),
             ("grant_type", "refresh_token"),
             ("refresh_token", credential.refresh_token.as_str()),
-            ("scope", SCOPE),
+            ("scope", scopes(credential.calendar_access).as_str()),
         ])
         .send()
         .map_err(|_| "Could not refresh Microsoft access. Nothing was submitted to Outlook.")?;

@@ -1,6 +1,5 @@
-Microsoft 365 work email:
-- Connect a Microsoft 365 mailbox using an IT-registered Microsoft Entra desktop/public client.
-- Choose Gmail or Microsoft 365 for each routine; existing routines retain Gmail.
-- Outlook drafts, scheduled sending, CC and report attachments through Microsoft Graph.
-- Secure account storage and no automatic retry of email submission.
-- Microsoft messages are limited to a 4 MB encoded request (about 2 MB attachments). Outlook calendar sync is not included.
+Outlook calendar sync:
+- Optional private reminders for Microsoft 365 routines in the primary Outlook calendar.
+- Sync routine schedules and reminder times; clean up events when paused, disabled or deleted.
+- Owned-event checks, conditional changes and stable transaction IDs protect against duplicate or unrelated changes.
+- Reconnect with Outlook calendar access; IT must approve delegated Calendars.ReadWrite. Existing email-only connections keep working.

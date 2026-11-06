@@ -66,8 +66,11 @@ test("Microsoft routine keeps provider and sender through edit, reload and previ
     "microsoft:work@harrisons.com.my",
   );
   await expect(
-    page.getByRole("checkbox", { name: "Sync to Google Calendar" }),
-  ).toBeDisabled();
+    page.getByRole("checkbox", { name: "Sync to Outlook Calendar" }),
+  ).toBeEnabled();
+  await page
+    .getByRole("checkbox", { name: "Sync to Outlook Calendar" })
+    .check();
   await page.getByRole("button", { name: "Save routine" }).click();
   await page.reload();
   const saved = await page.evaluate(
@@ -75,6 +78,7 @@ test("Microsoft routine keeps provider and sender through edit, reload and previ
       JSON.parse(localStorage.getItem("taskhub.email-routines.preview.v1")!)[0],
   );
   expect(saved.settings.provider).toBe("microsoft");
+  expect(saved.settings.calendar.enabled).toBe(true);
   expect(saved.settings.sender_account).toBe("work@harrisons.com.my");
   await page.getByRole("button", { name: "Preview next email" }).click();
   await expect(
