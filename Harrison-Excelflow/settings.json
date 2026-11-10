@@ -1,0 +1,128 @@
+{
+  "company": "Harrisons Sabah Sdn Bhd",
+  "branches": {
+    "A10": [
+      "SANDAKAN",
+      "SDK"
+    ],
+    "B11": [
+      "LAHAD DATU",
+      "LDU"
+    ],
+    "C20": [
+      "KOTA KINABALU",
+      "KK"
+    ],
+    "D21": [
+      "KOTA MARUDU",
+      "KM"
+    ],
+    "F23": [
+      "KENINGAU",
+      "KGU"
+    ],
+    "G24": [
+      "BEAUFORT",
+      "BFT"
+    ],
+    "H25": [
+      "RANAU",
+      "RNU"
+    ],
+    "J30": [
+      "TAWAU",
+      "TWU"
+    ],
+    "M40": [
+      "LABUAN",
+      "LBN"
+    ]
+  },
+  "agencies": {
+    "101": "NESTLE SALES DIV",
+    "107": "VINDA SCA",
+    "108": "HMM (DUTY FREE)",
+    "109": "POWER ROOT",
+    "110": "WIPRO CONSUMER CARE (LDW)",
+    "111": "WIPRO UNZA",
+    "112": "NESTLE CONFECTIONERY",
+    "115": "HAPE (DUTY FREE)",
+    "116": "HMM (DUTY PAID)",
+    "117": "THUMBS / HAND BRAND",
+    "118": "APRIL - WIPES",
+    "119": "COTTRICH MARKETING",
+    "120": "PURINA",
+    "121": "APRIL - COTTON",
+    "124": "BARKATH",
+    "130": "NESTLE PROFESSIONAL",
+    "136": "SEAFRESH",
+    "138": "HT WINES",
+    "140": "RB - HYGIENE HOME",
+    "141": "RB - HEALTH",
+    "142": "BOSISTO'S",
+    "143": "G.S.K.",
+    "145": "MORINAGA",
+    "148": "TG POWER WRAP",
+    "149": "STREAMLINE CONCEPT",
+    "150": "GLICO",
+    "151": "PORKIES",
+    "158": "RED BULL",
+    "160": "KAO",
+    "162": "MUNCHY",
+    "163": "Oromeo",
+    "165": "TIP  TOP",
+    "168": "COLGATE PAMOLIVE",
+    "170": "KOMONOYA",
+    "173": "PAPER CUPS",
+    "177": "TOHTONKU",
+    "178": "NETWORK FOODS",
+    "179": "TREATZ FOOD SDN BHD",
+    "180": "KOMONOYA",
+    "196": "KEGS AND CYLINDERS (DF)",
+    "197": "TAX STAMP",
+    "198": "KEGS AND CYLINDERS",
+    "199": "NESTLE VENDING ASSETS",
+    "201": "NTN BEARING",
+    "202": "HUME CEMBOARD",
+    "203": "TENCO PRODUCTS",
+    "205": "MCPOWELL BATTERIES",
+    "206": "B.M. OTHERS",
+    "207": "IB BEARING",
+    "208": "FILTERS",
+    "211": "ENGINEERING STORE",
+    "213": "TELE POWER SDN BHD",
+    "216": "FEDERAL PAINT",
+    "217": "Federal Paint",
+    "218": "LUBRICANT",
+    "219": "KRYSTAL SPRAY PAINT",
+    "220": "GP BATTERIES",
+    "221": "CENTURY BATTERY",
+    "223": "AKZONOBEL - ICI",
+    "301": "SYNGENTA AGROCHEMICALS",
+    "306": "ADVANSIA",
+    "310": "G-PLANTERS",
+    "311": "BAYER CO",
+    "312": "BMI BORNEO",
+    "316": "AGROCHEMICAL - OTHERS",
+    "320": "ANCOM CROP CARE",
+    "322": "TENDER CHEMICALS",
+    "324": "RAINBOW AGROSCIENCE",
+    "327": "BASF",
+    "331": "AGROMATE",
+    "332": "HEXTAR FERTILIZERS",
+    "333": "BEHN MEYER AGRICARE",
+    "334": "AGRI-SABAH FERTILIZERS",
+    "335": "FERTILIZERS OTHERS",
+    "336": "WASTECH MULTIGREEN",
+    "337": "SB Fertilizers",
+    "340": "SB PLUS FERTILIZERS",
+    "351": "AGRIC HARDWARE",
+    "361": "CCM INDUSTRIAL CHEMICALS",
+    "362": "INDUSTRIAL CHEMICALS OTHERS",
+    "371": "BAYER ENVIRONMENTAL SCIENCE",
+    "381": "BIOTRACK TECHNOLOGY",
+    "382": "C&F RESALES",
+    "389": "C&F RESALES"
+  },
+  "column_aliases": {}
+}

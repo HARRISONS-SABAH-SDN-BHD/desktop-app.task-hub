@@ -1,0 +1,3352 @@
+{
+  "DISC_main": {
+    "headers": [
+      "ITEM NO",
+      "PRODUCT NAME",
+      "DOCUMENT DATE",
+      "DOCUMENT NO",
+      "CUSTOMER ACCOUNT",
+      "CUSTOMER NAME",
+      "PROMOTION CODE",
+      "IPC DESCRIPTION",
+      "INVOICE QTY",
+      "UNIT",
+      "GROSS AMOUNT",
+      "DISC AMOUNT",
+      "DISC AMOUNT (2)",
+      "PGC",
+      "BRANCH CODE",
+      "BRANCH NAME"
+    ],
+    "header_styles": [
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      }
+    ],
+    "data_styles": [
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment horizontal=\"center\"/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00_);(0.00)"
+        },
+        "negative": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00_);(0.00)"
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00_);(0.00)"
+        },
+        "negative": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00_);(0.00)"
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00_);(0.00)"
+        },
+        "negative": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00_);(0.00)"
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      }
+    ],
+    "total_styles": [
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment horizontal=\"center\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0.00"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0.00"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0.00"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      }
+    ],
+    "metadata_styles": [
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      }
+    ],
+    "widths": [
+      19.0,
+      48.0,
+      15.0,
+      18.0,
+      18.0,
+      62.0,
+      19.0,
+      105.0,
+      13.0,
+      9.0,
+      14.0,
+      13.0,
+      17.0,
+      5.0,
+      13.0,
+      15.0
+    ],
+    "gridlines": null
+  },
+  "DISC_p160": {
+    "headers": [
+      "ITEM NO",
+      "PRODUCT NAME",
+      "DOCUMENT DATE",
+      "DOCUMENT NO",
+      "CUSTOMER ACCOUNT",
+      "CUSTOMER NAME",
+      "PROMOTION CODE",
+      "IPC DESCRIPTION",
+      "INVOICE QTY",
+      "UNIT",
+      "GROSS AMT",
+      "DISC AMT",
+      "DISC AMOUNT (2)",
+      null,
+      "BRANCH"
+    ],
+    "header_styles": [
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      }
+    ],
+    "data_styles": [
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment horizontal=\"center\"/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00"
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00"
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00"
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00"
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      }
+    ],
+    "total_styles": [
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0.00"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      }
+    ],
+    "metadata_styles": [
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      }
+    ],
+    "widths": [
+      10.0,
+      39.0,
+      15.0,
+      17.0,
+      18.0,
+      37.0,
+      19.0,
+      60.0,
+      13.0,
+      6.0,
+      11.0,
+      10.0,
+      17.0,
+      2.0,
+      15.0
+    ],
+    "gridlines": null
+  },
+  "DISC_pgc": {
+    "headers": [
+      "ITEM NO",
+      "PRODUCT NAME",
+      "DOCUMENT DATE",
+      "DOCUMENT NO",
+      "CUSTOMER ACCOUNT",
+      "CUSTOMER NAME",
+      "PROMOTION CODE",
+      "IPC DESCRIPTION",
+      "INVOICE QTY",
+      "UNIT",
+      "GROSS AMT",
+      "DISC AMT",
+      null,
+      "BRANCH"
+    ],
+    "header_styles": [
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00FFDAB9\"/><bgColor rgb=\"00FFDAB9\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      }
+    ],
+    "data_styles": [
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment horizontal=\"center\"/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00_);(0.00)"
+        },
+        "negative": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00_);(0.00)"
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00_);(0.00)"
+        },
+        "negative": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00_);(0.00)"
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00_);(0.00)"
+        },
+        "negative": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00_);(0.00)"
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0.00"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      }
+    ],
+    "total_styles": [
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0.00"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      }
+    ],
+    "metadata_styles": [
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><b val=\"1\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      }
+    ],
+    "widths": [
+      11.0,
+      38.0,
+      15.0,
+      13.0,
+      18.0,
+      39.0,
+      16.0,
+      17.0,
+      13.0,
+      6.0,
+      11.0,
+      10.0,
+      2.0,
+      15.0
+    ],
+    "gridlines": null
+  },
+  "FTG_main": {
+    "headers": [
+      "Item No.",
+      "Product Name",
+      "Document Date",
+      "Document No.",
+      "Customer Account",
+      "Customer Name",
+      "Promotion Code",
+      "IPC Description",
+      "Invoice Qty",
+      "Unit",
+      "DISC Amount",
+      "DISC Amount (2)",
+      "FOC Qty",
+      "Unit.1",
+      "FOC Amount",
+      "Branch Code",
+      "itemgroup_id"
+    ],
+    "header_styles": [
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      }
+    ],
+    "data_styles": [
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment horizontal=\"center\"/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "negative": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "zero": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "negative": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "zero": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00ADD8E6\"/><bgColor rgb=\"00ADD8E6\"/></patternFill></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "negative": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00ADD8E6\"/><bgColor rgb=\"00ADD8E6\"/></patternFill></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00ADD8E6\"/><bgColor rgb=\"00ADD8E6\"/></patternFill></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "negative": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "zero": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "zero": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "negative": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      }
+    ],
+    "total_styles": [
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment horizontal=\"center\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><top style=\"thin\"/><bottom style=\"double\"/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><top style=\"thin\"/><bottom style=\"double\"/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><top style=\"thin\"/><bottom style=\"double\"/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      }
+    ],
+    "metadata_styles": [
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      }
+    ],
+    "widths": [
+      19.0,
+      42.0,
+      15.0,
+      18.0,
+      18.0,
+      51.0,
+      19.0,
+      148.0,
+      13.0,
+      7.0,
+      13.0,
+      17.0,
+      9.0,
+      8.0,
+      12.0,
+      13.0,
+      14.0
+    ],
+    "gridlines": null
+  },
+  "FTG_p160": {
+    "headers": [
+      "Item No.",
+      "Product Name",
+      "Document Date",
+      "Document No.",
+      "Customer Account",
+      "Customer Name",
+      "Promotion Code",
+      "IPC Description",
+      "Invoice Qty",
+      "Unit",
+      "DISC Amount",
+      "DISC Amount (2)",
+      "FOC Qty",
+      "Unit.1",
+      "FOC Amount",
+      "Branch Code"
+    ],
+    "header_styles": [
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      }
+    ],
+    "data_styles": [
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment horizontal=\"center\"/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "negative": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "zero": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "negative": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00ADD8E6\"/><bgColor rgb=\"00ADD8E6\"/></patternFill></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "zero": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00ADD8E6\"/><bgColor rgb=\"00ADD8E6\"/></patternFill></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "negative": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00ADD8E6\"/><bgColor rgb=\"00ADD8E6\"/></patternFill></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"00ADD8E6\"/><bgColor rgb=\"00ADD8E6\"/></patternFill></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "zero": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "negative": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "zero": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "negative": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      }
+    ],
+    "total_styles": [
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment horizontal=\"center\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><top style=\"thin\"/><bottom style=\"double\"/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><top style=\"thin\"/><bottom style=\"double\"/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><top style=\"thin\"/><bottom style=\"double\"/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      }
+    ],
+    "metadata_styles": [
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      }
+    ],
+    "widths": [
+      10.0,
+      42.0,
+      15.0,
+      17.0,
+      18.0,
+      39.0,
+      19.0,
+      67.0,
+      13.0,
+      6.0,
+      13.0,
+      17.0,
+      9.0,
+      8.0,
+      12.0,
+      13.0
+    ],
+    "gridlines": null
+  },
+  "FTG_pgc": {
+    "headers": [
+      "Item No.",
+      "Product Name",
+      "Document Date",
+      "Document No.",
+      "Customer Account",
+      "Customer Name",
+      "Promotion Code",
+      "IPC Description",
+      "Invoice Qty",
+      "Unit",
+      "DISC Amount",
+      "FOC Qty",
+      "Unit.1",
+      "FOC Amount",
+      "Branch Code"
+    ],
+    "header_styles": [
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font/>",
+        "fill": "<fill><patternFill patternType=\"solid\"><fgColor rgb=\"0092D050\"/><bgColor rgb=\"0092D050\"/></patternFill></fill>",
+        "border": "<border><left style=\"thin\"/><right style=\"thin\"/><top style=\"thin\"/><bottom style=\"thin\"/></border>",
+        "alignment": "<alignment horizontal=\"center\" vertical=\"top\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      }
+    ],
+    "data_styles": [
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment horizontal=\"center\"/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "0"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "negative": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "General"
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "zero": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "negative": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "positive": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        },
+        "zero": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        }
+      },
+      {
+        "default": {
+          "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+          "fill": "<fill><patternFill/></fill>",
+          "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+          "alignment": "<alignment/>",
+          "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+          "number_format": "#,##0.00;(#,##0.00);\"-\""
+        }
+      }
+    ],
+    "total_styles": [
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment horizontal=\"center\"/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "General"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "#,##0.00;(#,##0.00);\"-\""
+      }
+    ],
+    "metadata_styles": [
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      },
+      {
+        "font": "<font><name val=\"Calibri\"/><family val=\"2\"/><color theme=\"1\"/><sz val=\"11\"/><scheme val=\"minor\"/></font>",
+        "fill": "<fill><patternFill/></fill>",
+        "border": "<border><left/><right/><top/><bottom/><diagonal/></border>",
+        "alignment": "<alignment/>",
+        "protection": "<protection locked=\"1\" hidden=\"0\"/>",
+        "number_format": "0"
+      }
+    ],
+    "widths": [
+      10.0,
+      29.0,
+      15.0,
+      14.0,
+      18.0,
+      37.0,
+      16.0,
+      17.0,
+      13.0,
+      6.0,
+      13.0,
+      9.0,
+      8.0,
+      15.0,
+      13.0
+    ],
+    "gridlines": null
+  }
+}
