@@ -1,3 +1,4 @@
+import { ExcelFlowPicker } from "./ExcelFlowPicker";
 import { Help } from "./Help";
 import { useState, type FormEvent } from "react";
 import { CalendarClock, Plus, ArrowLeft } from "lucide-react";
@@ -742,6 +743,12 @@ function RoutineForm({
           Use a saved copy for files that stay the same. Use a current-report
           rule for files that change each month.
         </Help>
+        <ExcelFlowPicker
+          value={settings.attachments}
+          onChange={(items) => update("attachments", items)}
+          disabled={locked}
+          onBusyChange={setAttachmentBusy}
+        />
         <AttachmentPicker
           title="Fixed attachments (same saved copy every run)"
           value={settings.attachments}
