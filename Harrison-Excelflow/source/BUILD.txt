@@ -1,0 +1,15 @@
+For maintenance on a normal Windows Python 3.12+ installation with Tcl/Tk:
+
+From the app folder:
+  py -m pip install -r source\requirements.txt pyinstaller
+  py -m unittest discover -s source -v
+  py -m PyInstaller --noconfirm --windowed --onedir --name "FTG DISC" --icon assets\app.ico --add-data "assets;assets" source\app.py
+
+Copy settings.json, report_styles.json and START HERE.txt into dist\FTG DISC
+beside FTG DISC.exe.
+The complete dist\FTG DISC directory is the portable application.
+Do not copy only the executable: its _internal directory is required.
+
+For source use: py source\app.py
+The app requires only openpyxl plus Python's standard library at runtime.
+It does not import pandas or run the old scripts.

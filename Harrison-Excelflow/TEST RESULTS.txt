@@ -1,0 +1,4 @@
+Version 1.17 verification
+
+23 automated tests passed. Windows Desktop resolver returned C:\Users\User\Desktop on this PC.
+Default report output directory changed to the Windows Desktop. Input normalization, calculations, workbook styles and completion chime unchanged.

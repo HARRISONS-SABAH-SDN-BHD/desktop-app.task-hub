@@ -1,0 +1,259 @@
+Harrison ExcelFlow — version 1.17
+
+VERSION 1.17 — DESKTOP OUTPUT DEFAULT
+Save reports to now defaults to your Windows Desktop, including redirected
+Desktop folders. You can still choose a different folder for any run.
+Each run creates its own report folder on the Desktop.
+
+VERSION 1.16 — COMPLETION CHIME
+A short original ascending chime plays once after report generation succeeds
+and reaches 100%. Validation-only runs, errors and cancellations stay silent.
+Playback is asynchronous and follows your Windows volume and mute settings.
+
+VERSION 1.15 — MAIN MENU MESSAGE
+The main menu now includes a More to come message below the report module.
+
+VERSION 1.14 — APP AND MODULE NAMES
+Application: Harrison ExcelFlow
+Application folder: Harrison Excelflow
+Open Harrison ExcelFlow.exe to launch the app.
+The report module remains named DISC & FTG Reports.
+
+VERSION 1.13 — APP NAME
+The desktop application is now named DISC & FTG Reports, including the
+main report heading, window titles, menu entry and executable.
+
+VERSION 1.12 — FULL TIME UNIT NAMES
+Elapsed times use full words: seconds, minutes, hours and days, with correct
+singular and plural forms. The same labels appear in completion status and
+Run log; numeric timing values in run_summary.json remain in seconds.
+
+VERSION 1.11 — COMPACT REPORT SETUP
+Removed the expanding blank section below the action buttons. The status bar
+now sits immediately beneath them, and the default window is shorter.
+The separate Run details page still expands when you resize the window.
+
+VERSION 1.10 — SEPARATE RUN DETAILS PAGE
+Use View run details to open Date preview, Run log and Issues on a dedicated
+page. Back to report returns to your selections without clearing data.
+The details page stays available during processing and updates as work proceeds.
+
+VERSION 1.9 — RUN TIMES
+After report generation, the bottom status area shows Validation, Report
+generation and Total durations. The same timing line appears in Run log, and
+numeric seconds are saved under timings in run_summary.json in the run folder.
+Validation time includes reading and normalizing the input workbooks. Report
+generation time includes building and saving the output reports. File selection,
+manual review and time spent before starting the run are not counted.
+For Validate & preview, only validation is timed; generation shows Not run.
+Timings reset for each new action and remain visible when returning from the menu.
+
+VERSION 1.8 — GREEN HARRISONS APP ICON
+The supplied Harrisons logo has been recolored to Excel green and is used for
+the executable icon and application window icons. Multiple icon sizes are
+included for Windows. The embedded app assets are in _internal/assets; keep
+the entire application folder together when moving the app.
+
+VERSION 1.7 — ROUNDED SELECTION BUTTONS
+Report version now has three rounded buttons: Both, Normal and Special.
+The selected version is highlighted in teal, just like Workbooks to process.
+Both groups support mouse clicks and left/right arrow keys when focused.
+Selection buttons are disabled while a run is active. Their current selections
+remain visible and are retained when you return from the main menu.
+All application action buttons now use rounded corners, including Settings
+and the IG editor. Standard Windows file dialogs keep their native appearance.
+
+VERSION 1.6 — REPORT VERSION SELECTOR ON THE MAIN SCREEN
+In Report details, use Report version to choose Both, Normal or Special.
+Both generates normal and special versions in one run. Normal generates only
+normal reports. Special generates only special-promotion reports.
+Workbooks to process (Both / DISC / FTG) is a separate choice of input type.
+The report-version choice is no longer hidden inside Settings.
+
+VERSION 1.5 — MAIN MENU AND PROGRESS PERCENTAGE
+The app opens at Main menu. Click FTG & DISC Report to open the reporting screen.
+Use Main menu at the top of that screen to return. Selected files, settings and
+the preview are retained during the session. Navigation is disabled during a run.
+
+A numeric percentage is displayed beside the progress bar. It starts at 0%,
+advances through validation and report generation and reaches 100% only on
+successful completion. Validation-only runs also end at 100% when they pass.
+Cancelled/failed runs retain their last percentage. A new run resets to 0%.
+Progress reflects processing stages and work completed; it is not a time estimate.
+
+VERSION 1.4 — REFERENCE INTERFACE AND OPTIONAL INPUTS
+The interface follows the supplied reference: rounded panels, numbered teal
+sections, native vector icons, Both / DISC / FTG report selection, an empty
+preview message and a compact status area.
+
+Choose a DISC workbook, an FTG workbook, or both. One workbook is enough.
+Both processes every workbook provided. DISC processes only the DISC selector;
+FTG processes only the FTG selector. A missing unselected input is not an error.
+If you explicitly select DISC or FTG, that corresponding input must be present.
+Matching reporting periods are required only for the inputs being processed.
+
+Normal / Special / Both REPORT VERSIONS are separate from DISC / FTG input
+selection. Choose report versions in Settings; the default is Both versions.
+Existing calculations, date normalization, IG mappings and Excel styles remain.
+
+VERSION 1.3 — A MORE SPACIOUS INTERFACE
+The main window now separates workbook selection, report details, destination,
+actions and results into clear sections with larger text and more space.
+Manage IG names is at the top right. Settings opens decimal precision, the
+P160 multiplier, filename detection and swapped-date recovery options.
+Automatic period detection, IG mappings, calculations and Excel report styling
+are retained. The month and year remain grey when detected automatically.
+
+Version 1.2.2: renamed Amount decimals to Amount (RM) decimals.
+
+Version 1.2.1: the automatically detected month text is grey, matching the
+disabled year field. Turning off automatic detection restores black month text
+for manual selection. Report generation and data handling are unchanged.
+
+NEW IN VERSION 1.2 — AUTOMATIC REPORTING PERIOD
+Choose the two raw files. The suffix YYMM sets the period automatically:
+ALL_DISC_2610.xlsx and ALL_FTG_2610.xlsx mean October 2026.
+ALL_DISC_2701.xlsx and ALL_FTG_2701.xlsx mean January 2027.
+The first two digits mean year 2000–2099; the last two are month 01–12.
+The detected month/year appear in locked fields, so no period selection is needed.
+Both filenames must agree and each file must be in its correct input section.
+The raw data's invoice period and document dates are still checked against the
+detected period before generation. Filenames do not override conflicting data.
+Case-insensitive .xlsx/.xlsm names and download copies such as
+ALL_DISC_2610 (1).xlsx are supported. For exports with other filenames, turn
+off Detect from filenames (YYMM) and select the period manually.
+
+NEW IN VERSION 1.1
+The report colors, fonts, header emphasis, blue discount cells and DISC spacer
+columns follow the supplied original October workbooks. Border patterns are
+retained with explicit grey lines. Report information occupies five consecutive
+rows (title, company, branch, period, agency), merged across A:B. Headers are on
+row 7 for both DISC and FTG. Normalized data values and report rules are retained.
+
+MANAGE IG NAMES
+Click Manage IG names to view the full searchable mapping list. Select an entry
+to edit its IG number or agency name and click Update selected. Use New / clear
+and Add to insert an entry, or Remove selected to remove one. Click Save mappings
+to persist the list. Cancel discards unsaved changes. The next report run uses
+the saved names in agency headings and the FTG IG reference sheet.
+Removing a mapping never removes transactions. Unmapped agency headings show
+IG <number> (unmapped). Restore a mapping to supply the agency name again.
+Both settings.json and report_styles.json must remain beside the executable.
+
+START
+Double-click Harrison ExcelFlow.exe. No Python installation, Excel installation, internet
+connection, or sign-in is needed to use the app. Keep the _internal folder and
+settings.json beside the executable. If using the ZIP, extract the entire ZIP
+first. Do not run the executable from inside the ZIP preview.
+
+MONTHLY WORKFLOW
+1. Browse for the raw DISC workbook, FTG workbook, or both.
+2. Check the detected period. The supplied filenames automatically set October
+   2026. No month/year selection is required while automatic detection is enabled.
+3. Choose Both, DISC or FTG on the main screen. Settings also offers Normal,
+   Special or Both report versions. These are independent choices.
+4. Select where the results should be saved.
+5. Click Validate & preview to review dates and any issues.
+6. Click Generate reports. It validates again, then generates the reports.
+   You can also click Generate directly; validation is always performed first.
+7. Click Open results. Each run has its own folder; earlier runs are retained.
+
+DATE HANDLING
+The selected reporting period is authoritative. The app accepts Excel date
+values, Excel serial dates, d/m/yyyy, m/d/yyyy, ISO yyyy-mm-dd, and supported
+English month names. Common time suffixes are removed during parsing.
+
+Example: select October 2026 and 10/13/2026 00:00:00 becomes 13/10/2026.
+An Excel date already interpreted as 10 February 2026 can be recovered as
+2 October 2026 when October 2026 is selected and recovery is enabled.
+
+Recovery only swaps the day and month when it produces a valid date in the
+selected month and year. It never replaces the year or invents a day. If a date
+cannot be resolved to that period, generation stops and lists the source row.
+Disable recovery if all typed Excel dates must retain their original meaning.
+Text dates are still interpreted using the selected reporting period.
+
+Outputs contain REAL Excel dates with display format d/m/yyyy. The raw inputs
+remain unchanged. Two-digit years are rejected to avoid guessing the century.
+If a file intentionally contains multiple invoice periods, split it by period
+first. Existing invoice month/year columns must agree with your selection.
+
+NUMBERS AND IDENTIFIERS
+- IDs are stored as text. Existing text leading zeros are preserved. Numeric
+  IDs such as 160.0 become 160. Digits already lost in Excel cannot be recovered.
+- Long numeric IDs generate warnings, including unused fallback item IDs.
+- Branch code, branch name, abbreviation, or two-digit branch number can map
+  to the configured branch. Unknown branches stop processing.
+- PGC accepts a whole-number ID or an exactly matching configured agency name.
+  Names mapping to multiple PGC IDs require an explicit numeric ID.
+- Numeric text such as 1,234.50 and (1,234.50) is supported. Ambiguous comma
+  decimals are rejected; use a decimal point. Blank required amounts are errors.
+- Quantities retain fractions. PGC/month/year must be whole numbers and are
+  never silently rounded. Amount and quantity display precision is adjustable.
+- Amount display settings do not round the underlying source amounts. Quantity
+  settings can hide additional decimal places on screen; full values remain.
+- The P160 second discount uses the multiplier (default 0.88), rounded per row
+  with decimal half-up rounding to the selected amount precision. A half-cent
+  tie can differ from the old scripts' binary-float rounding.
+- Names are trimmed, not guessed or fuzzy-matched. Product names are not used
+  to invent item IDs. Missing item numbers use item_id according to the PGC
+  fallback rule inherited from the original scripts.
+
+REPORT RULES
+Normal DISC: retain IPCD and N/A/missing promotions.
+Normal FTG:  retain IPCF and N/A/missing promotions.
+Special DISC: retain IPCF only.
+Special FTG:  retain IPCD only.
+
+Each branch gets a workbook, a main sheet and a sheet for each PGC present.
+FTG workbooks also include the IG agency reference sheet. Special output may
+legitimately omit a branch or FTG altogether if no transactions match.
+
+DISC discount signs follow gross amount when gross is nonzero. FTG discount,
+free quantity and free amount signs follow invoice quantity. P160 second
+discount values are calculated in both main sheets and P160 sheets.
+
+IMPROVEMENTS TO THE OLD REPORTS
+- Correct branch labels on agency sheets (fixes Branch : None).
+- Consistent row-7 headers and freeze panes; filterable main/PGC sheets.
+- Real Excel dates, text IDs, numeric amounts, and fractional quantities.
+- P160 second-discount values also populated on the DISC main sheet.
+- Totals on main and PGC sheets for quantities and financial columns.
+  Totals are generated values; regenerate after changing raw inputs. Manually
+  editing an output workbook does not automatically update those totals.
+- Each input is read once per action; each output workbook is saved once.
+- Background processing keeps the window responsive. Cancel is cooperative
+  and may wait for the current workbook save to finish.
+
+VALIDATION AND OUTPUTS
+Validation errors stop report generation; inspect the Issues tab and the
+validation_issues.csv saved in a Validation folder. Only the first 500 issues
+are displayed in the app; the CSV includes all. Warnings permit generation
+and are saved in the run folder. Date preview shows a sample, not every row.
+run_summary.json records period, conversion counts, output row counts,
+totals, selected precision, multiplier, sources, and completion status.
+Cancelled/failed runs may contain a partial set of reports and are marked
+accordingly in their summary. Use complete runs for reporting.
+
+MAPPINGS AND INPUT LAYOUT
+Manage IG names opens the in-app agency mapping editor. Branch and header
+mappings remain in settings.json. The app reloads mappings for each action.
+Additional header aliases can be supplied under column_aliases, for example:
+  "column_aliases": { "date": ["Transaction Date", "Document Date"] }
+Use unique exact aliases. No changes are made to the original spreadsheets.
+The data must have headers in row 1, on exactly one recognizable data sheet.
+Additional unused source columns are ignored and listed in run_summary.json.
+Formulas in recognized raw columns are rejected: export their values instead.
+Supported formats: .xlsx and .xlsm (macros are neither run nor copied).
+Legacy .xls must first be saved/exported as .xlsx.
+
+VERIFICATION
+The October source files contain 76,074 DISC rows and 8,531 FTG rows.
+Expected output: 9 normal DISC workbooks / 75,870 main-sheet records;
+9 normal FTG workbooks / 8,531 records; 7 special DISC workbooks / 204 records;
+no special FTG workbooks because the FTG source has no IPCD promotions.
+See TEST RESULTS.txt for the checks performed on these files.
+
+The source folder contains the Python application for future maintenance.
+
+

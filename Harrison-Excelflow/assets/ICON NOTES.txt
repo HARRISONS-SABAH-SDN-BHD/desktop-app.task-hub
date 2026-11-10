@@ -1,0 +1,14 @@
+Tool: built-in image editing.
+Edit target: user-supplied Harrisons logo.
+Final edit prompt:
+Create a precise flat-color icon from this supplied logo. Keep its silhouette
+and all cutouts unchanged. Replace every blue area with one single solid flat
+color #217346 (Excel green). The interior of every shape MUST be perfectly
+uniform green: no texture, no noise, no gradients, no lighting, no metallic
+effects, no speckles or decorative details. Preserve the sharp straight
+geometric edges. Keep all empty spaces transparent. This should look like a
+clean 2D vector logo exported as a transparent PNG, suitable for a 16px Windows
+app icon. Do not redesign or reinterpret any part of the mark.
+
+app-logo.png is the selected generated PNG. app.ico and the smaller PNGs are
+format/size conversions for Windows executable and title-bar icons.
