@@ -13,13 +13,20 @@ mod excelflow;
 #[cfg_attr(not(test), allow(dead_code))]
 mod foreground;
 mod gmail;
+mod mail_sources;
+mod mailserver;
+// Retained for reading legacy data; Microsoft connections are not exposed.
+#[cfg_attr(not(test), allow(dead_code))]
 mod microsoft;
 mod model;
 #[cfg(feature = "desktop")]
 mod notifications;
+#[cfg_attr(not(test), allow(dead_code))]
+mod outlook_classic;
 #[cfg(feature = "desktop")]
 mod routine_scheduler;
 mod runner;
+mod runtime;
 #[cfg(test)]
 mod scheduler;
 mod storage;
@@ -82,6 +89,107 @@ mod desktop {
         .map_err(|e| e.to_string())?
     }
     #[tauri::command]
+    fn runtime_status() -> Result<runtime::Progress> {
+        runtime::progress()
+    }
+    #[tauri::command]
+    fn cancel_report_processing() {
+        runtime::cancel();
+    }
+    #[tauri::command]
+    fn mailserver_status() -> Result<mailserver::Status> {
+        mailserver::status()
+    }
+    #[tauri::command]
+    async fn connect_mailserver(config: mailserver::Config, password: String) -> Result<()> {
+        tauri::async_runtime::spawn_blocking(move || mailserver::connect(config, password))
+            .await
+            .map_err(|e| e.to_string())?
+    }
+    #[tauri::command]
+    fn disconnect_mailserver() -> Result<()> {
+        mailserver::disconnect()
+    }
+    #[tauri::command]
+    async fn browse_mail_source(
+        app: tauri::AppHandle,
+        provider: String,
+        request: serde_json::Value,
+    ) -> Result<serde_json::Value> {
+        tauri::async_runtime::spawn_blocking(move || {
+            mail_sources::browse(&app.state::<AppState>(), &provider, request)
+        })
+        .await
+        .map_err(|e| e.to_string())?
+    }
+    #[tauri::command]
+    async fn download_mail_workbook(
+        app: tauri::AppHandle,
+        selection: mail_sources::Download,
+    ) -> Result<mail_sources::Input> {
+        tauri::async_runtime::spawn_blocking(move || {
+            mail_sources::download(&app.state::<AppState>(), selection)
+        })
+        .await
+        .map_err(|e| e.to_string())?
+    }
+    #[tauri::command]
+    async fn pick_excelflow_input(app: tauri::AppHandle) -> Result<Option<mail_sources::Input>> {
+        #[cfg(windows)]
+        let owner = app
+            .get_webview_window("main")
+            .ok_or("Window unavailable")?
+            .hwnd()
+            .map_err(|_| "Window unavailable")?
+            .0 as isize;
+        #[cfg(not(windows))]
+        let owner = 0;
+        tauri::async_runtime::spawn_blocking(move || {
+            mail_sources::pick(&app.state::<AppState>(), owner)
+        })
+        .await
+        .map_err(|e| e.to_string())?
+    }
+    #[tauri::command]
+    async fn excelflow_recent_runs(app: tauri::AppHandle) -> Result<Vec<excelflow::Run>> {
+        tauri::async_runtime::spawn_blocking(move || mail_sources::recent(&app.state::<AppState>()))
+            .await
+            .map_err(|e| e.to_string())?
+    }
+    #[tauri::command]
+    async fn workbook_as_attachment(
+        app: tauri::AppHandle,
+        id: String,
+    ) -> Result<Vec<attachments::AttachmentRef>> {
+        tauri::async_runtime::spawn_blocking(move || {
+            mail_sources::as_attachment(&app.state::<AppState>(), &id)
+        })
+        .await
+        .map_err(|e| e.to_string())?
+    }
+    #[tauri::command]
+    async fn generate_excelflow(
+        app: tauri::AppHandle,
+        request: mail_sources::Generate,
+    ) -> Result<serde_json::Value> {
+        tauri::async_runtime::spawn_blocking(move || {
+            mail_sources::generate(&app.state::<AppState>(), request)
+        })
+        .await
+        .map_err(|e| e.to_string())?
+    }
+    #[tauri::command]
+    async fn excelflow_settings(
+        app: tauri::AppHandle,
+        agencies: Option<serde_json::Value>,
+    ) -> Result<serde_json::Value> {
+        tauri::async_runtime::spawn_blocking(move || {
+            mail_sources::settings(&app.state::<AppState>(), agencies)
+        })
+        .await
+        .map_err(|e| e.to_string())?
+    }
+    #[tauri::command]
     async fn inspect_excelflow_run(
         app: tauri::AppHandle,
         folder_id: String,
@@ -111,14 +219,6 @@ mod desktop {
         })
         .await
         .map_err(|e| e.to_string())?
-    }
-    #[tauri::command]
-    fn configure_excelflow(state: State<'_, AppState>, folder_id: String) -> Result<()> {
-        excelflow::configure(&state, &folder_id)
-    }
-    #[tauri::command]
-    fn launch_excelflow(state: State<'_, AppState>) -> Result<()> {
-        excelflow::launch(&state)
     }
     #[tauri::command]
     async fn pick_report_folder(
@@ -190,41 +290,6 @@ mod desktop {
         state.foreground.approve(&run_id)
     }
     #[tauri::command]
-    fn microsoft_status(state: State<'_, AppState>) -> Result<microsoft::Status> {
-        microsoft::status(&state)
-    }
-    #[tauri::command]
-    async fn connect_microsoft(
-        app: tauri::AppHandle,
-        client_id: String,
-        tenant_id: String,
-        calendar_access: Option<bool>,
-    ) -> Result<()> {
-        tauri::async_runtime::spawn_blocking(move || {
-            microsoft::connect(
-                &app.state::<AppState>(),
-                client_id,
-                tenant_id,
-                calendar_access.unwrap_or(false),
-                |url| {
-                    app.opener()
-                        .open_url(url, None::<&str>)
-                        .map_err(|_| "Could not open Microsoft sign-in".into())
-                },
-            )
-        })
-        .await
-        .map_err(|e| e.to_string())?
-    }
-    #[tauri::command]
-    fn cancel_microsoft_connection() {
-        microsoft::cancel();
-    }
-    #[tauri::command]
-    fn disconnect_microsoft() -> Result<()> {
-        microsoft::disconnect()
-    }
-    #[tauri::command]
     fn gmail_status(state: State<'_, AppState>) -> Result<gmail::ConnectionStatus> {
         gmail::status(&state)
     }
@@ -234,6 +299,7 @@ mod desktop {
         client_id: String,
         client_secret: Option<String>,
         calendar_access: Option<bool>,
+        read_access: Option<bool>,
     ) -> Result<()> {
         tauri::async_runtime::spawn_blocking(move || {
             gmail::connect(
@@ -241,6 +307,7 @@ mod desktop {
                 client_id,
                 client_secret,
                 calendar_access.unwrap_or(false),
+                read_access.unwrap_or(false),
                 |url| {
                     app.opener()
                         .open_url(url, None::<&str>)
@@ -401,6 +468,7 @@ mod desktop {
             .plugin(tauri_plugin_notification::init())
             .plugin(tauri_plugin_updater::Builder::new().build())
             .setup(|app| {
+                runtime::initialize(app.path().resource_dir()?.join("runtime"));
                 let root = app.path().app_data_dir()?;
                 let state = AppState::initialize(root).map_err(std::io::Error::other)?;
                 email_profile::activate(&state).map_err(std::io::Error::other)?;
@@ -412,7 +480,6 @@ mod desktop {
                 background::setup(app.handle())?;
                 routine_scheduler::start(app.handle().clone());
                 gmail::calendar::start(app.handle().clone());
-                microsoft::calendar::start(app.handle().clone());
                 updates::start(app.handle().clone());
                 Ok(())
             })
@@ -437,19 +504,25 @@ mod desktop {
                 run_email_routine,
                 test_email_notification,
                 retry_calendar_sync,
-                microsoft_status,
-                connect_microsoft,
-                cancel_microsoft_connection,
-                disconnect_microsoft,
                 gmail_status,
                 connect_gmail,
                 cancel_gmail_connection,
                 disconnect_gmail,
                 open_gmail_setup,
+                runtime_status,
+                cancel_report_processing,
+                mailserver_status,
+                connect_mailserver,
+                disconnect_mailserver,
+                browse_mail_source,
+                download_mail_workbook,
+                pick_excelflow_input,
+                excelflow_recent_runs,
+                workbook_as_attachment,
+                generate_excelflow,
+                excelflow_settings,
                 inspect_excelflow_run,
                 import_excelflow_reports,
-                configure_excelflow,
-                launch_excelflow,
                 pick_report_folder,
                 open_report_folder,
                 suggest_report_patterns,

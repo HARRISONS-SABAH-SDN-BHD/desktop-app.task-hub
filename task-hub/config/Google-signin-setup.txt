@@ -20,3 +20,5 @@ Unconfigured developer builds expose a separate developer setup section.
 Do not distribute an unconfigured build expecting one-click Google sign-in.
 
 Local release builds can instead set TASK_HUB_GOOGLE_CREDENTIALS_PATH to the downloaded Desktop OAuth JSON outside the repository. The release script imports it without copying it into source.
+
+Optional email-source access: add https://www.googleapis.com/auth/gmail.readonly in the Google project's data access configuration. Users explicitly enable Read email attachments for ExcelFlow and reconnect. Existing send-only connections remain unchanged.

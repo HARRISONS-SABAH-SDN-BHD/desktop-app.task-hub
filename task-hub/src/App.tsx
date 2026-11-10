@@ -1,8 +1,11 @@
-import { MicrosoftConnection } from "./components/MicrosoftConnection";
+import { Connect } from "./components/Connect";
+import { ExcelFlow } from "./components/ExcelFlow";
 import {
-  microsoftConnection,
-  emptyMicrosoftStatus,
-} from "./services/microsoftConnection";
+  otherConnections,
+  emptyMailServerStatus,
+} from "./services/otherConnections";
+import { excelFlowWorkspace, idleWorker } from "./services/excelflowWorkspace";
+import type { AttachmentRef } from "./domain/attachments";
 import { useEffect, useState } from "react";
 import {
   Mail,
@@ -13,6 +16,8 @@ import {
   ArrowLeft,
   CalendarClock,
   Download,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from "lucide-react";
 import { bridge } from "./services/bridge";
 import type { Run, Snapshot } from "./domain/types";
@@ -21,7 +26,6 @@ import { ForegroundMonitor } from "./components/ForegroundMonitor";
 import { AppUpdates } from "./components/AppUpdates";
 import { EmailRoutines } from "./components/EmailRoutines";
 import { emailRoutines } from "./services/emailRoutines";
-import { GmailConnection } from "./components/GmailConnection";
 import { gmailConnection, type GmailStatus } from "./services/gmailConnection";
 import {
   isRoutineDue,
@@ -32,8 +36,8 @@ import {
 const pages = [
   { id: "routines", title: "Email routines", icon: CalendarClock },
   { id: "history", title: "Email history", icon: HistoryIcon },
-  { id: "microsoft", title: "Microsoft 365", icon: Mail },
-  { id: "connection", title: "Gmail connection", icon: CircleHelp },
+  { id: "excelflow", title: "ExcelFlow", icon: Mail },
+  { id: "connection", title: "Connect", icon: CircleHelp },
   { id: "updates", title: "App updates", icon: Download },
 ] as const;
 type Page = (typeof pages)[number]["id"];
@@ -49,7 +53,14 @@ export default function App() {
   const [manualBusy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [routines, setRoutines] = useState<EmailRoutine[]>([]);
-  const [microsoftStatus, setMicrosoftStatus] = useState(emptyMicrosoftStatus);
+  const [mailStatus, setMailStatus] = useState(emptyMailServerStatus);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [worker, setWorker] = useState(idleWorker);
+  const [connectionChoice, setConnectionChoice] = useState("gmail");
+  const [handoff, setHandoff] = useState<{
+    files: AttachmentRef[];
+    routineId: string | null;
+  } | null>(null);
   const [gmailStatus, setGmailStatus] = useState<GmailStatus>({
     connected: false,
     email: null,
@@ -57,15 +68,16 @@ export default function App() {
     busy: false,
   });
   async function refreshConnection() {
-    const [google, microsoft] = await Promise.all([
+    const [google, mail] = await Promise.all([
       gmailConnection.status(),
-      microsoftConnection.status(),
+      otherConnections.mailStatus(),
     ]);
     setGmailStatus(google);
-    setMicrosoftStatus(microsoft);
+    setMailStatus(mail);
   }
   const busy =
     manualBusy ||
+    worker.active ||
     snapshot.foreground?.active === true ||
     snapshot.runs.some((run) => run.status === "running");
   async function refreshRoutines() {
@@ -102,22 +114,31 @@ export default function App() {
         .catch((e) => {
           if (active) setError(String(e));
         });
-    const refreshMicrosoft = () =>
-      microsoftConnection
-        .status()
-        .then((status) => {
-          if (active) setMicrosoftStatus(status);
+    const refreshOthers = () => {
+      void otherConnections
+        .mailStatus()
+        .then((value) => {
+          if (active) setMailStatus(value);
         })
         .catch((e) => {
           if (active) setError(String(e));
         });
-    void refreshMicrosoft();
+      void excelFlowWorkspace
+        .status()
+        .then((value) => {
+          if (active) setWorker(value);
+        })
+        .catch((e) => {
+          if (active) setError(String(e));
+        });
+    };
+    refreshOthers();
     void refreshAccount();
     const timer = window.setInterval(() => void refresh(), 750);
     const routineTimer = window.setInterval(() => void refreshSaved(), 5000);
     const accountTimer = window.setInterval(() => {
       void refreshAccount();
-      void refreshMicrosoft();
+      refreshOthers();
     }, 2000);
     return () => {
       active = false;
@@ -129,11 +150,15 @@ export default function App() {
   function navigate(next: Page) {
     if (busy) return;
     setPage(next);
+    setSidebarCollapsed(next === "excelflow");
     setResult(undefined);
     setError("");
   }
   const runs = snapshot.runs.filter((r) => r.task_id === "foreground_email");
-  const dueCount = routines.filter(isRoutineDue).length;
+  const dueCount = routines.filter(
+    (routine) =>
+      routine.settings.provider !== "microsoft" && isRoutineDue(routine),
+  ).length;
   async function runRoutine(plan: RoutinePreview) {
     setBusy(true);
     try {
@@ -157,8 +182,10 @@ export default function App() {
     }
   }
   return (
-    <div className="app-shell">
-      <aside className="sidebar">
+    <div
+      className={`app-shell${page === "excelflow" ? " excelflow-shell" : ""}${page === "excelflow" && sidebarCollapsed ? " sidebar-collapsed" : ""}`}
+    >
+      <aside className="sidebar" id="workspace-sidebar">
         <a
           className="brand"
           href="#"
@@ -170,7 +197,7 @@ export default function App() {
           <span className="brand-mark">
             <Mail size={21} />
           </span>
-          <span>
+          <span className="brand-name">
             task<span className="brand-light">hub</span>
             <small>EMAIL, ONE TASK AT A TIME</small>
           </span>
@@ -221,6 +248,24 @@ export default function App() {
       <div className="main-shell">
         <header className="topbar">
           <div>
+            {page === "excelflow" && (
+              <button
+                type="button"
+                className="sidebar-toggle secondary"
+                aria-label={
+                  sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"
+                }
+                aria-expanded={!sidebarCollapsed}
+                aria-controls="workspace-sidebar"
+                onClick={() => setSidebarCollapsed((value) => !value)}
+              >
+                {sidebarCollapsed ? (
+                  <PanelLeftOpen size={20} />
+                ) : (
+                  <PanelLeftClose size={20} />
+                )}
+              </button>
+            )}
             Email workspace <ChevronRight size={13} />
             <strong>{pages.find((p) => p.id === page)?.title}</strong>
           </div>
@@ -249,9 +294,8 @@ export default function App() {
             />
             {bridge.native &&
               !gmailStatus.connected &&
-              !microsoftStatus.connected &&
-              page !== "connection" &&
-              page !== "microsoft" && (
+              !mailStatus.connected &&
+              page !== "connection" && (
                 <div className="routine-due-banner" role="status">
                   <span>
                     Connect an email account to enable background drafts and
@@ -263,13 +307,6 @@ export default function App() {
                     onClick={() => navigate("connection")}
                   >
                     Connect Gmail
-                  </button>
-                  <button
-                    className="secondary"
-                    disabled={busy}
-                    onClick={() => navigate("microsoft")}
-                  >
-                    Connect Microsoft 365
                   </button>
                 </div>
               )}
@@ -324,7 +361,13 @@ export default function App() {
                 onRetry={retryReports}
                 calendarLinks={snapshot.calendar_links ?? []}
                 busy={busy}
-                microsoftEmail={microsoftStatus.email}
+                handoff={handoff}
+                onHandoffUsed={() => setHandoff(null)}
+                mailserverEmail={
+                  mailStatus.can_send
+                    ? (mailStatus.config?.email ?? null)
+                    : null
+                }
                 senderEmail={gmailStatus.email}
                 native={bridge.native}
                 refresh={refreshRoutines}
@@ -336,18 +379,31 @@ export default function App() {
                 native={bridge.native}
                 onSelect={setResult}
               />
-            ) : page === "microsoft" ? (
-              <MicrosoftConnection
-                status={microsoftStatus}
+            ) : page === "excelflow" ? (
+              <ExcelFlow
                 native={bridge.native}
-                busy={busy}
-                refresh={refreshConnection}
+                worker={worker}
+                routines={routines}
+                connected={{
+                  gmail: gmailStatus.connected && !!gmailStatus.read_access,
+                  mailserver: mailStatus.connected,
+                }}
+                onConnect={(provider) => {
+                  setConnectionChoice(provider);
+                  navigate("connection");
+                }}
+                onUse={(files, routineId) => {
+                  setHandoff({ files, routineId });
+                  navigate("routines");
+                }}
               />
             ) : page === "updates" ? (
               <AppUpdates busy={busy} />
             ) : (
-              <GmailConnection
-                status={gmailStatus}
+              <Connect
+                initialProvider={connectionChoice}
+                google={gmailStatus}
+                mailserver={mailStatus}
                 native={bridge.native}
                 busy={busy}
                 refresh={refreshConnection}
@@ -361,7 +417,7 @@ export default function App() {
               ? "Closing the window keeps schedules running. Quit from the system tray."
               : "One task. A clearer workflow."}
           </span>
-          <span>GMAIL / MICROSOFT 365 · BACKGROUND EMAIL · WINDOWS</span>
+          <span>GMAIL / IMAP / POP3 · BACKGROUND EMAIL · WINDOWS</span>
         </footer>
       </div>
     </div>

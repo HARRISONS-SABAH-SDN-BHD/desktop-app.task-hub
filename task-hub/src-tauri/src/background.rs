@@ -31,10 +31,10 @@ pub fn setup(app: &AppHandle) -> tauri::Result<()> {
             "quit" => {
                 let state = app.state::<AppState>();
                 let busy = state.lock().map(|store| store.runs.iter().any(|r| r.status == "running")).unwrap_or(true)
-                    || gmail::busy();
+                    || gmail::busy() || crate::runtime::progress().is_ok_and(|p|p.active);
                 if busy {
                     show(app);
-                    let _ = notifications::show(app, "Task Hub is finishing an operation", "Wait for the current email or Google operation to finish, then choose Quit again.");
+                    let _ = notifications::show(app, "Task Hub is finishing an operation", "Wait for the current report or email operation to finish, then choose Quit again.");
                 } else { app.exit(0); }
             },
             _ => (),

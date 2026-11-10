@@ -36,7 +36,11 @@ test("application identity and signed update policy stay stable across packaging
     readFileSync(new URL("../src-tauri/tauri.conf.json", import.meta.url)),
   );
   assert.equal(config.identifier, "com.taskhub.desktop");
-  assert.equal(config.version, JSON.parse(readFileSync(new URL("../package.json", import.meta.url))).version);
+  assert.equal(
+    config.version,
+    JSON.parse(readFileSync(new URL("../package.json", import.meta.url)))
+      .version,
+  );
   assert.equal(config.plugins.updater.requireSignedVersion, true);
   assert.equal(config.plugins.updater.allowDowngrades, false);
   assert.equal(config.bundle.windows.nsis.installMode, "currentUser");
@@ -50,5 +54,9 @@ test("application identity and signed update policy stay stable across packaging
   ).toString("utf8");
   assert.ok(publicKey.includes("public key"));
   assert.ok(!publicKey.includes("secret key"));
-  assert.equal(config.bundle.resources, undefined);
+  assert.deepEqual(config.bundle.resources, {
+    "resources/runtime/taskhub-runtime.exe": "runtime/taskhub-runtime.exe",
+    "resources/runtime/settings.json": "runtime/settings.json",
+    "resources/runtime/report_styles.json": "runtime/report_styles.json",
+  });
 });

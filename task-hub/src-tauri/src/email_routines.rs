@@ -118,8 +118,14 @@ fn validate(settings: &RoutineSettings) -> Result<()> {
             "Calendar reminders must be between 0 and 40320 minutes before the event".into(),
         );
     }
-    if !matches!(settings.provider.as_str(), "gmail" | "microsoft") {
-        return Err("Choose Gmail or Microsoft 365 as the email provider".into());
+    if !matches!(
+        settings.provider.as_str(),
+        "gmail" | "microsoft" | "mailserver"
+    ) {
+        return Err("Choose Gmail or IMAP / POP3 as the email provider".into());
+    }
+    if settings.provider == "mailserver" && settings.calendar.as_ref().is_some_and(|c| c.enabled) {
+        return Err("IMAP/POP3 accounts do not support calendar sync. Use Gmail.".into());
     }
     crate::attachments::validate_list(&settings.attachments)?;
     if settings
@@ -458,6 +464,9 @@ fn claim(
             .iter()
             .find(|r| r.id == id)
             .ok_or("Routine not found")?;
+        if !matches!(routine.settings.provider.as_str(), "gmail" | "mailserver") {
+            return Err("Microsoft support is currently unavailable. Choose Gmail or IMAP / POP3 before running this routine.".into());
+        }
         let report_retry = retry_run.is_some_and(|id| routine.attempt.as_deref()==Some(id) && store.runs.iter().any(|r|r.id==id && r.parameters.get("_attachment_due").and_then(|v|v.as_str())==Some(due) && r.status=="failed" && r.error.as_deref().is_some_and(|e|e.starts_with(crate::attachment_rules::ISSUE_PREFIX))));
         if retry_run.is_some() && !report_retry { return Err("Only attachment preparation failures can be retried here. Inspect Gmail and history for other failures.".into()); }
         if !routine.settings.enabled || (routine.attempt.is_some() && !report_retry) {
@@ -542,14 +551,22 @@ pub fn automatic_tick(state: &AppState, account_ready: bool) -> Result<Option<Ru
     } else {
         None
     };
-    let microsoft = crate::microsoft::connected_sender();
+    let microsoft: Option<String> = None;
+    let custom = crate::mailserver::connected_sender();
     automatic_tick_filtered(
         state,
-        account_ready || microsoft.is_some(),
+        account_ready || microsoft.is_some() || custom.is_some(),
         Utc::now(),
         crate::gmail::execute,
         |routine| {
-            let account = if routine.settings.provider == "microsoft" {
+            if routine.settings.provider == "mailserver"
+                && crate::runtime::progress().is_ok_and(|p| p.active)
+            {
+                return false;
+            }
+            let account = if routine.settings.provider == "mailserver" {
+                &custom
+            } else if routine.settings.provider == "microsoft" {
                 &microsoft
             } else {
                 &google
@@ -588,7 +605,11 @@ fn automatic_tick_filtered(
         store
             .email_routines
             .iter()
-            .find(|r| automatic_eligible(r, now) && available(r))
+            .find(|r| {
+                matches!(r.settings.provider.as_str(), "gmail" | "mailserver")
+                    && automatic_eligible(r, now)
+                    && available(r)
+            })
             .map(preview)
             .transpose()?
     };
@@ -673,7 +694,7 @@ pub fn pending_reminders(state: &AppState) -> Result<Vec<DueReminder>> {
     store
         .email_routines
         .iter()
-        .filter(|r| due(r))
+        .filter(|r| matches!(r.settings.provider.as_str(), "gmail" | "mailserver") && due(r))
         .map(|r| {
             let plan = preview(r)?;
             Ok(DueReminder {
@@ -726,7 +747,7 @@ mod tests {
             true,
             now,
             |_, _, _, _| panic!("disconnected provider must not execute"),
-            |_| false
+            |_| true
         )
         .unwrap()
         .is_none());

@@ -15,6 +15,8 @@ if ($SigningKeyPath) {
 }
 if (!$env:TAURI_SIGNING_PRIVATE_KEY) { throw 'Set TASK_HUB_SIGNING_KEY_PATH to the private updater key, or provide TAURI_SIGNING_PRIVATE_KEY through a GitHub Actions secret. Keep the key outside the project.' }
 if (!$env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD) { $env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD='' }
+npm run runtime:ensure
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 npm run desktop:build
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 npm run release:prepare

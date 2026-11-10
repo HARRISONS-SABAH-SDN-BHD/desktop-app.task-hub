@@ -35,3 +35,5 @@ References:
 https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-device-code
 https://learn.microsoft.com/en-us/graph/api/user-sendmail?view=graph-rest-1.0
 https://learn.microsoft.com/en-us/graph/api/user-post-messages?view=graph-rest-1.0
+
+In Task Hub 0.7+, Microsoft 365 is under the Connect sidebar page. Local Outlook Classic/PST access is a separate Connect option and does not require Microsoft Entra credentials.

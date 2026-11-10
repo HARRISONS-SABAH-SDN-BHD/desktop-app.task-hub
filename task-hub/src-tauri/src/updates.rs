@@ -100,6 +100,7 @@ pub fn install(app: AppHandle) -> Result<()> {
     }
     // Nonblocking and held through installation: no new send, OAuth, or calendar operation can start.
     let _google = gmail::lock_for_update()?;
+    let _runtime = crate::runtime::lock_for_update()?;
     let (update, bytes) = {
         let updates = app.state::<UpdateState>();
         let inner = updates.0.lock().map_err(|_| "Update status unavailable")?;

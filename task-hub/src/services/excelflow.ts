@@ -76,10 +76,4 @@ export const excelFlow = {
     validateAttachments([...existing, ...items]);
     return items;
   },
-  async configure(folderId: string): Promise<void> {
-    return invoke("configure_excelflow", { folderId });
-  },
-  async launch(): Promise<void> {
-    return invoke("launch_excelflow");
-  },
 };

@@ -27,10 +27,13 @@ struct Credentials {
     subject: String,
     #[serde(default)]
     calendar_access: bool,
+    #[serde(default)]
+    read_access: bool,
 }
 #[derive(Serialize)]
 pub struct ConnectionStatus {
     pub calendar_access: bool,
+    pub read_access: bool,
     pub publisher_configured: bool,
     pub connected: bool,
     pub email: Option<String>,
@@ -63,6 +66,7 @@ pub fn status(state: &AppState) -> Result<ConnectionStatus> {
         });
     Ok(ConnectionStatus {
         publisher_configured: publisher_client().is_some(),
+        read_access: credential.as_ref().is_some_and(|c| c.read_access),
         calendar_access: credential.as_ref().is_some_and(|c| c.calendar_access),
         connected: credential.is_some(),
         email: credential.map(|c| c.email),
@@ -90,13 +94,14 @@ pub fn connect(
     id: String,
     secret: Option<String>,
     calendar_access: bool,
+    read_access: bool,
     open: impl FnOnce(String) -> Result<()>,
 ) -> Result<()> {
     let (id, secret) = match publisher_client() {
         Some((id, secret)) => (id.to_owned(), secret.map(str::to_owned)),
         None => (id, secret),
     };
-    oauth::connect(state, id, secret, calendar_access, open)
+    oauth::connect(state, id, secret, calendar_access, read_access, open)
 }
 pub fn cancel_connect() {
     CANCEL_CONNECT.store(true, Ordering::SeqCst);
@@ -122,11 +127,12 @@ fn deliver(state: &AppState, run: &mut Run, direct: bool) -> Result<(String, Vec
         .get("_provider")
         .and_then(|v| v.as_str())
         .unwrap_or("gmail");
-    if !matches!(microsoft, "gmail" | "microsoft") {
+    if !matches!(microsoft, "gmail" | "mailserver") {
         return Err("Unsupported email provider; nothing was submitted".into());
     }
+    let custom = microsoft == "mailserver";
     let microsoft = microsoft == "microsoft";
-    let mut google_credential = if microsoft {
+    let mut google_credential = if microsoft || custom {
         None
     } else {
         Some(vault::read()?.ok_or("Connect Gmail before running this routine")?)
@@ -136,7 +142,14 @@ fn deliver(state: &AppState, run: &mut Run, direct: bool) -> Result<(String, Vec
     } else {
         None
     };
-    let sender = if let Some(c) = &microsoft_credential {
+    let custom_credential = if custom {
+        Some(crate::mailserver::credentials()?)
+    } else {
+        None
+    };
+    let sender = if let Some(c) = &custom_credential {
+        c.config.email.clone()
+    } else if let Some(c) = &microsoft_credential {
         c.email.clone()
     } else {
         google_credential.as_ref().unwrap().email.clone()
@@ -191,6 +204,13 @@ fn deliver(state: &AppState, run: &mut Run, direct: bool) -> Result<(String, Vec
         &run.id,
         &attachments,
     )?;
+    let custom_recipient = text("recipient")?.to_owned();
+    let custom_cc = run
+        .parameters
+        .get("cc")
+        .and_then(|v| v.as_str())
+        .unwrap_or_default()
+        .to_owned();
     if !report_receipts.is_empty() {
         run.parameters.insert(
             "_resolved_reports".into(),
@@ -207,7 +227,23 @@ fn deliver(state: &AppState, run: &mut Run, direct: bool) -> Result<(String, Vec
             Ok(())
         })?;
     }
-    let (provider, id, summary) = if let Some(credential) = &mut microsoft_credential {
+    let custom_summary;
+    let (provider, id, summary) = if let Some(credential) = &custom_credential {
+        custom_summary = crate::mailserver::deliver(
+            state,
+            credential,
+            &raw,
+            &custom_recipient,
+            &custom_cc,
+            send,
+            &run.id,
+        )?;
+        (
+            "Mail server",
+            "accepted".to_string(),
+            custom_summary.as_str(),
+        )
+    } else if let Some(credential) = &mut microsoft_credential {
         let id = crate::microsoft::deliver(credential, &raw, send)?;
         (
             "Microsoft 365",
@@ -255,7 +291,13 @@ fn deliver(state: &AppState, run: &mut Run, direct: bool) -> Result<(String, Vec
     let receipt = state.output.join(format!(
         "{}.{}.txt",
         run.id,
-        if microsoft { "microsoft" } else { "gmail" }
+        if custom {
+            "mailserver"
+        } else if microsoft {
+            "microsoft"
+        } else {
+            "gmail"
+        }
     ));
     atomic_write(&receipt, logs.join("\n").as_bytes()).map_err(|_| "The mail provider accepted the request, but Task Hub could not write its receipt. Inspect Drafts / Sent before retrying; no retry was attempted.")?;
     Ok((receipt.to_string_lossy().into_owned(), logs))
@@ -301,4 +343,17 @@ mod tests {
         assert!(check_sender("other@gmail.com", "expected@gmail.com").is_err());
         assert!(check_sender("other@gmail.com", "").is_err());
     }
+}
+
+pub(crate) fn source_token() -> Result<(reqwest::blocking::Client, String)> {
+    let mut credential = vault::read()?.ok_or("Connect Gmail first")?;
+    if !credential.read_access {
+        return Err(
+            "Reconnect Gmail with Read email attachments enabled to use it as an ExcelFlow source."
+                .into(),
+        );
+    }
+    let client = transport::client()?;
+    let token = oauth::access_token(&client, &mut credential)?;
+    Ok((client, token))
 }

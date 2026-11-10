@@ -21,6 +21,12 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: src-tauri
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r integrations/runtime/requirements-build.txt
+      - run: npm run runtime:build
+      - run: python -m unittest discover -s integrations/runtime -p test_runtime.py
       - run: npm ci
       - name: Validate release identity and signing secret
         shell: pwsh

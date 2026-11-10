@@ -1,29 +1,55 @@
-Harrison ExcelFlow + Task Hub
+Task Hub 0.7.0 — Connect and ExcelFlow
 
-1. Generate DISC / FTG reports in Harrison ExcelFlow as usual.
-2. In Task Hub, create or edit an email routine. Under Add files > ExcelFlow
-   reports, click Choose ExcelFlow run.
-3. Select the output folder containing run_summary.json and its Formatted...
-   subfolders. Do not select the Desktop, a raw workbook or an inner DISC folder.
-4. Confirm Report month. Filter by branch, report type or Normal/Special version.
-   Check the files you want and choose Add selected reports.
-5. Review the fixed attachments and save the routine. Importing does not send mail.
+CONNECT
+Only Gmail and IMAP / POP3 are currently available.
+Microsoft 365 and Outlook Classic connections are temporarily unavailable.
+Saved Microsoft routines are preserved but do not run. Edit them to select a
+connected Gmail or IMAP / POP3 sender before saving and running them again.
 
-For the next monthly report, edit the routine, remove the previous saved copies,
-choose the new completed ExcelFlow run and add its reports. Imported reports are
-fixed snapshots: re-running ExcelFlow will not silently replace them.
-Use a separate routine for Normal and Special files when they share a filename.
-The existing email limits still apply: 10 attachments / 18 MB overall, and a
-smaller Microsoft Graph encoded request limit (approximately 2 MB attachments).
+Gmail: enable Read email attachments for ExcelFlow and reconnect to read raw
+workbooks. The publisher needs Google's gmail.readonly scope configured.
+IMAP / POP3: use your provider's incoming TLS server, username and password/app
+password. IMAP defaults to port 993, POP3 to 995. SMTP is optional for reading,
+but required for sending routines. SMTP requires TLS or STARTTLS and uses the
+same password, with an optional different username. Ask IT which methods your
+account supports; providers requiring OAuth may block password-based access.
+Passwords are stored in Windows Credential Manager, not routine files.
+Browsing never deletes mail or marks it read. POP3 header browsing needs TOP.
+IMAP can save drafts; POP3 drafts are local .eml files. SMTP does not automatically
+save a Sent Items copy.
 
-Optional: Set ExcelFlow app folder to the folder containing Harrison ExcelFlow.exe
-and _internal. Open ExcelFlow then launches that application. Keep the complete
-ExcelFlow portable folder together. ExcelFlow 1.17's existing run_summary.json is
-supported; no changes to its report calculations, raw workbooks or executable
-are needed for this integration. Task Hub never runs arbitrary command strings.
+EXCELFLOW
+Open ExcelFlow in the sidebar. The sidebar collapses automatically; use the
+button in the top bar to expand or collapse it again. Select DISC & FTG Reports.
+The original ExcelFlow layout is retained with Task Hub's theme and fonts:
+- Workbooks on the left; Report details on the right.
+- Output location below, followed by actions and progress.
+- Main menu, Manage IG names and Settings at the top right.
+- Date preview, Run log and Issues under View run details.
 
-Implementation boundaries:
-- excelflow.rs validates completed run summaries, scoped paths and workbook files.
-- ExcelFlowPicker.tsx handles selection; imported files use existing attachment storage.
-- Import commands accept native-selected folder IDs and report keys, not arbitrary paths.
-- Browser mode previews the selection only; real file snapshots use the desktop backend.
+Browse for a DISC workbook, an FTG workbook, or both. Alternatively choose
+Read from email, select Gmail or IMAP / POP3, read folders and recent emails,
+then assign the chosen workbook attachments as DISC or FTG. Choose Done to
+return to the report screen. No separate ExcelFlow app folder is needed.
+
+Use Both / DISC / FTG and Both / Normal / Special as in the original app.
+Automatic period detection uses ALL_DISC_YYMM or ALL_FTG_YYMM filenames.
+Files prefixed oriALL_ need a manual month/year in Settings or a renamed copy.
+Settings includes decimals, the P160 multiplier, filename detection and date
+recovery. Manage IG names changes Task Hub's own embedded engine settings.
+Choose an output folder or keep Task Hub's output/ExcelFlow default.
+
+Validate & preview checks dates without generating reports. Generate reports
+creates a new report-run folder. Open results lets you choose a completed run,
+select reports and add them to a new or existing email routine. Save that routine
+to confirm its attachments. The reports are fixed copies; later report runs do
+not automatically replace them. No email is sent by reading or generating files.
+
+LEGACY REPORT RULES
+New routines no longer expose Report Rules. Existing rules remain clearly marked
+until explicitly removed. Add the intended attachments, remove legacy rules and save.
+
+LIMITS
+Raw workbooks: 100 MB each. Outgoing attachments: 10 files / 18 MB in total.
+Only .xlsx/.xlsm workbook attachments are imported. Macros are not run.
+Scheduled email requires Task Hub running in the tray, an awake computer and internet.

@@ -1,0 +1,29 @@
+Building the embedded runtime (developers only)
+
+Installed Task Hub users do not need Python or a separate ExcelFlow folder.
+For source development:
+1. Install Python 3.12 and create a virtual environment.
+2. Install integrations/runtime/requirements-build.txt in that environment.
+3. Set TASK_HUB_RUNTIME_PYTHON to its python.exe if it is not your default Python.
+4. Run npm run runtime:build, then npm run desktop.
+
+The runtime is built into src-tauri/resources/runtime and is ignored by Git.
+Release builds ensure it is current. CI builds it before compiling Tauri.
+Source ZIPs include Python sources and the pinned ExcelFlow engine, not the binary.
+Build caches are outside the project under the temporary/runtime-build directory.
+
+Boundaries:
+- integrations/runtime/vendor/engine.py is the original ExcelFlow 1.17 report engine.
+  origin.json records its hash. Calculations are not duplicated in TypeScript/Rust.
+- integrations/runtime/mailboxes.py handles TLS-only IMAP/POP3/SMTP with Python's
+  standard protocol libraries; no message deletion or automatic send retry.
+- outlook_classic.rs and its fixed PowerShell script read the current Outlook COM
+  profile. Caller data enters through JSON stdin; it is never interpolated as code.
+- runtime.rs controls the bundled worker, bounded JSON, progress, timeout and cancel.
+- mail_sources.rs scopes workbook files by IDs and verifies immutable input copies.
+- Passwords stay in Windows Credential Manager and cross into the worker via stdin,
+  never in process arguments, workflow JSON, receipts or frontend status objects.
+
+To update the report engine, deliberately replace the vendored file from the
+Harrison-Excelflow source, update its origin hash, rebuild the runtime and run both
+engine parity and integration tests. Do not edit report calculations in the UI.

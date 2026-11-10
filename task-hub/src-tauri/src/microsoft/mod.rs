@@ -124,3 +124,10 @@ pub(crate) fn deliver(credential: &mut Credentials, raw: &str, send: bool) -> Re
         send,
     )
 }
+
+pub(crate) fn source_token() -> Result<(reqwest::blocking::Client, String)> {
+    let mut credential = credentials()?;
+    let client = crate::gmail::transport::client()?;
+    let token = oauth::access_token(&client, &mut credential)?;
+    Ok((client, token))
+}

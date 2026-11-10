@@ -1,6 +1,7 @@
+import type { AttachmentRef } from "../domain/attachments";
 import { ExcelFlowPicker } from "./ExcelFlowPicker";
 import { Help } from "./Help";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { CalendarClock, Plus, ArrowLeft } from "lucide-react";
 import {
   isRoutineDue,
@@ -12,7 +13,6 @@ import {
   type RoutineSettings,
 } from "../domain/emailRoutines";
 import { emailRoutines } from "../services/emailRoutines";
-import { ReportRules } from "./ReportRules";
 import {
   REPORT_ISSUE_PREFIX,
   validateReportRules,
@@ -31,9 +31,11 @@ export function EmailRoutines({
   busy,
   native,
   senderEmail,
-  microsoftEmail = null,
+  mailserverEmail = null,
   refresh,
   onRun,
+  handoff,
+  onHandoffUsed,
 }: {
   routines: EmailRoutine[];
   runs?: Run[];
@@ -42,9 +44,11 @@ export function EmailRoutines({
   busy: boolean;
   native: boolean;
   senderEmail: string | null;
-  microsoftEmail?: string | null;
+  mailserverEmail?: string | null;
   refresh: () => Promise<void>;
   onRun: (plan: RoutinePreview) => Promise<void>;
+  handoff?: { files: AttachmentRef[]; routineId: string | null } | null;
+  onHandoffUsed?: () => void;
 }) {
   const [editing, setEditing] = useState<{
     id: string | null;
@@ -94,6 +98,20 @@ export function EmailRoutines({
       settings: routine ? structuredClone(routine.settings) : newRoutine(),
     });
   }
+  useEffect(() => {
+    if (handoff) {
+      const routine = routines.find((r) => r.id === handoff.routineId);
+      setPlan(null);
+      setEditing({
+        id: routine?.id ?? null,
+        settings: {
+          ...(routine ? structuredClone(routine.settings) : newRoutine()),
+          attachments: handoff.files,
+        },
+      });
+      onHandoffUsed?.();
+    }
+  }, [handoff, routines, onHandoffUsed]);
   const current = plan ? routines.find((r) => r.id === plan.id) : undefined;
   return (
     <>
@@ -139,10 +157,17 @@ export function EmailRoutines({
           {error}
         </p>
       )}
+      {routines.some((r) => r.settings.provider === "microsoft") && (
+        <p className="notice" role="status">
+          Microsoft routines are paused while Microsoft support is unavailable.
+          Their saved details are preserved; edit a routine to choose Gmail or
+          IMAP / POP3.
+        </p>
+      )}
       {editing ? (
         <RoutineForm
           settings={editing.settings}
-          microsoftEmail={microsoftEmail}
+          mailserverEmail={mailserverEmail}
           senderEmail={senderEmail}
           native={native}
           locked={locked}
@@ -198,7 +223,10 @@ export function EmailRoutines({
           </dl>
           <AttachmentPicker value={plan.attachments ?? []} />
           {!!current?.settings.report_rules?.length && (
-            <ReportRules value={current.settings.report_rules} />
+            <p className="notice">
+              Legacy report rules are active for this routine. Edit the routine
+              to replace them with selected ExcelFlow reports.
+            </p>
           )}
           {current?.attempt ? (
             <p className="notice">
@@ -331,7 +359,9 @@ export function EmailRoutines({
                   <p className="muted">
                     {settings.provider === "microsoft"
                       ? "Microsoft 365"
-                      : "Gmail"}
+                      : settings.provider === "mailserver"
+                        ? "IMAP / POP3"
+                        : "Gmail"}
                   </p>
                   <p>
                     Default recipient: <strong>{settings.recipient}</strong>
@@ -416,7 +446,10 @@ export function EmailRoutines({
                       </strong>
                     </p>
                     {!!settings.report_rules?.length && (
-                      <ReportRules value={settings.report_rules} />
+                      <p className="notice">
+                        Legacy report rules are active. Edit this routine to
+                        remove them.
+                      </p>
                     )}
                   </details>
                   {attachmentFailure && (
@@ -446,25 +479,32 @@ export function EmailRoutines({
                     </p>
                   )}
                   <div className="button-row routine-actions">
-                    {due && !routine.attempt && !settings.auto_send && (
-                      <button
-                        className="primary"
-                        disabled={locked}
-                        onClick={() =>
-                          void act(async () => {
-                            await onRun(
-                              await emailRoutines.preview(routine.id),
-                            );
-                          })
-                        }
-                      >
-                        {native ? "Prepare draft" : "Preview routine only"}
-                      </button>
-                    )}
+                    {due &&
+                      !routine.attempt &&
+                      !settings.auto_send &&
+                      settings.provider !== "microsoft" && (
+                        <button
+                          className="primary"
+                          disabled={locked}
+                          onClick={() =>
+                            void act(async () => {
+                              await onRun(
+                                await emailRoutines.preview(routine.id),
+                              );
+                            })
+                          }
+                        >
+                          {native ? "Prepare draft" : "Preview routine only"}
+                        </button>
+                      )}
                     {attachmentFailure && routine.next_due && (
                       <button
                         className="primary"
-                        disabled={locked || !settings.enabled}
+                        disabled={
+                          locked ||
+                          !settings.enabled ||
+                          settings.provider === "microsoft"
+                        }
                         onClick={() =>
                           void act(() => onRetry(routine.id, routine.next_due!))
                         }
@@ -476,7 +516,7 @@ export function EmailRoutines({
                     {routine.next_due && (
                       <button
                         className="secondary"
-                        disabled={locked}
+                        disabled={locked || settings.provider === "microsoft"}
                         onClick={() => void preview(routine.id)}
                       >
                         {due ? "Preview due email" : "Preview next email"}
@@ -544,7 +584,7 @@ function RoutineForm({
   settings: initial,
   native,
   senderEmail,
-  microsoftEmail = null,
+  mailserverEmail = null,
   locked,
   onSave,
   onCancel,
@@ -552,7 +592,7 @@ function RoutineForm({
   settings: RoutineSettings;
   native: boolean;
   senderEmail: string | null;
-  microsoftEmail?: string | null;
+  mailserverEmail?: string | null;
   locked: boolean;
   onSave: (settings: RoutineSettings) => void;
   onCancel: () => void;
@@ -561,16 +601,14 @@ function RoutineForm({
     ...initial,
     provider:
       initial.provider ??
-      (initial.sender_account || senderEmail || !microsoftEmail
-        ? "gmail"
-        : "microsoft"),
+      (senderEmail || !mailserverEmail ? "gmail" : "mailserver"),
     report_rules: initial.report_rules ?? [],
     calendar: initial.calendar ?? { enabled: false, reminder_minutes: 1440 },
     cc: initial.cc ?? "",
     attachments: initial.attachments ?? [],
     sender_account:
       initial.sender_account ??
-      (native ? (senderEmail ?? microsoftEmail) : "preview@example.com"),
+      (native ? (senderEmail ?? mailserverEmail) : "preview@example.com"),
   }));
   const [error, setError] = useState("");
   const [attachmentBusy, setAttachmentBusy] = useState(false);
@@ -583,11 +621,17 @@ function RoutineForm({
   function save(event: FormEvent) {
     event.preventDefault();
     setError("");
+    if (settings.provider === "microsoft") {
+      setError(
+        "Microsoft support is currently unavailable. Choose a connected Gmail or IMAP / POP3 sender before saving.",
+      );
+      return;
+    }
     if (
       native &&
       (!settings.sender_account ||
         settings.sender_account !==
-          (settings.provider === "microsoft" ? microsoftEmail : senderEmail))
+          (settings.provider === "mailserver" ? mailserverEmail : senderEmail))
     ) {
       setError(
         "Connect the intended email sender, then choose that account before saving this routine.",
@@ -643,10 +687,15 @@ function RoutineForm({
               const [provider, ...parts] = event.target.value.split(":");
               setSettings((current) => ({
                 ...current,
-                provider: provider === "microsoft" ? "microsoft" : "gmail",
+                provider:
+                  provider === "microsoft"
+                    ? "microsoft"
+                    : provider === "mailserver"
+                      ? "mailserver"
+                      : "gmail",
                 sender_account: parts.join(":") || null,
                 calendar:
-                  provider === "microsoft"
+                  provider === "mailserver"
                     ? {
                         enabled: false,
                         reminder_minutes: current.calendar.reminder_minutes,
@@ -659,8 +708,10 @@ function RoutineForm({
             {settings.sender_account &&
               settings.sender_account !==
                 (settings.provider === "microsoft"
-                  ? microsoftEmail
-                  : senderEmail) && (
+                  ? null
+                  : settings.provider === "mailserver"
+                    ? mailserverEmail
+                    : senderEmail) && (
                 <option
                   value={
                     (settings.provider ?? "gmail") +
@@ -672,14 +723,19 @@ function RoutineForm({
                   {native ? "(not connected)" : "(preview only)"}
                 </option>
               )}
+            {!native && !senderEmail && (
+              <option value="gmail:preview@example.com">
+                Gmail — preview@example.com (preview only)
+              </option>
+            )}
             {senderEmail && (
               <option value={"gmail:" + senderEmail}>
                 Gmail — {senderEmail}
               </option>
             )}
-            {microsoftEmail && (
-              <option value={"microsoft:" + microsoftEmail}>
-                Microsoft 365 — {microsoftEmail}
+            {mailserverEmail && (
+              <option value={"mailserver:" + mailserverEmail}>
+                IMAP / POP3 — {mailserverEmail}
               </option>
             )}
           </select>
@@ -740,8 +796,9 @@ function RoutineForm({
         </label>
         <h3 className="form-section-title">3. Add files (optional)</h3>
         <Help label="Choosing attachments">
-          Use a saved copy for files that stay the same. Use a current-report
-          rule for files that change each month.
+          Use a saved copy for files that stay the same. Choose generated
+          reports from ExcelFlow when needed; saved copies do not update
+          automatically.
         </Help>
         <ExcelFlowPicker
           value={settings.attachments}
@@ -756,12 +813,23 @@ function RoutineForm({
           onBusyChange={setAttachmentBusy}
           disabled={locked}
         />
-        <ReportRules
-          value={settings.report_rules}
-          onChange={(rules) => update("report_rules", rules)}
-          disabled={locked || attachmentBusy}
-          onBusyChange={setAttachmentBusy}
-        />
+        {!!settings.report_rules.length && (
+          <div className="notice">
+            <p>
+              This routine still has {settings.report_rules.length} legacy
+              report rule(s). They remain active until removed. Add the intended
+              ExcelFlow attachments before replacing them.
+            </p>
+            <button
+              type="button"
+              className="secondary"
+              disabled={locked || attachmentBusy}
+              onClick={() => update("report_rules", [])}
+            >
+              Remove legacy report rules
+            </button>
+          </div>
+        )}
         <Help label="Message date fields">
           Available fields:{" "}
           <code>
@@ -858,9 +926,13 @@ function RoutineForm({
           </div>
         )}
         <h3 className="form-section-title">5. Calendar reminder (optional)</h3>
+        {settings.provider === "mailserver" && (
+          <p>Calendar sync is available for Gmail accounts.</p>
+        )}
         <label className="routine-check">
           <input
             type="checkbox"
+            disabled={settings.provider !== "gmail"}
             checked={settings.calendar.enabled}
             onChange={(e) =>
               update("calendar", {
@@ -869,9 +941,7 @@ function RoutineForm({
               })
             }
           />
-          {settings.provider === "microsoft"
-            ? "Sync to Outlook Calendar"
-            : "Sync to Google Calendar"}
+          Sync to Google Calendar
         </label>
         {settings.calendar.enabled && (
           <>
@@ -897,12 +967,10 @@ function RoutineForm({
             <Help label="Calendar reminders">
               Creates a private reminder in your connected account’s primary
               calendar. For Gmail, enable Google Calendar API and reconnect with
-              Calendar access. For Microsoft 365, enable Outlook calendar access
-              and reconnect; IT may need to approve Calendars.ReadWrite. Changes
-              sync from Task Hub; edit routines here. Disabling sync, disabling
-              the routine, or deleting it removes its calendar event when Task
-              Hub is running and connected. Email contents, recipients and files
-              are not copied to the calendar.
+              Calendar access. Changes sync from Task Hub; edit routines here.
+              Disabling sync, disabling the routine, or deleting it removes its
+              calendar event when Task Hub is running and connected. Email
+              contents, recipients and files are not copied to the calendar.
             </Help>
           </>
         )}

@@ -52,9 +52,7 @@ test("calendar access is a separate opt-in on Google sign-in and background oper
   page,
 }) => {
   await page.goto("/");
-  await page
-    .getByRole("button", { name: "Gmail connection", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Connect", exact: true }).click();
   const calendar = page.getByRole("checkbox", {
     name: "Enable Google Calendar access",
   });

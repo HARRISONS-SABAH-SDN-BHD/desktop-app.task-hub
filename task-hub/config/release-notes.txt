@@ -1,6 +1,7 @@
-Harrison ExcelFlow report integration:
-- Open ExcelFlow from Task Hub after selecting its application folder.
-- Choose a completed ExcelFlow run from an email routine, filter by branch/type/version, and import selected reports.
-- Reports become verified fixed attachment copies. New ExcelFlow runs do not silently change saved routine attachments.
-- Running/failed runs, missing or changed files, unsafe paths and duplicate filenames are rejected.
-- Existing email scheduling and calendar behavior are preserved.
+Unified Connect and embedded ExcelFlow (0.7.0, not yet published):
+- Connect now offers Gmail and TLS IMAP/POP3 only, with optional SMTP sending.
+- Microsoft 365 and Outlook Classic are temporarily unavailable; saved routines are preserved and do not run.
+- ExcelFlow retains its original menu, report panel positions and run-details view with Task Hub theme/fonts.
+- Sidebar collapses automatically in ExcelFlow and can be expanded again.
+- Read workbook attachments, generate DISC/FTG reports and select outputs for email routines.
+- Report Rules controls removed. Existing rules remain marked until explicitly removed.
