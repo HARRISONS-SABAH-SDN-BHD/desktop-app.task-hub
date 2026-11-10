@@ -325,7 +325,7 @@ function MailServerForm({
         IMAP drafts use the configured Drafts folder. POP3 cannot upload drafts;
         Task Hub saves a local .eml draft instead. SMTP submission does not
         automatically create a Sent Items copy. Calendar sync is available
-        through Gmail or Microsoft 365.
+        through Gmail.
       </Help>
     </section>
   );

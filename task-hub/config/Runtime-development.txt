@@ -2,15 +2,34 @@ Building the embedded runtime (developers only)
 
 Installed Task Hub users do not need Python or a separate ExcelFlow folder.
 For source development:
-1. Install Python 3.12 and create a virtual environment.
-2. Install integrations/runtime/requirements-build.txt in that environment.
-3. Set TASK_HUB_RUNTIME_PYTHON to its python.exe if it is not your default Python.
-4. Run npm run runtime:build, then npm run desktop.
+1. Install Python 3.12 with the Windows Python launcher (py).
+2. Run npm run desktop. The build script finds Python 3.12, creates an isolated
+   environment and installs the pinned packages on the first build. Internet
+   access is needed for that first setup; global Python packages are not changed.
+3. If Python is installed in a custom location, set TASK_HUB_RUNTIME_PYTHON to
+   its Python 3.12 python.exe before launching. No manual pip setup is needed.
 
-The runtime is built into src-tauri/resources/runtime and is ignored by Git.
-Release builds ensure it is current. CI builds it before compiling Tauri.
-Source ZIPs include Python sources and the pinned ExcelFlow engine, not the binary.
-Build caches are outside the project under the temporary/runtime-build directory.
+The runtime is generated in src-tauri/resources/runtime (ignored by Git).
+Source and resource hashes decide whether it needs rebuilding; Git checkout
+timestamps alone do not force a rebuild. Later launches reuse verified resources
+without needing Python or internet, until the runtime source changes.
+Build environments and caches stay under your temporary folder in
+task-hub-runtime-build/<project-id>. Deleting that cache is safe; the next source
+build will recreate it. Installed Task Hub users do not need Python at all.
+
+To force compilation: npm run runtime:build.
+If setup fails, read the pip or PyInstaller error above the final message. Check
+internet/proxy access for dependency errors. Close report operations if Windows
+reports a locked worker executable. Failed builds are never marked up to date.
+
+LOCAL SOURCE VERSUS INSTALLED APP
+The in-app updater downloads a published GitHub installer, not your local files.
+Local UI changes only appear in npm run desktop or a newly built installer.
+Task Hub permits one running instance: use Quit Task Hub in its tray menu before
+launching the source app. Closing the window alone keeps the old instance running.
+Publish a newer version with the updated installer when ready for automatic
+updates. Do not replace an existing published version. Current source remains
+0.7.0 until you choose to make the next release.
 
 Boundaries:
 - integrations/runtime/vendor/engine.py is the original ExcelFlow 1.17 report engine.

@@ -68,7 +68,9 @@ export function AppUpdates({ busy }: { busy: boolean }) {
         <Help label="Automatic update checks">
           The installed app checks automatically after startup and every six
           hours. New releases are downloaded and verified, then wait for your
-          click to install and restart.
+          click to install and restart. Updates come from published GitHub
+          installers; local source changes appear only after running the source
+          app or building and publishing a new installer.
         </Help>
         <Help label="Installing safely">
           Finish editing and save your work first. Installation is blocked while
