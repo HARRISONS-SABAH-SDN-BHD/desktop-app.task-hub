@@ -9,6 +9,7 @@ mod attachments;
 mod background;
 mod email_profile;
 mod email_routines;
+mod excelflow;
 #[cfg_attr(not(test), allow(dead_code))]
 mod foreground;
 mod gmail;
@@ -79,6 +80,45 @@ mod desktop {
         })
         .await
         .map_err(|e| e.to_string())?
+    }
+    #[tauri::command]
+    async fn inspect_excelflow_run(
+        app: tauri::AppHandle,
+        folder_id: String,
+    ) -> Result<excelflow::Run> {
+        tauri::async_runtime::spawn_blocking(move || {
+            excelflow::inspect(&app.state::<AppState>(), &folder_id)
+        })
+        .await
+        .map_err(|e| e.to_string())?
+    }
+    #[tauri::command]
+    async fn import_excelflow_reports(
+        app: tauri::AppHandle,
+        folder_id: String,
+        summary_hash: String,
+        selected: Vec<excelflow::Selection>,
+        existing: Vec<attachments::AttachmentRef>,
+    ) -> Result<Vec<attachments::AttachmentRef>> {
+        tauri::async_runtime::spawn_blocking(move || {
+            excelflow::import(
+                &app.state::<AppState>(),
+                &folder_id,
+                &summary_hash,
+                selected,
+                existing,
+            )
+        })
+        .await
+        .map_err(|e| e.to_string())?
+    }
+    #[tauri::command]
+    fn configure_excelflow(state: State<'_, AppState>, folder_id: String) -> Result<()> {
+        excelflow::configure(&state, &folder_id)
+    }
+    #[tauri::command]
+    fn launch_excelflow(state: State<'_, AppState>) -> Result<()> {
+        excelflow::launch(&state)
     }
     #[tauri::command]
     async fn pick_report_folder(
@@ -406,6 +446,10 @@ mod desktop {
                 cancel_gmail_connection,
                 disconnect_gmail,
                 open_gmail_setup,
+                inspect_excelflow_run,
+                import_excelflow_reports,
+                configure_excelflow,
+                launch_excelflow,
                 pick_report_folder,
                 open_report_folder,
                 suggest_report_patterns,

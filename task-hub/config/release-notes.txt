@@ -1,5 +1,6 @@
-Outlook calendar sync:
-- Optional private reminders for Microsoft 365 routines in the primary Outlook calendar.
-- Sync routine schedules and reminder times; clean up events when paused, disabled or deleted.
-- Owned-event checks, conditional changes and stable transaction IDs protect against duplicate or unrelated changes.
-- Reconnect with Outlook calendar access; IT must approve delegated Calendars.ReadWrite. Existing email-only connections keep working.
+Harrison ExcelFlow report integration:
+- Open ExcelFlow from Task Hub after selecting its application folder.
+- Choose a completed ExcelFlow run from an email routine, filter by branch/type/version, and import selected reports.
+- Reports become verified fixed attachment copies. New ExcelFlow runs do not silently change saved routine attachments.
+- Running/failed runs, missing or changed files, unsafe paths and duplicate filenames are rejected.
+- Existing email scheduling and calendar behavior are preserved.

@@ -679,3 +679,37 @@
     padding: 18px;
   }
 }
+
+.excelflow-picker {
+  border: 1px solid #34485e;
+  border-radius: 12px;
+  padding: 18px;
+  min-width: 0;
+}
+.excelflow-report-list {
+  max-height: 300px;
+  overflow-y: auto;
+  margin: 12px 0;
+}
+.email-fields label.excelflow-report {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 4px;
+  border-bottom: 1px solid #304154;
+}
+.excelflow-report > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.excelflow-report > span > span {
+  display: block;
+  font-size: 14px;
+  color: #acc2d7;
+  margin-top: 6px;
+}
+.excelflow-report input[type="checkbox"] {
+  width: 20px;
+  flex: 0 0 20px;
+  margin-top: 3px;
+}
