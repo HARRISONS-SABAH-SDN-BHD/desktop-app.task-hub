@@ -2,6 +2,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { bridge } from "./bridge";
 export interface GmailStatus {
   calendar_access?: boolean;
+  read_access?: boolean;
   publisher_configured?: boolean;
   connected: boolean;
   email: string | null;
@@ -18,6 +19,7 @@ export const gmailConnection = {
     clientId: string,
     clientSecret: string,
     calendarAccess = false,
+    readAccess = false,
   ): Promise<void> {
     if (!bridge.native)
       throw new Error(
@@ -26,6 +28,7 @@ export const gmailConnection = {
     return invoke("connect_gmail", {
       clientId,
       calendarAccess,
+      readAccess,
       clientSecret: clientSecret || null,
     });
   },

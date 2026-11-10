@@ -1,7 +1,7 @@
 {
   "name": "task-hub",
   "private": true,
-  "version": "0.6.0",
+  "version": "0.7.0",
   "type": "module",
   "scripts": {
     "schema:generate": "node scripts/generate-validator.mjs",
@@ -20,7 +20,9 @@
     "check": "npm run test && npm run test:release && npm run build",
     "release:prepare": "node scripts/prepare-release.mjs",
     "release:build": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
-    "test:release": "node --test tests/release.test.mjs"
+    "test:release": "node --test tests/release.test.mjs",
+    "runtime:build": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-runtime.ps1",
+    "runtime:ensure": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-runtime.ps1 -Ensure"
   },
   "dependencies": {
     "@fontsource/dm-sans": "^5.3.0",

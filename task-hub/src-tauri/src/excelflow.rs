@@ -271,52 +271,6 @@ pub fn import(
     }
     Ok(files)
 }
-pub fn configure(state: &AppState, folder_id: &str) -> Result<()> {
-    let folder = sources::root(state, folder_id)?;
-    let app = fs::canonicalize(folder.join("Harrison ExcelFlow.exe"))
-        .map_err(|_| "Choose the ExcelFlow application folder containing Harrison ExcelFlow.exe")?;
-    if !app.is_file()
-        || !folder.join("_internal").is_dir()
-        || app.parent() != Some(folder.as_path())
-    {
-        return Err("ExcelFlow executable must be inside its selected application folder".into());
-    }
-    crate::storage::atomic_write(
-        &state.root.join("excelflow-app.json"),
-        &serde_json::to_vec(&sources::Folder {
-            id: folder_id.into(),
-            path: folder.to_string_lossy().into(),
-        })
-        .map_err(|_| "Could not save ExcelFlow location")?,
-    )
-}
-pub fn launch(state: &AppState) -> Result<()> {
-    if !state.root.join("excelflow-app.json").is_file() {
-        return Err("Set the ExcelFlow application folder first, using the folder containing Harrison ExcelFlow.exe.".into());
-    }
-    let folder: sources::Folder =
-        serde_json::from_slice(&read_limited(&state.root.join("excelflow-app.json"), 8192)?)
-            .map_err(|_| "Set the ExcelFlow application folder first")?;
-    let root = sources::root(state, &folder.id)?;
-    let app = fs::canonicalize(root.join("Harrison ExcelFlow.exe"))
-        .map_err(|_| "ExcelFlow has moved. Set its application folder again.")?;
-    if app.parent() != Some(root.as_path()) {
-        return Err(
-            "ExcelFlow executable location changed. Set the application folder again.".into(),
-        );
-    }
-    let mut command = std::process::Command::new(app);
-    command.current_dir(root);
-    #[cfg(windows)]
-    {
-        use std::os::windows::process::CommandExt;
-        command.creation_flags(0x08000000);
-    }
-    command.spawn().map_err(|_| {
-        "Could not open Harrison ExcelFlow. Check its application folder and _internal files."
-    })?;
-    Ok(())
-}
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -491,14 +445,5 @@ mod tests {
         )
         .is_err());
         assert!(!state.root.join("attachments").exists());
-    }
-    #[test]
-    fn launching_requires_an_explicit_application_folder() {
-        let (_temp, state, folder) = setup();
-        assert!(launch(&state)
-            .unwrap_err()
-            .contains("Set the ExcelFlow application folder"));
-        assert!(configure(&state, &folder.id).is_err());
-        assert!(!state.root.join("excelflow-app.json").exists());
     }
 }

@@ -1,0 +1,542 @@
+/* Preserve the original ExcelFlow desktop layout within Task Hub. */
+.sidebar-toggle {
+  padding: 8px;
+  display: inline-flex;
+  align-items: center;
+}
+.sidebar-collapsed .sidebar {
+  width: 68px;
+  padding: 24px 10px;
+}
+.sidebar-collapsed .main-shell {
+  margin-left: 68px;
+  width: calc(100% - 68px);
+}
+.sidebar-collapsed .brand {
+  padding: 0 6px;
+}
+.sidebar-collapsed .brand-name,
+.sidebar-collapsed .workspace,
+.sidebar-collapsed .nav-label,
+.sidebar-collapsed nav button span,
+.sidebar-collapsed .sidebar-bottom {
+  display: none;
+}
+.sidebar-collapsed nav {
+  margin-top: 35px;
+}
+.sidebar-collapsed nav button {
+  padding: 12px;
+  justify-content: center;
+}
+.excelflow-shell .content {
+  max-width: 1520px;
+  padding: 22px 28px;
+}
+.excel-app,
+.excel-dialog {
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  color: #e6eaf1;
+  font-size: 16px;
+}
+.excel-app h1 {
+  font-family: "Manrope", sans-serif;
+  font-size: 32px;
+  letter-spacing: -0.6px;
+  line-height: 1.3;
+}
+.excel-app h2,
+.excel-dialog h2 {
+  font-size: 20px;
+}
+.excel-app p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+.excel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+.excel-heading p {
+  margin-top: 5px;
+}
+.excel-tools,
+.excel-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.excel-app button,
+.excel-dialog button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 15px;
+}
+.excel-tools button {
+  white-space: nowrap;
+}
+.excel-card {
+  background: #121925;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 0;
+}
+.excel-upper {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(350px, 2fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.excel-section {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+.excel-section > span {
+  background: #1b393d;
+  color: var(--cyan);
+  border-radius: 7px;
+  font-size: 14px;
+  padding: 6px 9px;
+}
+.excel-input-group > label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 7px;
+}
+.excel-input-group {
+  margin-bottom: 14px;
+}
+.excel-input-row {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+}
+.excel-input-row > button {
+  flex-shrink: 0;
+}
+.excel-path {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  flex: 1;
+  background: #0b111b;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding-left: 10px;
+}
+.excel-path svg {
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.excel-path input {
+  min-width: 0;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  padding: 10px;
+  color: inherit;
+  text-overflow: ellipsis;
+}
+.excel-workbook-hint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.excel-workbook-hint button {
+  flex-shrink: 0;
+}
+.excel-period {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(85px, 1fr);
+  gap: 12px;
+}
+.excel-period label {
+  color: var(--muted);
+  font-size: 14px;
+  display: grid;
+  gap: 6px;
+}
+.excel-app select,
+.excel-app input,
+.excel-dialog select,
+.excel-dialog input {
+  font: inherit;
+}
+.excel-period input,
+.excel-period select {
+  width: 100%;
+  min-width: 0;
+}
+.excel-period input:disabled,
+.excel-period select:disabled {
+  opacity: 0.6;
+}
+.excel-caption {
+  margin: 9px 0 16px;
+  font-size: 14px;
+}
+.excel-choices {
+  border: 0;
+  padding: 0;
+  margin: 12px 0 0;
+  min-width: 0;
+}
+.excel-choices legend {
+  font-weight: 600;
+  margin-bottom: 7px;
+}
+.excel-choices > div {
+  display: flex;
+}
+.excel-choices button {
+  flex: 1;
+  border-radius: 0;
+  padding: 9px 10px;
+}
+.excel-choices button:first-child {
+  border-radius: 6px 0 0 6px;
+}
+.excel-choices button:last-child {
+  border-radius: 0 6px 6px 0;
+}
+.excel-output {
+  padding: 18px;
+  margin-bottom: 16px;
+}
+.excel-output-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.excel-output-row > label,
+.excel-output-row > button {
+  flex-shrink: 0;
+}
+.excel-actions {
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.excel-open-results {
+  margin-left: auto;
+}
+.excel-status {
+  padding: 13px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.excel-status > span {
+  flex: 1;
+  color: var(--muted);
+  font-size: 14px;
+}
+.excel-status > progress {
+  width: 150px;
+  accent-color: var(--cyan);
+}
+.excel-status > strong:last-child {
+  white-space: nowrap;
+}
+.excel-preview {
+  margin-bottom: 16px;
+}
+.excel-menu {
+  padding: 8px;
+  min-height: 640px;
+  display: flex;
+  flex-direction: column;
+}
+.excel-menu > p {
+  margin: 8px 0 28px;
+}
+.excel-module {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 22px;
+  padding: 28px;
+}
+.excel-module > svg {
+  color: var(--cyan);
+}
+.excel-module h2 {
+  font-size: 25px;
+}
+.excel-module p {
+  margin: 10px 0 24px;
+}
+.excel-upcoming {
+  text-align: center;
+  padding: 24px 0;
+}
+.excel-upcoming h3 {
+  color: var(--muted);
+  font-size: 19px;
+}
+.excel-upcoming p {
+  margin: 7px 0 12px;
+}
+.excel-menu > .excel-menu-footer {
+  margin-top: auto;
+  margin-bottom: 0;
+  font-size: 14px;
+}
+.excel-dialog {
+  width: min(900px, calc(100vw - 40px));
+  max-height: calc(100vh - 48px);
+  background: #121925;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 28px;
+}
+.excel-dialog::backdrop {
+  background: #02060dcc;
+}
+.excel-dialog > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+.excel-dialog .email-panel {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+.excel-dialog .email-fields,
+.excel-dialog .workspace-select {
+  margin: 16px 0;
+}
+.excel-dialog label > select {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+}
+.excel-dialog fieldset {
+  min-width: 0;
+}
+.excel-run-details {
+  min-height: 400px;
+  margin-bottom: 16px;
+}
+.excel-run-details [role="tablist"] {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+.excel-table-scroll {
+  overflow-x: auto;
+}
+.excel-run-details table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 14px;
+}
+.excel-run-details th,
+.excel-run-details td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+.excel-run-details th {
+  background: #1d2b3b;
+}
+.excel-run-details pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.excel-empty {
+  text-align: center;
+  padding: 90px 10px;
+  color: var(--muted);
+}
+.excel-empty h3 {
+  margin: 8px 0 5px;
+}
+@media (max-width: 1050px) {
+  .excel-heading {
+    flex-wrap: wrap;
+  }
+  .excel-tools {
+    flex-wrap: wrap;
+  }
+  .excel-upper {
+    grid-template-columns: minmax(0, 3fr) minmax(290px, 2fr);
+  }
+}
+@media (max-width: 760px) {
+  .excelflow-shell .content {
+    padding: 20px 14px;
+  }
+  .excel-upper {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .excel-heading h1 {
+    font-size: 26px;
+  }
+  .excel-tools {
+    gap: 8px;
+  }
+  .excel-output-row,
+  .excel-status {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .excel-output-row .excel-path {
+    flex-basis: 100%;
+  }
+  .excel-workbook-hint {
+    flex-wrap: wrap;
+  }
+  .excel-module {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 18px;
+  }
+  .excel-menu {
+    padding: 0;
+  }
+  .excel-dialog {
+    padding: 18px;
+  }
+  .excel-status > span {
+    flex-basis: 100%;
+  }
+  .excel-input-row {
+    flex-wrap: wrap;
+  }
+  .excel-path {
+    flex-basis: 100%;
+  }
+}
+
+.excel-period input {
+  background: #0b111b;
+  color: inherit;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 10px;
+}
+.excel-settings-dialog {
+  max-width: 630px;
+}
+.excel-settings-fields > label:not(.routine-check) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.excel-settings-fields > label:not(.routine-check) > input {
+  width: 110px;
+}
+.excel-settings-fields > p {
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.excel-settings-fields hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  width: 100%;
+}
+.excel-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+.excel-agency-dialog {
+  max-width: 790px;
+}
+.excel-agency-body {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+.excel-agency-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.excel-agency-search input {
+  min-width: 0;
+  flex: 1;
+}
+.excel-agency-search span {
+  font-size: 14px;
+  white-space: nowrap;
+}
+.excel-agency-table {
+  height: 230px;
+  overflow: auto;
+  border: 1px solid var(--line);
+}
+.excel-agency-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.excel-agency-table th {
+  position: sticky;
+  top: 0;
+  background: #1d2b3b;
+  text-align: left;
+  padding: 10px;
+}
+.excel-agency-table th:first-child {
+  width: 110px;
+}
+.excel-agency-table td {
+  border-bottom: 1px solid var(--line);
+}
+.excel-agency-table .back-link {
+  width: 100%;
+  justify-content: flex-start;
+  padding: 8px 10px;
+  text-align: left;
+}
+.excel-agency-table tr[aria-selected="true"] {
+  background: #1b393d;
+}
+.excel-agency-fields {
+  margin: 14px 0;
+  border: 1px solid var(--line);
+  padding: 12px;
+}
+.excel-agency-fields > label {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  align-items: center;
+  margin-bottom: 10px;
+}
+.excel-agency-fields > label > input {
+  min-width: 0;
+}
+.excel-agency-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.excel-agency-body > p {
+  font-size: 14px;
+}
+@media (max-width: 760px) {
+  .excel-agency-search {
+    flex-wrap: wrap;
+  }
+  .excel-agency-fields > label {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+}

@@ -9,11 +9,13 @@ export function MicrosoftConnection({
   native,
   busy,
   refresh,
+  embedded = false,
 }: {
   status: MicrosoftStatus;
   native: boolean;
   busy: boolean;
   refresh: () => Promise<void>;
+  embedded?: boolean;
 }) {
   const [clientId, setClientId] = useState(status.client_id);
   const [tenantId, setTenantId] = useState(status.tenant_id);
@@ -53,14 +55,16 @@ export function MicrosoftConnection({
   }
   return (
     <div className="help-content">
-      <div className="page-heading compact">
-        <span className="eyebrow">WORK EMAIL · MICROSOFT 365</span>
-        <h1>Microsoft 365 connection</h1>
-        <p>
-          Connect your work account to create Outlook drafts and send scheduled
-          emails in the background.
-        </p>
-      </div>
+      {!embedded && (
+        <div className="page-heading compact">
+          <span className="eyebrow">WORK EMAIL · MICROSOFT 365</span>
+          <h1>Microsoft 365 connection</h1>
+          <p>
+            Connect your work account to create Outlook drafts and send
+            scheduled emails in the background.
+          </p>
+        </div>
+      )}
       <section
         className="email-panel routine-form"
         aria-label="Microsoft 365 account connection"

@@ -7,19 +7,25 @@ export function GmailConnection({
   native,
   busy,
   refresh,
+  embedded = false,
 }: {
   status: GmailStatus;
   native: boolean;
   busy: boolean;
   refresh: () => Promise<void>;
+  embedded?: boolean;
 }) {
   const managed = status.publisher_configured === true;
   const [advanced, setAdvanced] = useState(false);
   const [clientId, setClientId] = useState(status.client_id);
   const [clientSecret, setClientSecret] = useState("");
+  const [readAccess, setReadAccess] = useState(status.read_access ?? false);
   const [calendarAccess, setCalendarAccess] = useState(
     status.calendar_access ?? false,
   );
+  useEffect(() => {
+    if (status.read_access) setReadAccess(true);
+  }, [status.read_access]);
   useEffect(() => {
     if (status.calendar_access) setCalendarAccess(true);
   }, [status.calendar_access]);
@@ -48,19 +54,22 @@ export function GmailConnection({
         managed ? "" : clientId.trim(),
         managed ? "" : clientSecret,
         calendarAccess,
+        readAccess,
       ),
     );
   }
   return (
     <div className="help-content">
-      <div className="page-heading compact">
-        <span className="eyebrow">BACKGROUND EMAIL · GOOGLE SIGN-IN</span>
-        <h1>Gmail connection</h1>
-        <p>
-          Connect once. Drafts and scheduled emails use Gmail’s API without
-          opening a browser window.
-        </p>
-      </div>
+      {!embedded && (
+        <div className="page-heading compact">
+          <span className="eyebrow">BACKGROUND EMAIL · GOOGLE SIGN-IN</span>
+          <h1>Gmail connection</h1>
+          <p>
+            Connect once. Drafts and scheduled emails use Gmail’s API without
+            opening a browser window.
+          </p>
+        </div>
+      )}
       <section
         className="email-panel routine-form"
         aria-label="Gmail account connection"
@@ -213,6 +222,14 @@ export function GmailConnection({
                 </label>
               </>
             )}
+            <label className="routine-check">
+              <input
+                type="checkbox"
+                checked={readAccess}
+                onChange={(e) => setReadAccess(e.target.checked)}
+              />
+              Read email attachments for ExcelFlow
+            </label>
             <label className="routine-check">
               <input
                 type="checkbox"

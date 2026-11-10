@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Help } from "./Help";
 import { bridge } from "../services/bridge";
 import { reportFiles } from "../services/reportFiles";
@@ -7,17 +7,25 @@ import type { ExcelFlowRun } from "../domain/excelflow";
 import { attachmentSize, type AttachmentRef } from "../domain/attachments";
 export function ExcelFlowPicker({
   value,
+  initialRun,
   onChange,
   disabled = false,
   onBusyChange,
 }: {
   value: AttachmentRef[];
+  initialRun?: ExcelFlowRun;
   onChange: (value: AttachmentRef[]) => void;
   disabled?: boolean;
   onBusyChange?: (value: boolean) => void;
 }) {
   const input = useRef<HTMLInputElement>(null);
   const [run, setRun] = useState<ExcelFlowRun | null>(null);
+  useEffect(() => {
+    if (initialRun) {
+      setRun(initialRun);
+      setSelected([]);
+    }
+  }, [initialRun]);
   const [selected, setSelected] = useState<string[]>([]);
   const [filter, setFilter] = useState("");
   const [version, setVersion] = useState("All");
@@ -56,11 +64,12 @@ export function ExcelFlowPicker({
     <section className="excelflow-picker" aria-label="ExcelFlow report import">
       <h3>ExcelFlow reports</h3>
       <Help label="Using ExcelFlow reports">
-        Generate your DISC or FTG reports in Harrison ExcelFlow, then choose its
-        completed run folder here. Select the branch, type and version you want.
-        Task Hub saves copies as fixed attachments; new monthly runs do not
-        replace these copies. Edit the routine to replace them. No email is sent
-        by importing. Choose one Normal or Special version per filename.
+        Generate your DISC or FTG reports in the ExcelFlow workspace, then
+        choose its completed run folder here. Select the branch, type and
+        version you want. Task Hub saves copies as fixed attachments; new
+        monthly runs do not replace these copies. Edit the routine to replace
+        them. No email is sent by importing. Choose one Normal or Special
+        version per filename.
       </Help>
       <div className="button-row routine-actions">
         <button
@@ -80,36 +89,6 @@ export function ExcelFlowPicker({
         >
           Choose ExcelFlow run
         </button>
-        {bridge.native && (
-          <>
-            <button
-              type="button"
-              className="secondary"
-              disabled={disabled || pending}
-              onClick={() => void act(() => excelFlow.launch())}
-            >
-              Open ExcelFlow
-            </button>
-            <button
-              type="button"
-              className="secondary"
-              disabled={disabled || pending}
-              onClick={() =>
-                void act(async () => {
-                  const folder = await reportFiles.pick();
-                  if (folder) {
-                    await excelFlow.configure(folder.id);
-                    setNotice(
-                      "ExcelFlow application location saved. You can now open ExcelFlow from Task Hub.",
-                    );
-                  }
-                })
-              }
-            >
-              Set ExcelFlow app folder
-            </button>
-          </>
-        )}
       </div>
       {!bridge.native && (
         <input
@@ -153,6 +132,7 @@ export function ExcelFlowPicker({
             <label>
               ExcelFlow report version
               <select
+                aria-label="ExcelFlow report version"
                 value={version}
                 onChange={(e) => setVersion(e.target.value)}
               >

@@ -11,3 +11,8 @@ release/
 *.key
 *.key.pub
 *signer-output*
+
+src-tauri/resources/runtime/
+
+__pycache__/
+*.pyc

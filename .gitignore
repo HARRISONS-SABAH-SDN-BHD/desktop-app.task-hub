@@ -1,0 +1,3 @@
+# Python source caches are generated locally, not repository content.
+**/__pycache__/
+**/*.py[cod]

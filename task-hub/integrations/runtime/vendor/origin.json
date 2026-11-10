@@ -1,0 +1,6 @@
+{
+  "source": "Harrison-Excelflow/source/engine.py",
+  "version": "1.17.0",
+  "sha256": "216ed6b1c353dc57e1f57ec95fbce9a119ca7b749faa30c91b54421d022acb91",
+  "note": "Vendored report engine; calculations and formatting are unchanged. Update this record when deliberately updating the engine."
+}

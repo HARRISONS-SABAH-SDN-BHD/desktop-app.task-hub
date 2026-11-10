@@ -89,6 +89,7 @@ pub(super) fn connect(
     id: String,
     secret: Option<String>,
     calendar_access: bool,
+    read_access: bool,
     open: impl FnOnce(String) -> Result<()>,
 ) -> Result<()> {
     let _operation = OPERATION
@@ -122,11 +123,16 @@ pub(super) fn connect(
         (
             "scope",
             &format!(
-                "openid email {COMPOSE_SCOPE}{}",
+                "openid email {COMPOSE_SCOPE}{}{}",
                 if calendar_access {
                     format!(" {}", super::calendar::SCOPE)
                 } else {
                     String::new()
+                },
+                if read_access {
+                    " https://www.googleapis.com/auth/gmail.readonly"
+                } else {
+                    ""
                 }
             ),
         ),
@@ -249,6 +255,10 @@ pub(super) fn connect(
         refresh_token: refresh,
         email: user.email.to_lowercase(),
         subject: user.sub,
+        read_access: token.scope.as_deref().is_some_and(|s| {
+            s.split_whitespace()
+                .any(|s| s == "https://www.googleapis.com/auth/gmail.readonly")
+        }),
         calendar_access: token.scope.as_deref().is_some_and(|scopes| {
             scopes
                 .split_whitespace()

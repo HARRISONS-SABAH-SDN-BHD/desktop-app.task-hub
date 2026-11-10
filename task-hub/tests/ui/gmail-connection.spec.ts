@@ -3,11 +3,9 @@ test("Gmail setup explains desktop OAuth and keeps real sign-in disabled in brow
   page,
 }) => {
   await page.goto("/");
-  await page
-    .getByRole("button", { name: "Gmail connection", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Connect", exact: true }).click();
   await expect(
-    page.getByRole("heading", { name: "Gmail connection", exact: true }),
+    page.getByRole("heading", { name: "Connect", exact: true }),
   ).toBeVisible();
   await expect(
     page.getByRole("region", { name: "Gmail account connection" }),
@@ -36,10 +34,10 @@ test("Gmail setup explains desktop OAuth and keeps real sign-in disabled in brow
 test("Gmail connection instructions fit a narrow screen", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
+  await page.getByRole("button", { name: "Connect", exact: true }).click();
   await page
-    .getByRole("button", { name: "Gmail connection", exact: true })
+    .getByRole("button", { name: "Developer connection settings" })
     .click();
-  await page.getByRole("button", { name: "Developer connection settings" }).click();
   await expect(page.getByLabel("Desktop OAuth client ID")).toBeVisible();
   expect(
     await page.evaluate(
