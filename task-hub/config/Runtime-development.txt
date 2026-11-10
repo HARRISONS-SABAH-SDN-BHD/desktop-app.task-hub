@@ -28,8 +28,8 @@ Local UI changes only appear in npm run desktop or a newly built installer.
 Task Hub permits one running instance: use Quit Task Hub in its tray menu before
 launching the source app. Closing the window alone keeps the old instance running.
 Publish a newer version with the updated installer when ready for automatic
-updates. Do not replace an existing published version. Current source remains
-0.7.0 until you choose to make the next release.
+updates. Do not replace an existing published version. The release version must be newer than the installed version; this release is
+0.7.1.
 
 Boundaries:
 - integrations/runtime/vendor/engine.py is the original ExcelFlow 1.17 report engine.
