@@ -2,12 +2,17 @@ mod vault;
 use crate::{model::Result, storage::AppState};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
+fn default_incoming_security() -> String {
+    "tls".into()
+}
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Config {
     pub email: String,
     pub protocol: String,
     pub host: String,
     pub port: u16,
+    #[serde(default = "default_incoming_security")]
+    pub incoming_security: String,
     pub username: String,
     pub folder: String,
     pub draft_folder: String,
@@ -40,6 +45,11 @@ pub fn status() -> Result<Status> {
 fn validate(config: &Config, password: &str) -> Result<()> {
     if !crate::validation::valid_email(&config.email)
         || !matches!(config.protocol.as_str(), "imap" | "pop3")
+        || !matches!(
+            config.incoming_security.as_str(),
+            "tls" | "starttls" | "none"
+        )
+        || (config.protocol == "imap" && config.incoming_security != "tls")
         || config.host.is_empty()
         || config.port == 0
         || config.smtp_port == 0
@@ -47,7 +57,10 @@ fn validate(config: &Config, password: &str) -> Result<()> {
         || password.is_empty()
         || password.len() > 2048
     {
-        return Err("Check the email address, protocol, TLS server settings and password".into());
+        return Err(
+            "Check the email address, protocol, encryption mode, server settings and password"
+                .into(),
+        );
     }
     for host in [&config.host, &config.smtp_host] {
         if host.len() > 253
@@ -136,12 +149,28 @@ pub fn deliver(
 mod tests {
     use super::*;
     #[test]
+    fn legacy_accounts_default_to_tls_and_pop_modes_round_trip() {
+        let old = json!({"email":"a@example.com","protocol":"pop3","host":"mail.example.com","port":995,"username":"a","folder":"INBOX","draft_folder":"Drafts","smtp_host":"","smtp_port":587,"smtp_username":"","smtp_security":"starttls"});
+        let mut config: Config = serde_json::from_value(old).unwrap();
+        assert_eq!(config.incoming_security, "tls");
+        for mode in ["tls", "starttls", "none"] {
+            config.incoming_security = mode.into();
+            assert!(validate(&config, "test-password").is_ok());
+            let saved: Config =
+                serde_json::from_value(serde_json::to_value(&config).unwrap()).unwrap();
+            assert_eq!(saved.incoming_security, mode);
+        }
+        config.protocol = "imap".into();
+        assert!(validate(&config, "test-password").is_err());
+    }
+    #[test]
     fn unsafe_server_settings_are_rejected() {
         let config = Config {
             email: "a@example.com".into(),
             protocol: "imap".into(),
             host: "https://example.com/path".into(),
             port: 993,
+            incoming_security: "tls".into(),
             username: "user".into(),
             folder: "INBOX".into(),
             draft_folder: "Drafts".into(),

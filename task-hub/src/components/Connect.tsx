@@ -12,6 +12,7 @@ const defaultConfig: MailConfig = {
   protocol: "imap",
   host: "",
   port: 993,
+  incoming_security: "tls",
   username: "",
   folder: "INBOX",
   draft_folder: "Drafts",
@@ -97,7 +98,10 @@ function MailServerForm({
   busy: boolean;
   refresh: () => Promise<void>;
 }) {
-  const [config, setConfig] = useState(status.config ?? defaultConfig);
+  const [config, setConfig] = useState<MailConfig>(() => ({
+    ...defaultConfig,
+    ...status.config,
+  }));
   const [password, setPassword] = useState("");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
@@ -137,13 +141,14 @@ function MailServerForm({
         </p>
       )}
       <Help label="Mail server settings">
-        Ask IT for incoming IMAP or POP3 settings. Incoming connections require
-        encrypted TLS. Outgoing SMTP is optional for reading attachments, but
-        required to send routines. Use a provider-issued app password where
-        required. Your provider may block password-based access; ask IT which
-        connection methods your account supports. Credentials are stored in
-        Windows Credential Manager, never in routine files. Browsing does not
-        delete messages or mark them read.
+        Ask IT for incoming IMAP or POP3 settings. IMAP uses SSL/TLS. POP3
+        supports SSL/TLS, STARTTLS or explicitly selected unencrypted access.
+        Outgoing SMTP is optional for reading attachments, but required to send
+        routines. Use a provider-issued app password where required. Your
+        provider may block password-based access; ask IT which connection
+        methods your account supports. Credentials are stored in Windows
+        Credential Manager, never in routine files. Browsing does not delete
+        messages or mark them read.
       </Help>
       {error && (
         <p className="error" role="alert">
@@ -172,6 +177,7 @@ function MailServerForm({
                   ...c,
                   protocol: e.target.value as "imap" | "pop3",
                   port: e.target.value === "imap" ? 993 : 995,
+                  incoming_security: "tls",
                 }))
               }
             >
@@ -179,6 +185,38 @@ function MailServerForm({
               <option value="pop3">POP3</option>
             </select>
           </label>
+          {config.protocol === "pop3" && (
+            <>
+              <label>
+                Incoming encryption
+                <select
+                  aria-label="Incoming encryption"
+                  value={config.incoming_security}
+                  onChange={(e) =>
+                    setConfig((current) => ({
+                      ...current,
+                      incoming_security: e.target
+                        .value as MailConfig["incoming_security"],
+                      port: e.target.value === "tls" ? 995 : 110,
+                    }))
+                  }
+                >
+                  <option value="tls">SSL/TLS — usually port 995</option>
+                  <option value="starttls">STARTTLS — usually port 110</option>
+                  <option value="none">
+                    None — no encryption, usually port 110
+                  </option>
+                </select>
+              </label>
+              {config.incoming_security === "none" && (
+                <p className="notice" role="status">
+                  No encryption: your username, password and email travel
+                  without encryption. Use this only when your mail administrator
+                  requires it.
+                </p>
+              )}
+            </>
+          )}
           <div className="routine-form-grid">
             <label>
               Incoming server
@@ -190,7 +228,7 @@ function MailServerForm({
               />
             </label>
             <label>
-              Incoming TLS port
+              Incoming port
               <input
                 type="number"
                 required
