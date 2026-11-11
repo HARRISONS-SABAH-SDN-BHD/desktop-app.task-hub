@@ -30,9 +30,36 @@ test("Connect offers only Gmail and IMAP POP3 without storing passwords", async 
   await page
     .getByLabel("Incoming protocol", { exact: true })
     .selectOption("pop3");
+  await expect(page.getByLabel("Incoming port", { exact: true })).toHaveValue(
+    "995",
+  );
+  const encryption = page.getByLabel("Incoming encryption", { exact: true });
+  await encryption.selectOption("starttls");
+  await expect(page.getByLabel("Incoming port", { exact: true })).toHaveValue(
+    "110",
+  );
+  await encryption.selectOption("none");
   await expect(
-    page.getByLabel("Incoming TLS port", { exact: true }),
-  ).toHaveValue("995");
+    page.getByText(
+      /your username, password and email travel without encryption/,
+    ),
+  ).toBeVisible();
+  await encryption.selectOption("tls");
+  await expect(page.getByLabel("Incoming port", { exact: true })).toHaveValue(
+    "995",
+  );
+  await expect(
+    page.getByText(
+      /your username, password and email travel without encryption/,
+    ),
+  ).toHaveCount(0);
+  await page
+    .getByLabel("Incoming protocol", { exact: true })
+    .selectOption("imap");
+  await expect(encryption).toHaveCount(0);
+  await expect(page.getByLabel("Incoming port", { exact: true })).toHaveValue(
+    "993",
+  );
   expect(
     await page.evaluate(() => JSON.stringify({ ...localStorage })),
   ).not.toContain("secret-preview-never-save");

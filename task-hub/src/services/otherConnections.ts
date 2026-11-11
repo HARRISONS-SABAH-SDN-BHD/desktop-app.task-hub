@@ -5,6 +5,7 @@ export interface MailConfig {
   protocol: "imap" | "pop3";
   host: string;
   port: number;
+  incoming_security: "tls" | "starttls" | "none";
   username: string;
   folder: string;
   draft_folder: string;

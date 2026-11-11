@@ -43,13 +43,18 @@ def dispatch(req):
         return {'folder':str(root),'summary':summary,'details':details}
     raise ValueError('Unsupported Task Hub worker operation.')
 def main():
+    req={}
     try:
         text=sys.stdin.buffer.read(40*1024*1024+1)
         if len(text)>40*1024*1024:raise ValueError('Worker request is too large.')
         req=json.loads(text);result=dispatch(req);print(json.dumps({'type':'result','data':result},default=str),flush=True)
     except Exception as error:
         # Protocol/server exception strings can contain credentials; emit only known validation messages.
-        message=str(error)[:1000] if isinstance(error,ValueError) or (type(error).__name__=='InvalidData' and type(error).__module__=='engine') else 'The operation could not complete. Check the connection, input files and permissions.'
+        if isinstance(error,ValueError) or (type(error).__name__=='InvalidData' and type(error).__module__=='engine'):message=str(error)[:1000]
+        elif isinstance(req,dict) and str(req.get('operation','')).startswith('mail_'):
+            import mailboxes
+            config=req.get('config',{});message=str(mailboxes.connection_error(str(config.get('protocol','mail')).upper(),'mailbox operation',config,error))[:1000]
+        else:message='The operation could not complete. Check the connection, input files and permissions.'
         print(json.dumps({'type':'error','message':message}),flush=True);return 1
     return 0
 if __name__=='__main__':raise SystemExit(main())
