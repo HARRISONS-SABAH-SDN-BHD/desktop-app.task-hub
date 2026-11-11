@@ -1,10 +1,9 @@
-Task Hub 0.7.3
-- Removed Microsoft account, Outlook Classic and obsolete Office app automation integrations; Gmail and IMAP/POP3 remain available.
-- Mail connection errors now include a bounded, sanitized Server reply section with the server rejection reason.
-- POP3 sign-in errors identify the PASS stage without assuming the password is incorrect.
-- Server messages can reveal mailbox locking, disabled accounts and other access restrictions when the server provides that information.
-- Known passwords, usernames, email addresses and common encoded credentials are redacted from server replies. Control characters and oversized replies are filtered.
-- Retains POP3 SSL/TLS, STARTTLS and explicit None encryption options from v0.7.2. STARTTLS never falls back to unencrypted access.
-- Incoming mailbox failures remain separate from outgoing SMTP failures. Sending behavior and automatic retry rules are unchanged.
+Task Hub 0.7.4
+- Removed Microsoft account and Outlook Classic integrations, their setup screens, backend modules and build settings.
+- Removed obsolete Office app automation recipes. ExcelFlow report generation remains available.
+- Gmail and IMAP/POP3 remain the supported connections. Existing routines with unsupported providers cannot run until changed to a supported sender.
+- Preserves POP3 SSL/TLS, STARTTLS and explicit None encryption options, with existing accounts defaulting to SSL/TLS.
+- Preserves sanitized Server reply diagnostics, credential redaction and separate incoming/outgoing connection errors.
+- Gmail sign-in, Google Calendar, mail-server transport, attachments and routine sending behavior are retained.
 
-Saved routines and attachments remain on this computer. IMAP/POP3 accounts appear as senders only after outgoing SMTP is configured and tested. SMTP continues to require SSL/TLS or STARTTLS.
+Saved routines and attachments remain on this computer. SMTP still requires SSL/TLS or STARTTLS. POP3 None is unencrypted; use the connection settings provided by your mail administrator.

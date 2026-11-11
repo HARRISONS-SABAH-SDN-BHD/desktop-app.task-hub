@@ -1,4 +1,4 @@
-Task Hub 0.7.3 — Connect and ExcelFlow
+Task Hub 0.7.4 — Connect and ExcelFlow
 
 CONNECT
 Only Gmail and IMAP / POP3 are currently available.
