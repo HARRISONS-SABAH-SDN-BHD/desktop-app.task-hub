@@ -1,6 +1,7 @@
 """Mail server adapters with explicitly configured POP3 encryption. Never delete messages or mark them read."""
 import email, imaplib, poplib, smtplib, ssl, re, socket
 from contextlib import contextmanager
+from mail_errors import server_reply
 from email import policy
 from email.parser import BytesParser
 from email.header import decode_header, make_header
@@ -30,12 +31,13 @@ def validate(config,password):
     if config.get('smtp_security') not in ['tls','starttls']:raise ValueError('SMTP requires TLS or STARTTLS.')
 
 class MailConnectionError(ValueError):
-    """Only safe, locally generated text crosses the worker boundary."""
+    """Locally generated context with a bounded, credential-redacted server reply."""
 
-def connection_error(protocol,stage,config,error,outgoing=False):
+def connection_error(protocol,stage,config,error,outgoing=False,password=None):
     host=config.get('smtp_host' if outgoing else 'host','')
     port=config.get('smtp_port' if outgoing else 'port','')
-    prefix=f'{protocol} {stage} failed at {host}:{port}. '
+    label='sign-in (PASS)' if stage=='password' else stage
+    prefix=f'{protocol} {label} failed at {host}:{port}. '
     if isinstance(error,ssl.SSLCertVerificationError):
         detail='The server certificate could not be verified. Check the server hostname, computer date and certificate with IT.'
     elif isinstance(error,ssl.SSLError):
@@ -46,19 +48,21 @@ def connection_error(protocol,stage,config,error,outgoing=False):
     elif isinstance(error,(smtplib.SMTPAuthenticationError,imaplib.IMAP4.error,poplib.error_proto)):
         if stage=='STARTTLS':detail='The server did not accept the STARTTLS upgrade. No username or password was sent. Confirm STARTTLS support with IT; no unencrypted fallback was attempted.'
         elif stage in ['sign-in','username','password']:
-            detail='The server rejected the username.' if stage=='username' else 'The server rejected sign-in. Verify the username, password and mailbox protocol access with your mail administrator.'
+            detail='The server rejected the username.' if stage=='username' else 'The server rejected sign-in or mailbox access. This does not by itself prove the password is incorrect.'
             if isinstance(error,smtplib.SMTPAuthenticationError) and isinstance(error.smtp_code,int):detail+=f' SMTP status {error.smtp_code}.'
         else:detail='The server rejected the protocol command. Confirm the server and protocol settings with IT.'
     elif isinstance(error,(ConnectionError,EOFError,smtplib.SMTPServerDisconnected)):detail='The server closed the connection unexpectedly. Check its protocol settings and server logs.'
     elif isinstance(error,OSError):detail='A network or operating-system error interrupted the connection. Check network access and firewall settings.'
     else:detail='An unexpected mail-server error occurred. Ask IT to check the server logs for this connection.'
+    reply=server_reply(error,config,password)
+    if reply:detail+=f' Server reply: {reply}'
     return MailConnectionError(prefix+detail)
 
 @contextmanager
-def phase(protocol,stage,config,outgoing=False):
+def phase(protocol,stage,config,outgoing=False,password=None):
     try:yield
     except MailConnectionError:raise
-    except Exception as error:raise connection_error(protocol,stage,config,error,outgoing) from None
+    except Exception as error:raise connection_error(protocol,stage,config,error,outgoing,password) from None
 
 def abort(client,protocol):
     if client is None:return
@@ -69,17 +73,17 @@ def incoming(config,password):
     validate(config,password)
     protocol=config['protocol'].upper();security=config.get('incoming_security','tls');client=None
     try:
-        with phase(protocol,'connection and TLS' if security=='tls' else 'connection',config):
+        with phase(protocol,'connection and TLS' if security=='tls' else 'connection',config,password=password):
             if protocol=='IMAP':client=imaplib.IMAP4_SSL(config['host'],config['port'],ssl_context=ssl.create_default_context(),timeout=30)
             elif security=='tls':client=poplib.POP3_SSL(config['host'],config['port'],timeout=30,context=ssl.create_default_context())
             else:client=poplib.POP3(config['host'],config['port'],timeout=30)
         if protocol=='IMAP':
-            with phase(protocol,'sign-in',config):client.login(config['username'],password)
+            with phase(protocol,'sign-in',config,password=password):client.login(config['username'],password)
         else:
             if security=='starttls':
-                with phase(protocol,'STARTTLS',config):client.stls(context=ssl.create_default_context())
-            with phase(protocol,'username',config):client.user(config['username'])
-            with phase(protocol,'password',config):client.pass_(password)
+                with phase(protocol,'STARTTLS',config,password=password):client.stls(context=ssl.create_default_context())
+            with phase(protocol,'username',config,password=password):client.user(config['username'])
+            with phase(protocol,'password',config,password=password):client.pass_(password)
         return client
     except Exception:
         abort(client,protocol);raise
@@ -92,12 +96,12 @@ def smtp(config,password):
     if not config.get('smtp_host'):raise ValueError('Add outgoing SMTP settings to send email.')
     client=None
     try:
-        with phase('SMTP','connection and TLS' if config['smtp_security']=='tls' else 'connection',config,True):
+        with phase('SMTP','connection and TLS' if config['smtp_security']=='tls' else 'connection',config,True,password=password):
             context=ssl.create_default_context()
             client=smtplib.SMTP_SSL(config['smtp_host'],config['smtp_port'],timeout=30,context=context) if config['smtp_security']=='tls' else smtplib.SMTP(config['smtp_host'],config['smtp_port'],timeout=30)
         if config['smtp_security']=='starttls':
-            with phase('SMTP','STARTTLS',config,True):client.ehlo();client.starttls(context=context);client.ehlo()
-        with phase('SMTP','sign-in',config,True):client.login(config.get('smtp_username') or config['username'],password)
+            with phase('SMTP','STARTTLS',config,True,password=password):client.ehlo();client.starttls(context=context);client.ehlo()
+        with phase('SMTP','sign-in',config,True,password=password):client.login(config.get('smtp_username') or config['username'],password)
         return client
     except Exception:
         abort(client,'SMTP');raise
@@ -108,9 +112,9 @@ def connect(config,password):
         client=None
         try:
             client=smtp(config,password)
-            with phase('SMTP','connection test',config,True):
-                code,_=client.noop()
-                if code!=250:raise smtplib.SMTPResponseException(code,b'Unexpected NOOP status')
+            with phase('SMTP','connection test',config,True,password=password):
+                code,reply=client.noop()
+                if code!=250:raise smtplib.SMTPResponseException(code,reply)
         except MailConnectionError as error:
             raise MailConnectionError(f'Incoming {config["protocol"].upper()} sign-in succeeded. Outgoing {error}') from None
         finally:

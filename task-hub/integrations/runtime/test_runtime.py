@@ -59,9 +59,9 @@ class PopSecurityTests(unittest.TestCase):
  def test_rejected_password_is_not_reported_as_network_error(self):
   client=Mock();client.pass_.side_effect=mailboxes.poplib.error_proto(b'-ERR echoed-secret')
   with patch('mailboxes.poplib.POP3_SSL',return_value=client),self.assertRaises(mailboxes.MailConnectionError) as result:mailboxes.incoming(self.config('pop3'),'echoed-secret')
-  self.assertIn('POP3 password failed',str(result.exception));self.assertNotIn('echoed-secret',str(result.exception));client.close.assert_called_once()
+  self.assertIn('POP3 sign-in (PASS) failed',str(result.exception));self.assertNotIn('echoed-secret',str(result.exception));client.close.assert_called_once()
  def test_incoming_success_and_smtp_failure_are_distinguished(self):
-  c=self.config();c['smtp_host']='smtp.example.com';failure=mailboxes.connection_error('SMTP','sign-in',c,mailboxes.smtplib.SMTPAuthenticationError(535,b'echoed-secret'),True)
+  c=self.config();c['smtp_host']='smtp.example.com';failure=mailboxes.connection_error('SMTP','sign-in',c,mailboxes.smtplib.SMTPAuthenticationError(535,b'echoed-secret'),True,password='echoed-secret')
   with patch('mailboxes.incoming',return_value=Mock()),patch('mailboxes.smtp',side_effect=failure),self.assertRaises(mailboxes.MailConnectionError) as result:mailboxes.connect(c,'echoed-secret')
   self.assertIn('Incoming IMAP sign-in succeeded',str(result.exception));self.assertIn('SMTP status 535',str(result.exception));self.assertNotIn('echoed-secret',str(result.exception))
  def test_imap_and_unknown_modes_cannot_select_unencrypted_access(self):
@@ -84,5 +84,37 @@ class PopSecurityTests(unittest.TestCase):
    c=self.config('pop3');c.update(host='127.0.0.1',port=server.server_address[1],incoming_security='none');self.assertTrue(mailboxes.connect(c,'local-test-only')['connected'])
    self.assertEqual(commands,['USER','PASS','QUIT'])
   finally:server.shutdown();server.server_close();thread.join(3)
+
+class ServerReplyTests(unittest.TestCase):
+ config=MailTests.config
+ def test_mailbox_lock_reason_reaches_display(self):
+  c=self.config('pop3');client=Mock();client.pass_.side_effect=mailboxes.poplib.error_proto(b'-ERR [IN-USE] Maildrop already locked by another session')
+  with patch('mailboxes.poplib.POP3_SSL',return_value=client),self.assertRaises(mailboxes.MailConnectionError) as result:mailboxes.incoming(c,'test-password')
+  message=str(result.exception);self.assertIn('sign-in (PASS)',message);self.assertIn('Server reply: -ERR [IN-USE] Maildrop already locked',message)
+ def test_plain_encoded_and_escaped_credentials_are_redacted(self):
+  import base64,json
+  from urllib.parse import quote
+  password='private p@ss!';c=self.config('pop3');user=c['username']
+  values=[password,quote(password,safe=''),base64.b64encode(password.encode()).decode(),base64.b64encode(('\0'+user+'\0'+password).encode()).decode(),json.dumps(password)[1:-1],user,c['email']]
+  for secret in values:
+   with self.subTest(secret=secret):
+    error=mailboxes.poplib.error_proto(('-ERR rejected '+secret).encode());result=str(mailboxes.connection_error('POP3','password',c,error,password=password));self.assertNotIn(secret,result);self.assertIn('[redacted]',result)
+ def test_smtp_server_reason_and_status_survive_without_credentials(self):
+  c=self.config();c['smtp_host']='smtp.example.com'
+  result=str(mailboxes.connection_error('SMTP','sign-in',c,mailboxes.smtplib.SMTPAuthenticationError(535,b'5.7.8 Login denied token=server-token'),True,password='local-password'))
+  self.assertIn('535',result);self.assertIn('5.7.8 Login denied',result);self.assertNotIn('server-token',result)
+ def test_controls_are_removed_and_replies_are_bounded(self):
+  c=self.config('pop3');error=mailboxes.poplib.error_proto(b'-ERR\r\n\x1b[31mdenied\x00 '+b'x'*2000)
+  result=str(mailboxes.connection_error('POP3','password',c,error,password='private'))
+  self.assertNotIn('\n',result);self.assertNotIn('\x1b',result);self.assertNotIn('\x00',result);self.assertLess(len(result),850);self.assertIn('Server reply:',result)
+ def test_oversized_replies_are_not_partially_exposed(self):
+  c=self.config('pop3');result=str(mailboxes.connection_error('POP3','password',c,mailboxes.poplib.error_proto(b'x'*65537),password='private'))
+  self.assertIn('omitted because it is too large',result)
+ def test_worker_json_preserves_sanitized_reason(self):
+  import io
+  request={'operation':'mail_connect','config':self.config('pop3'),'password':'private-password'};client=Mock();client.pass_.side_effect=mailboxes.poplib.error_proto(b'-ERR [AUTH] Account disabled private-password')
+  stdin=Mock();stdin.buffer=io.BytesIO(json.dumps(request).encode());stdout=io.StringIO()
+  with patch('worker.sys.stdin',stdin),patch('worker.sys.stdout',stdout),patch('mailboxes.poplib.POP3_SSL',return_value=client):code=worker.main()
+  event=json.loads(stdout.getvalue());self.assertEqual(code,1);self.assertEqual(event['type'],'error');self.assertIn('[AUTH] Account disabled',event['message']);self.assertNotIn('private-password',stdout.getvalue())
 
 if __name__=='__main__':unittest.main()

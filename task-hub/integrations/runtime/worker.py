@@ -53,7 +53,7 @@ def main():
         if isinstance(error,ValueError) or (type(error).__name__=='InvalidData' and type(error).__module__=='engine'):message=str(error)[:1000]
         elif isinstance(req,dict) and str(req.get('operation','')).startswith('mail_'):
             import mailboxes
-            config=req.get('config',{});message=str(mailboxes.connection_error(str(config.get('protocol','mail')).upper(),'mailbox operation',config,error))[:1000]
+            config=req.get('config',{});message=str(mailboxes.connection_error(str(config.get('protocol','mail')).upper(),'mailbox operation',config,error,password=req.get('password')))[:1000]
         else:message='The operation could not complete. Check the connection, input files and permissions.'
         print(json.dumps({'type':'error','message':message}),flush=True);return 1
     return 0
