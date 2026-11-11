@@ -11,7 +11,7 @@ import {
 const config = parseConfig(initial);
 describe("workflow configuration", () => {
   it("loads all starter workflows", () => {
-    expect(config.tasks).toHaveLength(12);
+    expect(config.tasks).toHaveLength(9);
   });
   it("rejects duplicate task and step ids", () => {
     const duplicate = structuredClone(initial);

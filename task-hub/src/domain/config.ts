@@ -135,9 +135,7 @@ export function validateParameters(task: Task, parameters: Parameters): void {
         )
       )
         throw new Error("Choose a supported browser.");
-      if (
-        !["Gmail", "Outlook personal", "Outlook work"].includes(fields.provider)
-      )
+      if (!["Gmail"].includes(fields.provider))
         throw new Error("Choose a supported mailbox.");
       if (
         !["Draft", "Send after review", "Send directly"].includes(

@@ -15,14 +15,9 @@ mod foreground;
 mod gmail;
 mod mail_sources;
 mod mailserver;
-// Retained for reading legacy data; Microsoft connections are not exposed.
-#[cfg_attr(not(test), allow(dead_code))]
-mod microsoft;
 mod model;
 #[cfg(feature = "desktop")]
 mod notifications;
-#[cfg_attr(not(test), allow(dead_code))]
-mod outlook_classic;
 mod recipients;
 #[cfg(feature = "desktop")]
 mod routine_scheduler;

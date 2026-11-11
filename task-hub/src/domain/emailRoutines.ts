@@ -11,7 +11,7 @@ export interface RecipientChange {
   note: string;
 }
 export interface CalendarLink {
-  provider?: "gmail" | "microsoft" | "mailserver";
+  provider?: string;
   routine_id: string;
   sender: string;
   event_id: string;
@@ -19,7 +19,7 @@ export interface CalendarLink {
   error: string | null;
 }
 export interface RoutineSettings {
-  provider?: "gmail" | "microsoft" | "mailserver";
+  provider?: string;
   report_rules?: ReportRule[];
   calendar?: { enabled: boolean; reminder_minutes: number } | null;
   cc?: string;

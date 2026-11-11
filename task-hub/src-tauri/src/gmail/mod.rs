@@ -122,25 +122,19 @@ fn deliver(state: &AppState, run: &mut Run, direct: bool) -> Result<(String, Vec
     let _operation = OPERATION
         .try_lock()
         .map_err(|_| "Another Gmail operation is in progress; no email request was made")?;
-    let microsoft = run
+    let provider = run
         .parameters
         .get("_provider")
         .and_then(|v| v.as_str())
         .unwrap_or("gmail");
-    if !matches!(microsoft, "gmail" | "mailserver") {
+    if !matches!(provider, "gmail" | "mailserver") {
         return Err("Unsupported email provider; nothing was submitted".into());
     }
-    let custom = microsoft == "mailserver";
-    let microsoft = microsoft == "microsoft";
-    let mut google_credential = if microsoft || custom {
+    let custom = provider == "mailserver";
+    let mut google_credential = if custom {
         None
     } else {
         Some(vault::read()?.ok_or("Connect Gmail before running this routine")?)
-    };
-    let mut microsoft_credential = if microsoft {
-        Some(crate::microsoft::credentials()?)
-    } else {
-        None
     };
     let custom_credential = if custom {
         Some(crate::mailserver::credentials()?)
@@ -149,8 +143,6 @@ fn deliver(state: &AppState, run: &mut Run, direct: bool) -> Result<(String, Vec
     };
     let sender = if let Some(c) = &custom_credential {
         c.config.email.clone()
-    } else if let Some(c) = &microsoft_credential {
-        c.email.clone()
     } else {
         google_credential.as_ref().unwrap().email.clone()
     };
@@ -243,17 +235,6 @@ fn deliver(state: &AppState, run: &mut Run, direct: bool) -> Result<(String, Vec
             "accepted".to_string(),
             custom_summary.as_str(),
         )
-    } else if let Some(credential) = &mut microsoft_credential {
-        let id = crate::microsoft::deliver(credential, &raw, send)?;
-        (
-            "Microsoft 365",
-            id,
-            if send {
-                "Microsoft Graph accepted the email for sending. Final delivery depends on the recipient's provider."
-            } else {
-                "Draft created in Outlook through Microsoft Graph. Nothing was sent."
-            },
-        )
     } else {
         let credential = google_credential.as_mut().unwrap();
         let client = transport::client()?;
@@ -291,13 +272,7 @@ fn deliver(state: &AppState, run: &mut Run, direct: bool) -> Result<(String, Vec
     let receipt = state.output.join(format!(
         "{}.{}.txt",
         run.id,
-        if custom {
-            "mailserver"
-        } else if microsoft {
-            "microsoft"
-        } else {
-            "gmail"
-        }
+        if custom { "mailserver" } else { "gmail" }
     ));
     atomic_write(&receipt, logs.join("\n").as_bytes()).map_err(|_| "The mail provider accepted the request, but Task Hub could not write its receipt. Inspect Drafts / Sent before retrying; no retry was attempted.")?;
     Ok((receipt.to_string_lossy().into_owned(), logs))

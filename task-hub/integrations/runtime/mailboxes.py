@@ -211,7 +211,7 @@ def deliver(config,password,raw,recipient,cc,send):
             try:client.quit()
             except Exception:pass
         return {'accepted':True,'detail':'SMTP accepted the message. SMTP does not automatically create a Sent Items copy.'}
-    if config['protocol']!='imap':raise ValueError('POP3 cannot create server-side drafts. Choose automatic sending or use an IMAP, Gmail or Microsoft connection for drafts.')
+    if config['protocol']!='imap':raise ValueError('POP3 cannot create server-side drafts. Choose automatic sending or use an IMAP or Gmail connection for drafts.')
     client=incoming(config,password)
     try:
         folder='"'+(config.get('draft_folder') or 'Drafts').replace('\\','\\\\').replace('"','\\"')+'"'

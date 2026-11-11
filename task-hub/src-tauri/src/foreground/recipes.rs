@@ -15,9 +15,6 @@ pub struct Draft {
 #[derive(Clone, Debug, PartialEq)]
 pub enum App {
     Browser,
-    Word,
-    Excel,
-    PowerPoint,
 }
 #[derive(Clone, Debug)]
 pub enum Operation {
@@ -25,16 +22,6 @@ pub enum Operation {
         draft: Draft,
         send: bool,
         direct: bool,
-    },
-    Word {
-        title: String,
-        paragraphs: Vec<String>,
-    },
-    Excel {
-        rows: Vec<Vec<String>>,
-    },
-    PowerPoint {
-        slides: Vec<(String, Vec<String>)>,
     },
 }
 #[derive(Clone, Debug)]
@@ -59,8 +46,8 @@ impl Recipe {
     pub fn build(
         recipe: &str,
         fields: &BTreeMap<String, String>,
-        output: &Path,
-        id: &str,
+        _output: &Path,
+        _id: &str,
     ) -> Result<Self> {
         let title = field(fields, "title")?.to_string();
         if title.chars().count() > 160 || title.contains(['\n', '\r', '\t']) {
@@ -80,7 +67,7 @@ impl Recipe {
                     return Err("Choose a supported browser".into());
                 }
                 let provider = field(fields, "provider")?;
-                if !["Gmail", "Outlook personal", "Outlook work"].contains(&provider) {
+                if !["Gmail"].contains(&provider) {
                     return Err("Unsupported email provider".into());
                 }
                 let recipient = field(fields, "recipient")?;
@@ -108,68 +95,6 @@ impl Recipe {
                     },
                 })
             }
-            "word_report" => Ok(Self {
-                browser: None,
-                label: "Write a report in Microsoft Word".into(),
-                app: App::Word,
-                artifact: Some(output.join(format!("{id}.docx"))),
-                operation: Operation::Word {
-                    title,
-                    paragraphs: body
-                        .replace("\r\n", "\n")
-                        .split('\n')
-                        .map(String::from)
-                        .collect(),
-                },
-            }),
-            "excel_report" => {
-                let mut rows = crate::adapters::documents::csv_rows(body)?;
-                if rows.len() > 100 || rows.iter().map(Vec::len).sum::<usize>() > 500 {
-                    return Err("Foreground Excel is limited to 100 rows / 500 cells. Use file export for larger data.".into());
-                }
-                for row in &mut rows {
-                    for value in row {
-                        if value.contains(['\n', '\r', '\t']) || value.chars().count() > 1000 {
-                            return Err("Foreground cells must be single-line text of at most 1,000 characters".into());
-                        }
-                        // Every cell is entered as literal text, including numbers and formula-looking strings.
-                        value.insert(0, '\'');
-                    }
-                }
-                Ok(Self {
-                    browser: None,
-                    label: "Enter data in Microsoft Excel".into(),
-                    app: App::Excel,
-                    artifact: Some(output.join(format!("{id}.xlsx"))),
-                    operation: Operation::Excel { rows },
-                })
-            }
-            "powerpoint_deck" => {
-                let normalized = body.replace("\r\n", "\n");
-                let mut slides = vec![(title, vec!["Created with Task Hub".into()])];
-                for section in normalized.split("\n---\n").filter(|s| !s.trim().is_empty()) {
-                    let mut lines = section.lines();
-                    let heading = lines.next().unwrap_or("").to_string();
-                    let content = lines.map(String::from).collect::<Vec<_>>();
-                    if heading.chars().count() > 160
-                        || content.len() > 10
-                        || section.chars().count() > 1000
-                    {
-                        return Err("Keep each slide to a short heading and at most 10 content lines / 1,000 characters".into());
-                    }
-                    slides.push((heading, content));
-                }
-                if slides.len() > 21 {
-                    return Err("Foreground PowerPoint is limited to 20 content slides".into());
-                }
-                Ok(Self {
-                    browser: None,
-                    label: "Build slides in Microsoft PowerPoint".into(),
-                    app: App::PowerPoint,
-                    artifact: Some(output.join(format!("{id}.pptx"))),
-                    operation: Operation::PowerPoint { slides },
-                })
-            }
             _ => Err("Foreground recipe is not registered".into()),
         }
     }
@@ -182,19 +107,6 @@ mod tests {
             ("title".into(), "Report".into()),
             ("body".into(), "Name,Value\nTask,=1+1".into()),
         ])
-    }
-    #[test]
-    fn excel_values_are_literal_and_save_paths_are_owned_by_runner() {
-        let recipe =
-            Recipe::build("excel_report", &fields(), Path::new("outputs"), "owned-id").unwrap();
-        assert_eq!(
-            recipe.artifact.unwrap(),
-            Path::new("outputs").join("owned-id.xlsx")
-        );
-        let Operation::Excel { rows } = recipe.operation else {
-            panic!()
-        };
-        assert_eq!(rows[1][1], "'=1+1");
     }
     #[test]
     fn unknown_recipes_and_ambiguous_delivery_are_rejected() {

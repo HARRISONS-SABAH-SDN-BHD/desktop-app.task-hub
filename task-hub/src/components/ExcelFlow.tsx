@@ -777,7 +777,11 @@ function RoutineTarget({
       >
         <option value="">Create a new routine</option>
         {routines
-          .filter((r) => !r.attempt && r.settings.provider !== "microsoft")
+          .filter(
+            (r) =>
+              !r.attempt &&
+              ["gmail", "mailserver"].includes(r.settings.provider ?? "gmail"),
+          )
           .map((r) => (
             <option key={r.id} value={r.id}>
               {r.settings.name}

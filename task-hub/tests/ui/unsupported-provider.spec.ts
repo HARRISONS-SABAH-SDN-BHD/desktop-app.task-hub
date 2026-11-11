@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-test("Legacy Microsoft routine is preserved but must choose a supported sender", async ({
+test("Unsupported provider routine is preserved but must choose a supported sender", async ({
   page,
 }) => {
   await page.goto("/");
@@ -10,10 +10,10 @@ test("Legacy Microsoft routine is preserved but must choose a supported sender",
         {
           id: "ms-test",
           settings: {
-            provider: "microsoft",
+            provider: "retired-provider",
             name: "Work report",
             recipient: "team@example.com",
-            sender_account: "work@harrisons.com.my",
+            sender_account: "work@example.com",
             subject: "Report",
             message: "Test report only",
             start_date: "2099-01-01",
@@ -38,14 +38,14 @@ test("Legacy Microsoft routine is preserved but must choose a supported sender",
   await page.reload();
   await page.getByRole("button", { name: "Edit routine / recipient" }).click();
   await expect(page.getByLabel("Sender account", { exact: true })).toHaveValue(
-    "microsoft:work@harrisons.com.my",
+    "retired-provider:work@example.com",
   );
   await expect(
     page.getByRole("button", { name: "Preview next email" }),
   ).toHaveCount(0);
   await page.getByRole("button", { name: "Save routine" }).click();
   await expect(page.getByRole("alert")).toContainText(
-    "Microsoft support is currently unavailable",
+    "This provider is unsupported",
   );
   await page
     .getByLabel("Sender account", { exact: true })

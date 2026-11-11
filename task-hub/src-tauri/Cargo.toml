@@ -1,6 +1,6 @@
 [package]
 name = "task-hub"
-version = "0.7.3"
+version = "0.7.4"
 description = "A local, data-driven workflow desktop application"
 authors = ["Task Hub contributors"]
 edition = "2021"

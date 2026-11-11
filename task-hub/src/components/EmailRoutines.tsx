@@ -155,11 +155,13 @@ export function EmailRoutines({
           {error}
         </p>
       )}
-      {routines.some((r) => r.settings.provider === "microsoft") && (
+      {routines.some(
+        (r) =>
+          !["gmail", "mailserver"].includes(r.settings.provider ?? "gmail"),
+      ) && (
         <p className="notice" role="status">
-          Microsoft routines are paused while Microsoft support is unavailable.
-          Their saved details are preserved; edit a routine to choose Gmail or
-          IMAP / POP3.
+          Routines using an unsupported provider are paused. Their saved details
+          are preserved; edit a routine to choose Gmail or IMAP / POP3.
         </p>
       )}
       {editing ? (
@@ -355,8 +357,10 @@ export function EmailRoutines({
                     </span>
                   </div>
                   <p className="muted">
-                    {settings.provider === "microsoft"
-                      ? "Microsoft 365"
+                    {!["gmail", "mailserver"].includes(
+                      settings.provider ?? "gmail",
+                    )
+                      ? "Unsupported provider"
                       : settings.provider === "mailserver"
                         ? "IMAP / POP3"
                         : "Gmail"}
@@ -403,8 +407,10 @@ export function EmailRoutines({
                     )}
                     {(settings.calendar?.enabled || calendarLink) && (
                       <p className={calendarLink?.error ? "error" : "muted"}>
-                        {settings.provider === "microsoft"
-                          ? "Outlook Calendar"
+                        {!["gmail", "mailserver"].includes(
+                          settings.provider ?? "gmail",
+                        )
+                          ? "Unsupported calendar"
                           : "Google Calendar"}
                         :{" "}
                         {!native
@@ -480,7 +486,9 @@ export function EmailRoutines({
                     {due &&
                       !routine.attempt &&
                       !settings.auto_send &&
-                      settings.provider !== "microsoft" && (
+                      ["gmail", "mailserver"].includes(
+                        settings.provider ?? "gmail",
+                      ) && (
                         <button
                           className="primary"
                           disabled={locked}
@@ -501,7 +509,9 @@ export function EmailRoutines({
                         disabled={
                           locked ||
                           !settings.enabled ||
-                          settings.provider === "microsoft"
+                          !["gmail", "mailserver"].includes(
+                            settings.provider ?? "gmail",
+                          )
                         }
                         onClick={() =>
                           void act(() => onRetry(routine.id, routine.next_due!))
@@ -514,7 +524,12 @@ export function EmailRoutines({
                     {routine.next_due && (
                       <button
                         className="secondary"
-                        disabled={locked || settings.provider === "microsoft"}
+                        disabled={
+                          locked ||
+                          !["gmail", "mailserver"].includes(
+                            settings.provider ?? "gmail",
+                          )
+                        }
                         onClick={() => void preview(routine.id)}
                       >
                         {due ? "Preview due email" : "Preview next email"}
@@ -619,9 +634,9 @@ function RoutineForm({
   function save(event: FormEvent) {
     event.preventDefault();
     setError("");
-    if (settings.provider === "microsoft") {
+    if (!["gmail", "mailserver"].includes(settings.provider ?? "gmail")) {
       setError(
-        "Microsoft support is currently unavailable. Choose a connected Gmail or IMAP / POP3 sender before saving.",
+        "This provider is unsupported. Choose a connected Gmail or IMAP / POP3 sender before saving.",
       );
       return;
     }
@@ -684,12 +699,7 @@ function RoutineForm({
               const [provider, ...parts] = event.target.value.split(":");
               setSettings((current) => ({
                 ...current,
-                provider:
-                  provider === "microsoft"
-                    ? "microsoft"
-                    : provider === "mailserver"
-                      ? "mailserver"
-                      : "gmail",
+                provider: provider === "mailserver" ? "mailserver" : "gmail",
                 sender_account: parts.join(":") || null,
                 calendar:
                   provider === "mailserver"
@@ -704,7 +714,7 @@ function RoutineForm({
             <option value="">Choose a connected sender</option>
             {settings.sender_account &&
               settings.sender_account !==
-                (settings.provider === "microsoft"
+                (!["gmail", "mailserver"].includes(settings.provider ?? "gmail")
                   ? null
                   : settings.provider === "mailserver"
                     ? mailserverEmail
