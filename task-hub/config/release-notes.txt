@@ -1,9 +1,10 @@
-Task Hub 0.7.4
-- Removed Microsoft account and Outlook Classic integrations, their setup screens, backend modules and build settings.
-- Removed obsolete Office app automation recipes. ExcelFlow report generation remains available.
-- Gmail and IMAP/POP3 remain the supported connections. Existing routines with unsupported providers cannot run until changed to a supported sender.
-- Preserves POP3 SSL/TLS, STARTTLS and explicit None encryption options, with existing accounts defaulting to SSL/TLS.
-- Preserves sanitized Server reply diagnostics, credential redaction and separate incoming/outgoing connection errors.
-- Gmail sign-in, Google Calendar, mail-server transport, attachments and routine sending behavior are retained.
+Task Hub 0.7.5
+- Import recipients from CSV, TXT or Excel (.xlsx), then choose addresses with checkboxes, search, Select all and Clear selection.
+- Save the imported recipient list and selected addresses with each routine. Duplicate addresses are removed and invalid files are rejected without replacing the previous list.
+- Selected recipients share one email's To field and can see the other To addresses. Recipient files are not outgoing attachments.
+- Simplified routine attachments to Add files. Removed report-rule and recipient-change controls from the routine form.
+- Existing routines retain their previous settings until explicitly edited and saved. The edit screen warns before removing old report rules and recipient changes; confirm recipients and attach the intended files before saving.
+- Preserves Gmail, Google Calendar, IMAP/POP3, SMTP and ExcelFlow support. Microsoft account and Outlook Classic integrations remain removed.
 
-Saved routines and attachments remain on this computer. SMTP still requires SSL/TLS or STARTTLS. POP3 None is unencrypted; use the connection settings provided by your mail administrator.
+Recipient files: up to 2 MB and 100 distinct addresses (8,000 characters total). Use one address per line or an Email column; Excel import reads the first worksheet. Browser preview supports CSV/TXT; Excel import requires the desktop app.
+Saved routines and attachments remain on this computer. Automatic sending still requires Task Hub running in the background, the computer awake and an internet connection.
