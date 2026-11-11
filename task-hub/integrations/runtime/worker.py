@@ -7,6 +7,9 @@ def progress(message,percent):print(json.dumps({'type':'progress','message':str(
 def dispatch(req):
     operation=req.get('operation')
     if operation=='ping':return {'version':1}
+    if operation=='read_recipients':
+        import recipients
+        return recipients.read(req.get('name'),req.get('data'))
     if operation.startswith('mail_'):
         import mailboxes
         config=req['config'];password=req['password'];mailboxes.validate(config,password)

@@ -8,10 +8,15 @@ test("routine cards stay newest first after editing and support search and narro
     await page.getByRole("button", { name: "New email routine" }).click();
     await page.getByLabel("Routine name", { exact: true }).fill(name);
     await page
-      .getByLabel("Default recipient", { exact: true })
-      .fill(
-        name.startsWith("Older") ? "older@example.com" : "team@example.com",
-      );
+      .getByLabel("Recipient file", { exact: true })
+      .setInputFiles({
+        name: "recipients.txt",
+        mimeType: "text/plain",
+        buffer: Buffer.from(
+          name.startsWith("Older") ? "older@example.com" : "team@example.com",
+        ),
+      });
+    await expect(page.getByText(/of 1 selected/)).toBeVisible();
     await page.getByLabel("First date", { exact: true }).fill("2099-01-01");
     await page.getByRole("button", { name: "Save routine" }).click();
   }

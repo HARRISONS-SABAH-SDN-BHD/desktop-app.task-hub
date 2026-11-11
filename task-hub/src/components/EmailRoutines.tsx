@@ -1,5 +1,6 @@
+import { RecipientPicker } from "./RecipientPicker";
+import { validateRecipientFile } from "../domain/recipients";
 import type { AttachmentRef } from "../domain/attachments";
-import { ExcelFlowPicker } from "./ExcelFlowPicker";
 import { Help } from "./Help";
 import { useEffect, useState, type FormEvent } from "react";
 import { CalendarClock, Plus, ArrowLeft } from "lucide-react";
@@ -13,10 +14,7 @@ import {
   type RoutineSettings,
 } from "../domain/emailRoutines";
 import { emailRoutines } from "../services/emailRoutines";
-import {
-  REPORT_ISSUE_PREFIX,
-  validateReportRules,
-} from "../domain/reportRules";
+import { REPORT_ISSUE_PREFIX } from "../domain/reportRules";
 import type { Run } from "../domain/types";
 import { AttachmentPicker } from "./AttachmentPicker";
 import { validateAttachments } from "../domain/attachments";
@@ -364,7 +362,7 @@ export function EmailRoutines({
                         : "Gmail"}
                   </p>
                   <p>
-                    Default recipient: <strong>{settings.recipient}</strong>
+                    Recipient: <strong>{settings.recipient}</strong>
                   </p>
                   <p>
                     <strong>
@@ -642,17 +640,10 @@ function RoutineForm({
       setError("Choose at least one weekday.");
       return;
     }
-    if (
-      settings.recipient_change?.until &&
-      settings.recipient_change.until < settings.recipient_change.from
-    ) {
-      setError("Recipient change end date must be on or after the start date.");
-      return;
-    }
     try {
       validateCc(settings.cc);
       validateAttachments(settings.attachments);
-      validateReportRules(settings.report_rules, settings.attachments.length);
+      validateRecipientFile(settings.recipient_file, settings.recipient);
     } catch (e) {
       setError(String(e));
       return;
@@ -661,9 +652,8 @@ function RoutineForm({
       setError("Wait for the files to finish adding.");
       return;
     }
-    onSave(settings);
+    onSave({ ...settings, report_rules: [], recipient_change: null });
   }
-  const change = settings.recipient_change;
   return (
     <form className="email-panel routine-form" onSubmit={save}>
       <h2>Set up your email routine</h2>
@@ -671,6 +661,13 @@ function RoutineForm({
         Choose who receives the email, what to include, and when it should run.
         Optional settings can be left as they are.
       </Help>
+      {(!!initial.report_rules?.length || !!initial.recipient_change) && (
+        <p className="notice">
+          Saving this routine removes its previous report rules and recipient
+          changes. Confirm the selected recipients and add all files you want to
+          send below.
+        </p>
+      )}
       <fieldset disabled={locked || attachmentBusy} className="email-fields">
         <h3 className="form-section-title">1. Email details</h3>
         <label>
@@ -750,17 +747,19 @@ function RoutineForm({
             placeholder="Monthly progress report"
           />
         </label>
-        <label>
-          Default recipient
-          <input
-            type="email"
-            required
-            maxLength={254}
-            value={settings.recipient}
-            onChange={(e) => update("recipient", e.target.value)}
-            placeholder="manager@example.com"
-          />
-        </label>
+        <RecipientPicker
+          file={settings.recipient_file}
+          selected={settings.recipient}
+          disabled={locked}
+          onBusyChange={setAttachmentBusy}
+          onChange={(file, selected) =>
+            setSettings((s) => ({
+              ...s,
+              recipient_file: file,
+              recipient: selected,
+            }))
+          }
+        />
         <label>
           CC (optional)
           <input
@@ -796,40 +795,17 @@ function RoutineForm({
         </label>
         <h3 className="form-section-title">3. Add files (optional)</h3>
         <Help label="Choosing attachments">
-          Use a saved copy for files that stay the same. Choose generated
-          reports from ExcelFlow when needed; saved copies do not update
-          automatically.
+          Use a saved copy for files that stay the same. Add files saves a copy
+          for this routine; changing the original file does not update that
+          copy. Remove it and add the updated file when needed.
         </Help>
-        <ExcelFlowPicker
-          value={settings.attachments}
-          onChange={(items) => update("attachments", items)}
-          disabled={locked}
-          onBusyChange={setAttachmentBusy}
-        />
         <AttachmentPicker
-          title="Fixed attachments (same saved copy every run)"
+          title="Attachments"
           value={settings.attachments}
           onChange={(items) => update("attachments", items)}
           onBusyChange={setAttachmentBusy}
           disabled={locked}
         />
-        {!!settings.report_rules.length && (
-          <div className="notice">
-            <p>
-              This routine still has {settings.report_rules.length} legacy
-              report rule(s). They remain active until removed. Add the intended
-              ExcelFlow attachments before replacing them.
-            </p>
-            <button
-              type="button"
-              className="secondary"
-              disabled={locked || attachmentBusy}
-              onClick={() => update("report_rules", [])}
-            >
-              Remove legacy report rules
-            </button>
-          </div>
-        )}
         <Help label="Message date fields">
           Available fields:{" "}
           <code>
@@ -972,112 +948,6 @@ function RoutineForm({
               calendar event when Task Hub is running and connected. Email
               contents, recipients and files are not copied to the calendar.
             </Help>
-          </>
-        )}
-        <h3 className="form-section-title">6. Recipient changes (optional)</h3>
-        <label>
-          Recipient change
-          <select
-            value={
-              change
-                ? change.until === null
-                  ? "permanent"
-                  : "temporary"
-                : "none"
-            }
-            onChange={(e) =>
-              update(
-                "recipient_change",
-                e.target.value === "none"
-                  ? null
-                  : {
-                      recipient: change?.recipient ?? "",
-                      from: change?.from ?? settings.start_date,
-                      until:
-                        e.target.value === "permanent"
-                          ? null
-                          : (change?.until ?? settings.start_date),
-                      note: change?.note ?? "",
-                    },
-              )
-            }
-          >
-            <option value="none">Use the default recipient</option>
-            <option value="temporary">Temporarily use another recipient</option>
-            <option value="permanent">
-              Permanently change from an effective date
-            </option>
-          </select>
-        </label>
-        {change && (
-          <>
-            <label>
-              Replacement recipient
-              <input
-                type="email"
-                required
-                maxLength={254}
-                value={change.recipient}
-                onChange={(e) =>
-                  update("recipient_change", {
-                    ...change,
-                    recipient: e.target.value,
-                  })
-                }
-              />
-            </label>
-            <div className="routine-form-grid">
-              <label>
-                Effective from
-                <input
-                  type="date"
-                  required
-                  value={change.from}
-                  onChange={(e) =>
-                    update("recipient_change", {
-                      ...change,
-                      from: e.target.value,
-                    })
-                  }
-                />
-              </label>
-              {change.until !== null && (
-                <label>
-                  Through (inclusive)
-                  <input
-                    type="date"
-                    required
-                    min={change.from}
-                    value={change.until}
-                    onChange={(e) =>
-                      update("recipient_change", {
-                        ...change,
-                        until: e.target.value,
-                      })
-                    }
-                  />
-                </label>
-              )}
-            </div>
-            <label>
-              Reminder note
-              <input
-                maxLength={500}
-                value={change.note}
-                onChange={(e) =>
-                  update("recipient_change", {
-                    ...change,
-                    note: e.target.value,
-                  })
-                }
-                placeholder="Covering the manager’s leave"
-              />
-            </label>
-            <p>
-              For this first version, the recipient change applies to the
-              scheduled occurrence date. Only one recipient change can be saved
-              per routine.
-            </p>
           </>
         )}
       </fieldset>

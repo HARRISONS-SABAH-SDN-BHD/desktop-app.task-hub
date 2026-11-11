@@ -27,7 +27,7 @@ pub(super) fn mime(
     attachments: &[crate::attachments::AttachmentData],
 ) -> Result<String> {
     if !validation::valid_email(from)
-        || !validation::valid_email(to)
+        || validation::to_addresses(to).is_err()
         || subject.contains(['\r', '\n'])
         || body.trim().is_empty()
     {
@@ -35,9 +35,11 @@ pub(super) fn mime(
     }
     let mut builder = Message::builder()
         .from(from.parse().map_err(|_| "Invalid sender")?)
-        .to(to.parse().map_err(|_| "Invalid recipient")?)
         .subject(subject)
         .message_id(Some(format!("<taskhub.{id}@taskhub.local>")));
+    for address in validation::to_addresses(to)? {
+        builder = builder.to(address.parse().map_err(|_| "Invalid recipient")?);
+    }
     for address in validation::cc_addresses(cc)? {
         builder = builder.cc(address.parse().map_err(|_| "Invalid CC email address")?);
     }
@@ -95,6 +97,36 @@ mod tests {
         net::TcpListener,
         thread,
     };
+    #[test]
+    fn multiple_to_recipients_have_separate_mailboxes_and_reject_empty_or_duplicate_selection() {
+        let raw = mime(
+            "sender@example.com",
+            "one@example.com, two@example.com",
+            "cc@example.com",
+            "Report",
+            "Body",
+            "123",
+            &[],
+        )
+        .unwrap();
+        let mail = String::from_utf8(URL_SAFE_NO_PAD.decode(raw).unwrap()).unwrap();
+        assert!(mail.contains("To: one@example.com, two@example.com"));
+        assert!(mail.contains("Cc: cc@example.com"));
+        for to in [
+            "",
+            "one@example.com, ONE@example.com",
+            "one@example.com,",
+            "one@example.com\r\nBcc: other@example.com",
+        ] {
+            assert!(mime("sender@example.com", to, "", "Report", "Body", "123", &[]).is_err());
+        }
+        let task = crate::email_profile::default_config()
+            .unwrap()
+            .tasks
+            .remove(0);
+        let values=serde_json::from_value(json!({"recipient":"one@example.com, two@example.com","subject":"Report","message":"Body","delivery":"Draft"})).unwrap();
+        validation::parameters(&task, &values).unwrap();
+    }
     #[test]
     fn cc_is_encoded_and_optional_and_rejects_injection() {
         let raw = mime(

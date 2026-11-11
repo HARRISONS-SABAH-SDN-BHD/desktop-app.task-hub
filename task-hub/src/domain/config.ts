@@ -1,3 +1,4 @@
+import { recipientAddresses } from "./recipients";
 import validate from "./task-config.validator.js";
 import type { Parameters, Step, Task, TaskConfig } from "./types";
 
@@ -94,9 +95,11 @@ export function validateStep(
   if (
     step.type === "email" &&
     filled.length &&
-    !/^[^\s@<>\r\n]+@[^\s@<>\r\n]+\.[^\s@<>\r\n]+$/.test(filled[0])
+    (step.id === "recipient"
+      ? !validTo(filled[0])
+      : !/^[^\s@<>\r\n]+@[^\s@<>\r\n]+\.[^\s@<>\r\n]+$/.test(filled[0]))
   )
-    return "Enter one valid email address.";
+    return "Enter valid email addresses.";
   if (
     step.type === "datetime" &&
     filled.length &&
@@ -142,10 +145,8 @@ export function validateParameters(task: Task, parameters: Parameters): void {
         )
       )
         throw new Error("Choose Draft, Send after review, or Send directly.");
-      if (
-        !/^[^\s@<>\r\n]+@[^\s@<>\r\n]+\.[^\s@<>\r\n]+$/.test(fields.recipient)
-      )
-        throw new Error("Enter one valid recipient.");
+      if (!validTo(fields.recipient))
+        throw new Error("Select valid recipient addresses.");
     }
   }
   if (task.action.type === "export" && task.action.format === "ics") {
@@ -201,4 +202,13 @@ export function executionParameters(
       ];
     }),
   );
+}
+
+function validTo(value: string): boolean {
+  try {
+    recipientAddresses(value);
+    return true;
+  } catch {
+    return false;
+  }
 }

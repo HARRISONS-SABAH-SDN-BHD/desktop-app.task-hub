@@ -104,7 +104,7 @@ pub fn parameters(task: &Task, parameters: &Parameters) -> Result<()> {
         }
         if format == "eml" || format == "smtp" {
             let recipient = &fields["recipient"];
-            if !valid_email(recipient) {
+            if to_addresses(recipient).is_err() {
                 return Err("Invalid email recipient".into());
             }
         }
@@ -158,7 +158,13 @@ fn validate_step(step: &Step, value: &Value, required: bool) -> Result<()> {
         {
             return Err(format!("{}: unknown selection", step.prompt));
         }
-        if step.kind == "email" && !valid_email(value) {
+        if step.kind == "email"
+            && (if step.id == "recipient" {
+                to_addresses(value).is_err()
+            } else {
+                !valid_email(value)
+            })
+        {
             return Err("Invalid email address".into());
         }
         if step.kind == "datetime" && DateTime::parse_from_rfc3339(value).is_err() {
@@ -288,6 +294,24 @@ pub(crate) fn cc_addresses(value: &str) -> Result<Vec<&str>> {
             "Enter valid CC email addresses separated by commas (up to 100), or leave CC blank."
                 .into(),
         );
+    }
+    Ok(addresses)
+}
+
+/// Required To list: bounded, distinct and validated before MIME or SMTP submission.
+pub(crate) fn to_addresses(value: &str) -> Result<Vec<&str>> {
+    if value.len() > 8000 || value.chars().any(char::is_control) {
+        return Err("Select 1–100 valid recipient addresses (up to 8,000 characters total)".into());
+    }
+    let addresses: Vec<_> = value.split(',').map(str::trim).collect();
+    let mut seen = HashSet::new();
+    if addresses.is_empty()
+        || addresses.len() > 100
+        || addresses
+            .iter()
+            .any(|v| v.len() > 254 || !valid_email(v) || !seen.insert(v.to_lowercase()))
+    {
+        return Err("Select 1–100 distinct, valid recipient email addresses".into());
     }
     Ok(addresses)
 }

@@ -84,7 +84,7 @@ impl Recipe {
                     return Err("Unsupported email provider".into());
                 }
                 let recipient = field(fields, "recipient")?;
-                if !crate::validation::valid_email(recipient) {
+                if crate::validation::to_addresses(recipient).is_err() {
                     return Err("Enter one valid recipient email address".into());
                 }
                 let delivery = field(fields, "delivery")?;

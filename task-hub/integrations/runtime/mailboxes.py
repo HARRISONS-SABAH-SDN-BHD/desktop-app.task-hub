@@ -202,7 +202,9 @@ def deliver(config,password,raw,recipient,cc,send):
     if send:
         client=smtp(config,password)
         try:
-            refused=client.sendmail(config['email'],[recipient]+cc,raw)
+            recipients=recipient if isinstance(recipient,list) else [recipient]
+            envelope=list({address.lower():address for address in recipients+cc}.values())
+            refused=client.sendmail(config['email'],envelope,raw)
             if refused:raise ValueError('Some recipients were refused. Inspect your provider before retrying; no retry was attempted.')
         except Exception:raise ValueError('SMTP submission failed or its outcome is uncertain. Inspect your provider before retrying. No retry was attempted.')
         finally:

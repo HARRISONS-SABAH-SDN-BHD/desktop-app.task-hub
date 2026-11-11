@@ -23,6 +23,7 @@ mod model;
 mod notifications;
 #[cfg_attr(not(test), allow(dead_code))]
 mod outlook_classic;
+mod recipients;
 #[cfg(feature = "desktop")]
 mod routine_scheduler;
 mod runner;
@@ -43,6 +44,12 @@ mod desktop {
     use tauri::{Manager, State};
     use tauri_plugin_opener::OpenerExt;
 
+    #[tauri::command]
+    async fn import_recipient_file(name: String, data: String) -> Result<Vec<String>> {
+        tauri::async_runtime::spawn_blocking(move || recipients::import(name, data))
+            .await
+            .map_err(|e| e.to_string())?
+    }
     #[tauri::command]
     fn update_status(app: tauri::AppHandle) -> Result<updates::UpdateStatus> {
         updates::status(&app)
@@ -485,6 +492,7 @@ mod desktop {
             })
             .on_window_event(background::on_window_event)
             .invoke_handler(tauri::generate_handler![
+                import_recipient_file,
                 update_status,
                 check_updates,
                 install_update,

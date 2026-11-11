@@ -2,6 +2,8 @@ import type { ReportRule } from "./reportRules";
 import type { Parameters } from "./types";
 import type { AttachmentRef } from "./attachments";
 
+import type { RecipientFile } from "./recipients";
+
 export interface RecipientChange {
   recipient: string;
   from: string;
@@ -23,6 +25,7 @@ export interface RoutineSettings {
   cc?: string;
   name: string;
   recipient: string;
+  recipient_file?: RecipientFile;
   subject: string;
   message: string;
   start_date: string;

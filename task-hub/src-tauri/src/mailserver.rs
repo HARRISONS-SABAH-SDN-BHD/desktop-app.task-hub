@@ -138,7 +138,7 @@ pub fn deliver(
         ));
     }
     let result = crate::runtime::request(
-        json!({"operation":"mail_deliver","config":credential.config,"password":credential.password,"raw":STANDARD.encode(bytes),"recipient":recipient,"cc":crate::validation::cc_addresses(cc)?,"send":send}),
+        json!({"operation":"mail_deliver","config":credential.config,"password":credential.password,"raw":STANDARD.encode(bytes),"recipient":crate::validation::to_addresses(recipient)?,"cc":crate::validation::cc_addresses(cc)?,"send":send}),
     )?;
     Ok(result["detail"]
         .as_str()

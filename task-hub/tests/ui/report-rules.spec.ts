@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-test("report rules are removed from new routines and legacy rules require explicit removal", async ({
+test("report rules are removed from new routines and saving explicitly replaces legacy settings", async ({
   page,
 }) => {
   await page.goto("/");
@@ -9,7 +9,7 @@ test("report rules are removed from new routines and legacy rules require explic
   ).toHaveCount(0);
   await expect(
     page.getByRole("region", { name: "ExcelFlow report import" }),
-  ).toBeVisible();
+  ).toHaveCount(0);
   await page.evaluate(() =>
     localStorage.setItem(
       "taskhub.email-routines.preview.v1",
@@ -52,11 +52,8 @@ test("report rules are removed from new routines and legacy rules require explic
   await page.reload();
   await page.getByRole("button", { name: "Edit routine / recipient" }).click();
   await expect(
-    page.getByText(/They remain active until removed/),
+    page.getByText(/Saving this routine removes its previous report rules/),
   ).toBeVisible();
-  await page
-    .getByRole("button", { name: "Remove legacy report rules" })
-    .click();
   await page.getByRole("button", { name: "Save routine" }).click();
   const rules = await page.evaluate(
     () =>

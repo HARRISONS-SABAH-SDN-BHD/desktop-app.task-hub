@@ -1575,3 +1575,33 @@ textarea::placeholder {
   color: #a9b8ca;
   opacity: 1;
 }
+
+.recipient-picker {
+  border: 1px solid var(--border, #344457);
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 0;
+}
+.recipient-picker h4 {
+  font-size: 1.1rem;
+  margin: 0 0 12px;
+}
+.recipient-options {
+  max-height: 280px;
+  overflow-y: auto;
+  margin-top: 12px;
+  display: grid;
+  gap: 10px;
+}
+.recipient-options .checkbox-label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  overflow-wrap: anywhere;
+}
+.recipient-options input[type="checkbox"] {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+}

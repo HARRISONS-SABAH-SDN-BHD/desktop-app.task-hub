@@ -30,6 +30,8 @@ pub struct RoutineSettings {
     pub cc: String,
     pub name: String,
     pub recipient: String,
+    #[serde(default)]
+    pub recipient_file: Option<crate::recipients::RecipientFile>,
     pub subject: String,
     pub message: String,
     pub start_date: String,
@@ -144,9 +146,7 @@ fn validate(settings: &RoutineSettings) -> Result<()> {
     if settings.name.trim().is_empty() || settings.name.chars().count() > 100 {
         return Err("Give the routine a name of up to 100 characters".into());
     }
-    if !validation::valid_email(&settings.recipient) {
-        return Err("Enter a complete recipient email address".into());
-    }
+    crate::recipients::validate(&settings.recipient_file, &settings.recipient)?;
     date(&settings.start_date)?;
     NaiveTime::parse_from_str(&settings.time, "%H:%M").map_err(|_| "Choose a valid time")?;
     if !["once", "daily", "weekly", "monthly"].contains(&settings.repeat.as_str()) {
@@ -1079,6 +1079,7 @@ mod tests {
             cc: String::new(),
             name: "Report".into(),
             recipient: "a@example.com".into(),
+            recipient_file: None,
             subject: "{{previous_month}} {{previous_year}} report".into(),
             message: "Report for {{month}} {{year}}.\n\nPrepared {{date}}.".into(),
             start_date: "2026-01-31".into(),
@@ -1091,6 +1092,43 @@ mod tests {
             attachments: Vec::new(),
             recipient_change: None,
         }
+    }
+    #[test]
+    fn recipient_file_and_subset_survive_restart_without_becoming_attachments() {
+        let dir = tempfile::tempdir().unwrap();
+        let state = AppState::initialize(dir.path().into()).unwrap();
+        let mut s = settings();
+        s.recipient = "b@example.com, c@example.com".into();
+        s.recipient_file = Some(crate::recipients::RecipientFile {
+            name: "team.csv".into(),
+            recipients: vec![
+                "a@example.com".into(),
+                "b@example.com".into(),
+                "c@example.com".into(),
+            ],
+        });
+        save(&state, None, s).unwrap();
+        drop(state);
+        let state = AppState::initialize(dir.path().into()).unwrap();
+        let routine = state.lock().unwrap().email_routines[0].clone();
+        assert_eq!(
+            routine
+                .settings
+                .recipient_file
+                .as_ref()
+                .unwrap()
+                .recipients
+                .len(),
+            3
+        );
+        assert_eq!(
+            preview(&routine).unwrap().parameters["recipient"],
+            "b@example.com, c@example.com"
+        );
+        assert!(routine.settings.attachments.is_empty());
+        let mut invalid = routine.settings.clone();
+        invalid.recipient = "other@example.com".into();
+        assert!(save(&state, Some(routine.id), invalid).is_err());
     }
     #[test]
     fn templates_use_occurrence_not_current_month_and_preserve_blank_lines() {

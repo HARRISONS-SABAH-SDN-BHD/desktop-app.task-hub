@@ -1,3 +1,4 @@
+import { validateRecipientFile } from "../domain/recipients";
 import { validateAttachments } from "../domain/attachments";
 import { reportFiles } from "./reportFiles";
 import { localDate } from "../domain/emailRoutines";
@@ -50,6 +51,7 @@ export const emailRoutines = {
     return read();
   },
   async save(id: string | null, settings: RoutineSettings): Promise<void> {
+    validateRecipientFile(settings.recipient_file, settings.recipient);
     validateCc(settings.cc ?? "");
     validateReportRules(
       settings.report_rules ?? [],
