@@ -157,7 +157,8 @@ export default function App() {
   const runs = snapshot.runs.filter((r) => r.task_id === "foreground_email");
   const dueCount = routines.filter(
     (routine) =>
-      routine.settings.provider !== "microsoft" && isRoutineDue(routine),
+      ["gmail", "mailserver"].includes(routine.settings.provider ?? "gmail") &&
+      isRoutineDue(routine),
   ).length;
   async function runRoutine(plan: RoutinePreview) {
     setBusy(true);

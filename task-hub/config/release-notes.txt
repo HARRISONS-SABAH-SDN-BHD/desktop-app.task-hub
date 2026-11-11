@@ -1,4 +1,5 @@
 Task Hub 0.7.3
+- Removed Microsoft account, Outlook Classic and obsolete Office app automation integrations; Gmail and IMAP/POP3 remain available.
 - Mail connection errors now include a bounded, sanitized Server reply section with the server rejection reason.
 - POP3 sign-in errors identify the PASS stage without assuming the password is incorrect.
 - Server messages can reveal mailbox locking, disabled accounts and other access restrictions when the server provides that information.

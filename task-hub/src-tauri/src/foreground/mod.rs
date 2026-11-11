@@ -34,7 +34,7 @@ pub fn execute(
         Err("Foreground automation currently requires Windows.".into());
     controller.finish(result.is_ok());
     let logs = result?;
-    // A receipt describes visible edits; Office recipes also verify their actual saved file.
+    // A receipt describes the visible email edits.
     let receipt = output.join(format!("{id}.foreground.txt"));
     crate::storage::atomic_write(
         &receipt,

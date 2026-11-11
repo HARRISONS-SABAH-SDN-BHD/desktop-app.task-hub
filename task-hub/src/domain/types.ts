@@ -20,7 +20,7 @@ export type Action =
   | { type: "smtp"; fields: Record<string, string> }
   | {
       type: "foreground";
-      recipe: "web_email" | "word_report" | "excel_report" | "powerpoint_deck";
+      recipe: "web_email";
       fields: Record<string, string>;
     }
   | { type: "script"; script_id: "system-info" };

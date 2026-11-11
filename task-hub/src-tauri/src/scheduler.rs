@@ -104,11 +104,11 @@ mod tests {
             )
             .unwrap();
         let parameters: Parameters =
-            serde_json::from_value(serde_json::json!({"title":"Test", "content":"Test body"}))
+            serde_json::from_value(serde_json::json!({"provider":"Gmail","browser":"Google Chrome","recipient":"test@example.com","subject":"Test","message":"Test body","delivery":"Draft"}))
                 .unwrap();
         assert!(create(
             &state,
-            "foreground_word",
+            "foreground_email",
             parameters.clone(),
             (Utc::now() + Duration::hours(1)).to_rfc3339(),
             "once".into()
@@ -120,7 +120,7 @@ mod tests {
             .unwrap()
             .tasks
             .into_iter()
-            .find(|t| t.id == "foreground_word")
+            .find(|t| t.id == "foreground_email")
             .unwrap();
         state
             .transaction(|store| {
