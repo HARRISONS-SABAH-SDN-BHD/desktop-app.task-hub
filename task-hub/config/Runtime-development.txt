@@ -29,12 +29,12 @@ Task Hub permits one running instance: use Quit Task Hub in its tray menu before
 launching the source app. Closing the window alone keeps the old instance running.
 Publish a newer version with the updated installer when ready for automatic
 updates. Do not replace an existing published version. The release version must be newer than the installed version; this release is
-0.7.1.
+0.7.3.
 
 Boundaries:
 - integrations/runtime/vendor/engine.py is the original ExcelFlow 1.17 report engine.
   origin.json records its hash. Calculations are not duplicated in TypeScript/Rust.
-- integrations/runtime/mailboxes.py handles TLS-only IMAP/POP3/SMTP with Python's
+- integrations/runtime/mailboxes.py handles IMAP/SMTP TLS and explicit POP3 SSL/TLS, STARTTLS or None with Python's
   standard protocol libraries; no message deletion or automatic send retry.
 - outlook_classic.rs and its fixed PowerShell script read the current Outlook COM
   profile. Caller data enters through JSON stdin; it is never interpolated as code.

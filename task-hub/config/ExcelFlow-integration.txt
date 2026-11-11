@@ -1,4 +1,4 @@
-Task Hub 0.7.1 — Connect and ExcelFlow
+Task Hub 0.7.3 — Connect and ExcelFlow
 
 CONNECT
 Only Gmail and IMAP / POP3 are currently available.
@@ -8,8 +8,10 @@ connected Gmail or IMAP / POP3 sender before saving and running them again.
 
 Gmail: enable Read email attachments for ExcelFlow and reconnect to read raw
 workbooks. The publisher needs Google's gmail.readonly scope configured.
-IMAP / POP3: use your provider's incoming TLS server, username and password/app
-password. IMAP defaults to port 993, POP3 to 995. SMTP is optional for reading,
+IMAP / POP3: use your provider's incoming server, username and password/app
+password. IMAP uses SSL/TLS on port 993. POP3 offers SSL/TLS (usually 995),
+STARTTLS (usually 110), or explicitly selected None (usually 110). None sends
+credentials and email without encryption. STARTTLS never falls back to None. SMTP is optional for reading,
 but required for sending routines. SMTP requires TLS or STARTTLS and uses the
 same password, with an optional different username. Ask IT which methods your
 account supports; providers requiring OAuth may block password-based access.
@@ -53,3 +55,7 @@ LIMITS
 Raw workbooks: 100 MB each. Outgoing attachments: 10 files / 18 MB in total.
 Only .xlsx/.xlsm workbook attachments are imported. Macros are not run.
 Scheduled email requires Task Hub running in the tray, an awake computer and internet.
+
+Connection errors identify the server, port and failing stage: connection/TLS,
+STARTTLS, username/password, or outgoing SMTP. Server rejection text is displayed in a bounded Server reply section after
+credentials and control characters are removed. Raw transcripts are not displayed. Successful incoming sign-in is distinguished from SMTP failure.
