@@ -90,7 +90,7 @@ def messages(config,password):
         else:
             for uid,index in list(pop_ids(client).items())[-50:][::-1]:
                 try:raw=b'\r\n'.join(client.top(index,0)[1])
-                except poplib.error_proto:raise ValueError('This POP3 server does not support header-only browsing (TOP). Use IMAP or Outlook Classic.')
+                except poplib.error_proto:raise ValueError('This POP3 server does not support header-only browsing (TOP). Use IMAP.')
                 result.append(message_info(raw,uid))
         return result
     finally:close(client,config['protocol'])
@@ -143,7 +143,7 @@ def deliver(config,password,raw,recipient,cc,send):
             try:client.quit()
             except Exception:pass
         return {'accepted':True,'detail':'SMTP accepted the message. SMTP does not automatically create a Sent Items copy.'}
-    if config['protocol']!='imap':raise ValueError('POP3 cannot create server-side drafts. Choose automatic sending or use an IMAP, Gmail or Microsoft connection for drafts.')
+    if config['protocol']!='imap':raise ValueError('POP3 cannot create server-side drafts. Choose automatic sending or use an IMAP or Gmail connection for drafts.')
     client=incoming(config,password)
     try:
         folder='"'+(config.get('draft_folder') or 'Drafts').replace('\\','\\\\').replace('"','\\"')+'"'

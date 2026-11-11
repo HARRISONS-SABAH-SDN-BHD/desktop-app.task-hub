@@ -36,8 +36,6 @@ Boundaries:
   origin.json records its hash. Calculations are not duplicated in TypeScript/Rust.
 - integrations/runtime/mailboxes.py handles TLS-only IMAP/POP3/SMTP with Python's
   standard protocol libraries; no message deletion or automatic send retry.
-- outlook_classic.rs and its fixed PowerShell script read the current Outlook COM
-  profile. Caller data enters through JSON stdin; it is never interpolated as code.
 - runtime.rs controls the bundled worker, bounded JSON, progress, timeout and cancel.
 - mail_sources.rs scopes workbook files by IDs and verifies immutable input copies.
 - Passwords stay in Windows Credential Manager and cross into the worker via stdin,

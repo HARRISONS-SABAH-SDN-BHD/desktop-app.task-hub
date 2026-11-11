@@ -275,12 +275,7 @@
                   "const": "foreground"
                 },
                 "recipe": {
-                  "enum": [
-                    "web_email",
-                    "word_report",
-                    "excel_report",
-                    "powerpoint_deck"
-                  ]
+                  "enum": ["web_email"]
                 },
                 "fields": {
                   "type": "object",

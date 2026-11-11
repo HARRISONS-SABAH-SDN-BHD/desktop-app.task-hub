@@ -112,10 +112,6 @@ mod tests {
     #[test]
     fn mailbox_validation_preserves_exact_https_provider_hosts() {
         assert!(validate_mailbox_url("mail.google.com/mail/u/0/#inbox", "Gmail").is_ok());
-        assert!(
-            validate_mailbox_url("https://outlook.live.com/mail/0/", "Outlook personal").is_ok()
-        );
-        assert!(validate_mailbox_url("https://outlook.office.com/mail/", "Outlook work").is_ok());
         for raw in [
             "http://mail.google.com/mail/",
             "https://mail.google.com.example.org/",
@@ -125,15 +121,15 @@ mod tests {
         ] {
             assert!(validate_mailbox_url(raw, "Gmail").is_err(), "{raw}");
         }
-        assert!(validate_mailbox_url("https://mail.google.com/", "Outlook personal").is_err());
-        assert!(validate_mailbox_url("https://outlook.office.com/", "Unknown").is_err());
+        assert!(validate_mailbox_url("https://mail.google.com/", "Unsupported").is_err());
+        assert!(validate_mailbox_url("https://example.com/", "Unknown").is_err());
     }
 
     #[test]
     #[ignore = "requires an interactive desktop and TASKHUB_TEST_APP_EXE naming an open registered app"]
     fn desktop_child_enumeration_reaches_known_app() {
         let name = std::env::var("TASKHUB_TEST_APP_EXE")
-            .expect("Set TASKHUB_TEST_APP_EXE to an open registered app, e.g. WINWORD.EXE");
+            .expect("Set TASKHUB_TEST_APP_EXE to an open registered app, e.g. chrome.exe");
         let expected = app_path(&name)
             .expect("The test app must have a registered installation path")
             .to_string_lossy()
@@ -211,8 +207,6 @@ fn validate_mailbox_url(raw: &str, provider: &str) -> Result<()> {
     let url = url::Url::parse(&qualified).map_err(|_| "Invalid mailbox URL")?;
     let expected = match provider {
         "Gmail" => "mail.google.com",
-        "Outlook personal" => "outlook.live.com",
-        "Outlook work" => "outlook.office.com",
         _ => return Err("Unsupported email provider".into()),
     };
     if url.scheme() != "https"
@@ -235,9 +229,6 @@ impl<'a> Session<'a> {
                 Some("Google Chrome") => &["chrome.exe"],
                 _ => &["msedge.exe"],
             },
-            App::Word => &["WINWORD.EXE"],
-            App::Excel => &["EXCEL.EXE"],
-            App::PowerPoint => &["POWERPNT.EXE"],
         };
         let path = names.iter().find_map(|name| app_path(name)).ok_or_else(|| format!("Install {} and open it once to finish setup. Its registered application path was not found.", names.join(" or ")))?;
         let executable = path.to_string_lossy().to_lowercase();
@@ -266,23 +257,13 @@ impl<'a> Session<'a> {
             Operation::Email { draft, .. } => {
                 let url = match draft.provider.as_str() {
                     "Gmail" => "https://mail.google.com/mail/u/0/",
-                    "Outlook personal" => "https://outlook.live.com/mail/0/",
-                    _ => "https://outlook.office.com/mail/",
+                    _ => return Err("Unsupported email provider".into()),
                 };
                 if recipe.browser.as_deref() == Some("Mozilla Firefox") {
                     command.args(["-new-window", url]);
                 } else {
                     command.args(["--new-window", "--force-renderer-accessibility", url]);
                 }
-            }
-            Operation::Word { .. } => {
-                command.arg("/w");
-            }
-            Operation::Excel { .. } => {
-                command.arg("/x");
-            }
-            Operation::PowerPoint { .. } => {
-                command.arg("/n");
             }
         }
         command

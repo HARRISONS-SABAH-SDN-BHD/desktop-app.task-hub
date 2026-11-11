@@ -27,9 +27,6 @@ export const otherConnections = {
   async mailStatus(): Promise<MailServerStatus> {
     return bridge.native ? invoke("mailserver_status") : emptyMailServerStatus;
   },
-  async classicStatus(): Promise<boolean> {
-    return bridge.native ? invoke("outlook_classic_status") : false;
-  },
   async connectMail(config: MailConfig, password: string): Promise<void> {
     if (!bridge.native)
       throw new Error("Use the desktop app to connect a mail server.");
@@ -37,13 +34,5 @@ export const otherConnections = {
   },
   async disconnectMail(): Promise<void> {
     return invoke("disconnect_mailserver");
-  },
-  async connectClassic(): Promise<{ connected: boolean; profile: string }> {
-    if (!bridge.native)
-      throw new Error("Outlook Classic requires the Windows desktop app.");
-    return invoke("connect_outlook_classic");
-  },
-  async disconnectClassic(): Promise<void> {
-    return invoke("disconnect_outlook_classic");
   },
 };

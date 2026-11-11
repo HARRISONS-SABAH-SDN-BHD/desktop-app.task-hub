@@ -186,7 +186,7 @@ fn endpoint(base: &str, segments: &[&str]) -> Result<url::Url> {
     }
     Ok(url)
 }
-pub fn browse(state: &AppState, provider: &str, mut request: Value) -> Result<Value> {
+pub fn browse(_state: &AppState, provider: &str, mut request: Value) -> Result<Value> {
     supported_source(provider)?;
     let _operation = crate::gmail::lock_for_update()?;
     let operation = request["operation"]
@@ -197,7 +197,6 @@ pub fn browse(state: &AppState, provider: &str, mut request: Value) -> Result<Va
         return Err("Unsupported mailbox operation".into());
     }
     match provider {
-        "outlook_classic" => crate::outlook_classic::request(state, request),
         "mailserver" => {
             if operation == "folders" {
                 let value = crate::mailserver::credentials()?;
@@ -208,61 +207,16 @@ pub fn browse(state: &AppState, provider: &str, mut request: Value) -> Result<Va
             request["operation"] = json!(format!("mail_{operation}"));
             crate::mailserver::request(&format!("mail_{operation}"), request)
         }
-        "gmail" | "microsoft" => cloud(provider, &operation, &request),
+        "gmail" => cloud(&operation, &request),
         _ => Err("Choose a connected email source".into()),
     }
 }
-fn cloud(provider: &str, operation: &str, request: &Value) -> Result<Value> {
-    let (client, token) = if provider == "gmail" {
-        crate::gmail::source_token()?
-    } else {
-        crate::microsoft::source_token()?
-    };
+fn cloud(operation: &str, request: &Value) -> Result<Value> {
+    let (client, token) = crate::gmail::source_token()?;
     if operation == "folders" {
         return Ok(json!([{"id":"INBOX","store_id":"","name":"Inbox"}]));
     }
     let id = request["message_id"].as_str().unwrap_or_default();
-    if provider == "microsoft" {
-        let mut url = endpoint(
-            "https://graph.microsoft.com/v1.0",
-            if operation == "messages" {
-                vec!["me", "mailFolders", "inbox", "messages"]
-            } else {
-                vec!["me", "messages", id, "attachments"]
-            }
-            .as_slice(),
-        )?;
-        if operation == "messages" {
-            url.query_pairs_mut()
-                .append_pair("$select", "id,subject,from,receivedDateTime,hasAttachments")
-                .append_pair("$top", "50")
-                .append_pair("$orderby", "receivedDateTime desc");
-        } else {
-            url.query_pairs_mut()
-                .append_pair("$select", "id,name,size,isInline")
-                .append_pair("$top", "100");
-        }
-        let value = json_response(
-            client
-                .get(url)
-                .bearer_auth(&token)
-                .send()
-                .map_err(|_| "Could not read Microsoft mailbox")?,
-            2 * 1024 * 1024,
-        )?;
-        let items = value["value"]
-            .as_array()
-            .ok_or("Invalid Microsoft mailbox response")?;
-        return Ok(Value::Array(if operation == "messages" {
-            items.iter().map(|v|json!({"id":v["id"],"subject":v["subject"],"sender":v.pointer("/from/emailAddress/address").unwrap_or(&Value::Null),"received":v["receivedDateTime"]})).collect()
-        } else {
-            items
-                .iter()
-                .filter(|v| v["name"].as_str().is_some_and(valid_name))
-                .map(|v| json!({"id":v["id"],"name":v["name"],"size":v["size"]}))
-                .collect()
-        }));
-    }
     if operation == "messages" {
         let mut url = endpoint(
             "https://gmail.googleapis.com/gmail/v1/users/me",
@@ -378,13 +332,9 @@ pub fn download(state: &AppState, selection: Download) -> Result<Input> {
     ));
     let result = (|| -> Result<Input> {
         let bytes = match selection.provider.as_str() {
-            "outlook_classic" | "mailserver" => {
+            "mailserver" => {
                 let fields = json!({"operation":"download","message_id":selection.message_id,"attachment_id":selection.attachment_id,"store_id":selection.store_id,"expected_name":selection.name,"expected_size":selection.size,"destination":temp});
-                let value = if selection.provider == "outlook_classic" {
-                    crate::outlook_classic::request(state, fields)?
-                } else {
-                    crate::mailserver::request("mail_download", fields)?
-                };
+                let value = crate::mailserver::request("mail_download", fields)?;
                 if value["name"] != selection.name || value["size"].as_u64() != Some(selection.size)
                 {
                     return Err(
@@ -394,98 +344,36 @@ pub fn download(state: &AppState, selection: Download) -> Result<Input> {
                 }
                 bounded(&temp, MAX_INPUT)?
             }
-            "gmail" | "microsoft" => {
-                let (client, token) = if selection.provider == "gmail" {
-                    crate::gmail::source_token()?
-                } else {
-                    crate::microsoft::source_token()?
-                };
-                let url = if selection.provider == "gmail" {
-                    endpoint(
-                        "https://gmail.googleapis.com/gmail/v1/users/me",
-                        &[
-                            "messages",
-                            &selection.message_id,
-                            "attachments",
-                            &selection.attachment_id,
-                        ],
-                    )?
-                } else {
-                    endpoint(
-                        "https://graph.microsoft.com/v1.0",
-                        &[
-                            "me",
-                            "messages",
-                            &selection.message_id,
-                            "attachments",
-                            &selection.attachment_id,
-                            "$value",
-                        ],
-                    )?
-                };
-                if selection.provider == "microsoft" {
-                    let mut metadata_url = endpoint(
-                        "https://graph.microsoft.com/v1.0",
-                        &[
-                            "me",
-                            "messages",
-                            &selection.message_id,
-                            "attachments",
-                            &selection.attachment_id,
-                        ],
-                    )?;
-                    metadata_url
-                        .query_pairs_mut()
-                        .append_pair("$select", "id,name,size");
-                    let metadata = json_response(
-                        client
-                            .get(metadata_url)
-                            .bearer_auth(&token)
-                            .send()
-                            .map_err(|_| "Could not recheck selected Microsoft attachment")?,
-                        1024 * 1024,
-                    )?;
-                    if metadata["name"] != selection.name
-                        || metadata["size"].as_u64() != Some(selection.size)
-                    {
-                        return Err("The selected attachment changed. Refresh the email and choose it again.".into());
-                    }
-                }
+            "gmail" => {
+                let (client, token) = crate::gmail::source_token()?;
+                let url = endpoint(
+                    "https://gmail.googleapis.com/gmail/v1/users/me",
+                    &[
+                        "messages",
+                        &selection.message_id,
+                        "attachments",
+                        &selection.attachment_id,
+                    ],
+                )?;
                 let response = client
                     .get(url)
                     .bearer_auth(token)
                     .send()
                     .map_err(|_| "Could not download the selected email attachment")?;
-                if selection.provider == "gmail" {
-                    use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine};
-                    let value = json_response(response, 140 * 1024 * 1024)?;
-                    URL_SAFE_NO_PAD
-                        .decode(
-                            value["data"]
-                                .as_str()
-                                .ok_or("Missing Gmail attachment bytes")?
-                                .trim_end_matches('='),
-                        )
-                        .map_err(|_| "Invalid Gmail attachment encoding")?
-                } else {
-                    if !response.status().is_success() {
-                        return Err("Microsoft attachment download failed. Refresh the message and try again.".into());
-                    }
-                    let mut bytes = Vec::new();
-                    response
-                        .take(MAX_INPUT + 1)
-                        .read_to_end(&mut bytes)
-                        .map_err(|_| "Could not read Microsoft attachment")?;
-                    bytes
-                }
+                use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine};
+                let value = json_response(response, 140 * 1024 * 1024)?;
+                URL_SAFE_NO_PAD
+                    .decode(
+                        value["data"]
+                            .as_str()
+                            .ok_or("Missing Gmail attachment bytes")?
+                            .trim_end_matches('='),
+                    )
+                    .map_err(|_| "Invalid Gmail attachment encoding")?
             }
             _ => return Err("Unknown email source".into()),
         };
-        // Outlook attachment metadata can include provider overhead. COM/Graph
-        // recheck the selection above; the imported size comes from bounded bytes.
-        if !matches!(selection.provider.as_str(), "outlook_classic" | "microsoft")
-            && bytes.len() as u64 != selection.size
-        {
+        if bytes.len() as u64 != selection.size {
             return Err("Attachment size changed. Refresh and choose it again.".into());
         }
         stage_bytes(state, &selection.name, &bytes)
@@ -497,7 +385,7 @@ fn supported_source(provider: &str) -> Result<()> {
     if matches!(provider, "gmail" | "mailserver") {
         Ok(())
     } else {
-        Err("Choose Gmail or IMAP / POP3. Microsoft sources are currently unavailable.".into())
+        Err("Choose Gmail or IMAP / POP3.".into())
     }
 }
 #[derive(Deserialize)]

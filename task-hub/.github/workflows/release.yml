@@ -42,8 +42,6 @@ jobs:
       - name: Build signed installer and feed
         run: npm run release:build
         env:
-          TASK_HUB_MICROSOFT_CLIENT_ID: ${{ secrets.TASK_HUB_MICROSOFT_CLIENT_ID }}
-          TASK_HUB_MICROSOFT_TENANT_ID: ${{ secrets.TASK_HUB_MICROSOFT_TENANT_ID }}
           TASK_HUB_GOOGLE_CLIENT_ID: ${{ secrets.TASK_HUB_GOOGLE_CLIENT_ID }}
           TASK_HUB_GOOGLE_CLIENT_SECRET: ${{ secrets.TASK_HUB_GOOGLE_CLIENT_SECRET }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_UPDATER_SIGNING_KEY }}

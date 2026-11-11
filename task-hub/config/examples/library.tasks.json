@@ -41,7 +41,7 @@
     {
       "id": "calendar_event",
       "title": "Plan a calendar event",
-      "description": "Prepare a meeting you can import into Outlook or Google Calendar.",
+      "description": "Prepare a meeting you can import into a calendar app.",
       "category": "Planning",
       "icon": "calendar",
       "steps": [
@@ -92,7 +92,7 @@
     {
       "id": "word_report",
       "title": "Create a Word report",
-      "description": "Put your notes into a clean, editable Microsoft Word document.",
+      "description": "Put your notes into a clean, editable document.",
       "category": "Documents",
       "icon": "document",
       "steps": [
@@ -289,7 +289,7 @@
     },
     {
       "id": "foreground_email",
-      "title": "Use Gmail or Outlook",
+      "title": "Use Gmail",
       "description": "Open your mailbox, click Compose, and visibly type a draft or send after your review.",
       "category": "Foreground",
       "icon": "mail",
@@ -298,7 +298,7 @@
           "id": "provider",
           "type": "select",
           "prompt": "Which mailbox should we open?",
-          "options": ["Gmail", "Outlook personal", "Outlook work"],
+          "options": ["Gmail"],
           "default": "Gmail",
           "description": "Uses your chosen browser. Sign in manually before running; English UI is required."
         },
@@ -347,92 +347,6 @@
           "body": "{message}",
           "delivery": "{delivery}",
           "browser": "{browser}"
-        }
-      }
-    },
-    {
-      "id": "foreground_word",
-      "title": "Write inside Microsoft Word",
-      "description": "Open Word, type your report in the editor, and save it through Save As.",
-      "category": "Foreground",
-      "icon": "document",
-      "steps": [
-        {
-          "id": "title",
-          "type": "text",
-          "prompt": "Give your report a title"
-        },
-        {
-          "id": "content",
-          "type": "textarea",
-          "prompt": "Add your report content",
-          "description": "Type up to 12,000 characters. Task Hub opens a new document and leaves it visible."
-        }
-      ],
-      "action": {
-        "type": "foreground",
-        "recipe": "word_report",
-        "fields": {
-          "title": "{title}",
-          "body": "{content}"
-        }
-      }
-    },
-    {
-      "id": "foreground_excel",
-      "title": "Enter data in Microsoft Excel",
-      "description": "Open Excel and visibly enter your CSV data cell by cell, then save the workbook.",
-      "category": "Foreground",
-      "icon": "sheet",
-      "steps": [
-        {
-          "id": "title",
-          "type": "text",
-          "prompt": "Name your workbook"
-        },
-        {
-          "id": "data",
-          "type": "textarea",
-          "prompt": "Paste your CSV data",
-          "default": "Metric,Value\nCompleted tasks,24\nHours saved,8",
-          "description": "Up to 100 rows / 500 cells. Cells are literal text, including formula-looking strings."
-        }
-      ],
-      "action": {
-        "type": "foreground",
-        "recipe": "excel_report",
-        "fields": {
-          "title": "{title}",
-          "body": "{data}"
-        }
-      }
-    },
-    {
-      "id": "foreground_powerpoint",
-      "title": "Build slides in PowerPoint",
-      "description": "Open PowerPoint, type into slide placeholders, and save the presentation.",
-      "category": "Foreground",
-      "icon": "slides",
-      "steps": [
-        {
-          "id": "title",
-          "type": "text",
-          "prompt": "What's your presentation called?"
-        },
-        {
-          "id": "slides",
-          "type": "textarea",
-          "prompt": "Outline your slides",
-          "default": "Overview\nOur priorities\nWhat we achieved\n---\nNext steps\nActions and owners",
-          "description": "Separate slides with a line containing ---. First line is the heading. Up to 20 content slides, 10 content lines each."
-        }
-      ],
-      "action": {
-        "type": "foreground",
-        "recipe": "powerpoint_deck",
-        "fields": {
-          "title": "{title}",
-          "body": "{slides}"
         }
       }
     }

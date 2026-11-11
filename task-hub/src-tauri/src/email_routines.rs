@@ -118,10 +118,7 @@ fn validate(settings: &RoutineSettings) -> Result<()> {
             "Calendar reminders must be between 0 and 40320 minutes before the event".into(),
         );
     }
-    if !matches!(
-        settings.provider.as_str(),
-        "gmail" | "microsoft" | "mailserver"
-    ) {
+    if !matches!(settings.provider.as_str(), "gmail" | "mailserver") {
         return Err("Choose Gmail or IMAP / POP3 as the email provider".into());
     }
     if settings.provider == "mailserver" && settings.calendar.as_ref().is_some_and(|c| c.enabled) {
@@ -465,7 +462,7 @@ fn claim(
             .find(|r| r.id == id)
             .ok_or("Routine not found")?;
         if !matches!(routine.settings.provider.as_str(), "gmail" | "mailserver") {
-            return Err("Microsoft support is currently unavailable. Choose Gmail or IMAP / POP3 before running this routine.".into());
+            return Err("This provider is unsupported. Choose Gmail or IMAP / POP3 before running this routine.".into());
         }
         let report_retry = retry_run.is_some_and(|id| routine.attempt.as_deref()==Some(id) && store.runs.iter().any(|r|r.id==id && r.parameters.get("_attachment_due").and_then(|v|v.as_str())==Some(due) && r.status=="failed" && r.error.as_deref().is_some_and(|e|e.starts_with(crate::attachment_rules::ISSUE_PREFIX))));
         if retry_run.is_some() && !report_retry { return Err("Only attachment preparation failures can be retried here. Inspect Gmail and history for other failures.".into()); }
@@ -551,11 +548,10 @@ pub fn automatic_tick(state: &AppState, account_ready: bool) -> Result<Option<Ru
     } else {
         None
     };
-    let microsoft: Option<String> = None;
     let custom = crate::mailserver::connected_sender();
     automatic_tick_filtered(
         state,
-        account_ready || microsoft.is_some() || custom.is_some(),
+        account_ready || custom.is_some(),
         Utc::now(),
         crate::gmail::execute,
         |routine| {
@@ -566,8 +562,6 @@ pub fn automatic_tick(state: &AppState, account_ready: bool) -> Result<Option<Ru
             }
             let account = if routine.settings.provider == "mailserver" {
                 &custom
-            } else if routine.settings.provider == "microsoft" {
-                &microsoft
             } else {
                 &google
             };
@@ -733,14 +727,14 @@ mod tests {
         let (_dir, state, now) = setup_due_automatic();
         state
             .transaction(|store| {
-                store.email_routines[0].settings.provider = "microsoft".into();
+                store.email_routines[0].settings.provider = "retired-provider".into();
                 Ok(())
             })
             .unwrap();
         let routine = state.lock().unwrap().email_routines[0].clone();
         assert_eq!(
             preview(&routine).unwrap().parameters["_provider"],
-            "microsoft"
+            "retired-provider"
         );
         assert!(automatic_tick_filtered(
             &state,
@@ -755,12 +749,12 @@ mod tests {
         let mut unsupported = settings();
         unsupported.provider = "smtp".into();
         assert!(validate(&unsupported).is_err());
-        unsupported.provider = "microsoft".into();
+        unsupported.provider = "retired-provider".into();
         unsupported.calendar = Some(CalendarSettings {
             enabled: true,
             reminder_minutes: 60,
         });
-        assert!(validate(&unsupported).is_ok());
+        assert!(validate(&unsupported).is_err());
     }
     fn setup_due_automatic() -> (tempfile::TempDir, AppState, DateTime<Utc>) {
         let dir = tempfile::tempdir().unwrap();

@@ -1,6 +1,5 @@
 Task Hub 0.7.1
 - Connect offers Gmail and IMAP/POP3, with optional SMTP sending.
-- Microsoft 365 and Outlook Classic are temporarily unavailable. Existing Microsoft routines are preserved and paused.
 - Removed the Customer Ageing import workflow.
 - Restored the original ExcelFlow menu, report layout, Settings and IG-name editor with Task Hub colours and fonts.
 - Added an automatically collapsible ExcelFlow sidebar.
