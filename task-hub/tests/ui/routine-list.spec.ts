@@ -1,4 +1,9 @@
+import { chooseRecipients, seedRecipients } from "./recipient-selection";
 import { expect, test } from "@playwright/test";
+
+test.beforeEach(async ({ page }) => {
+  await seedRecipients(page);
+});
 
 test("routine cards stay newest first after editing and support search and narrow screens", async ({
   page,
@@ -7,11 +12,9 @@ test("routine cards stay newest first after editing and support search and narro
   for (const name of ["Older report", "Newer report", "Latest report"]) {
     await page.getByRole("button", { name: "New email routine" }).click();
     await page.getByLabel("Routine name", { exact: true }).fill(name);
-    await page
-      .getByLabel("Recipient", { exact: true })
-      .fill(
-        name.startsWith("Older") ? "older@example.com" : "team@example.com",
-      );
+    await chooseRecipients(page, {
+      To: name.startsWith("Older") ? "older@example.com" : "team@example.com",
+    });
     await page.getByLabel("First date", { exact: true }).fill("2099-01-01");
     await page.getByRole("button", { name: "Save routine" }).click();
   }

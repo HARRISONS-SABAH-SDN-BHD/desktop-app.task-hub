@@ -1,3 +1,4 @@
+import { chooseRecipients, seedRecipients } from "./recipient-selection";
 import { test, expect } from "@playwright/test";
 test("recipient directory supports add, deduplication, search, deletion and routine selection", async ({
   page,
@@ -59,12 +60,7 @@ test("recipient directory supports add, deduplication, search, deletion and rout
   await expect(
     page.getByRole("region", { name: "Email history suggestions" }),
   ).toHaveCount(0);
-  await page
-    .getByLabel("Choose saved recipient", { exact: true })
-    .selectOption("manager@example.com");
-  await expect(page.getByLabel("Recipient", { exact: true })).toHaveValue(
-    "manager@example.com",
-  );
+  await chooseRecipients(page, { To: "manager@example.com" });
   await page
     .getByLabel("Recipient change", { exact: true })
     .selectOption("temporary");
@@ -105,7 +101,7 @@ test("recipient directory supports add, deduplication, search, deletion and rout
   await expect(
     page.getByLabel("Replacement recipient", { exact: true }),
   ).toHaveCount(0);
-  await page.getByLabel("Recipient", { exact: true }).fill("typed@example.com");
+  await chooseRecipients(page, { To: "manager@example.com" });
   await page.getByRole("button", { name: "Save routine", exact: true }).click();
   let settings = await page.evaluate(
     () =>
@@ -113,7 +109,7 @@ test("recipient directory supports add, deduplication, search, deletion and rout
         .settings,
   );
   expect(settings.recipient_change).toBeNull();
-  expect(settings.recipient).toBe("typed@example.com");
+  expect(settings.recipient).toBe("manager@example.com");
   expect(settings.recipient_file).toBeUndefined();
   await page
     .getByRole("button", { name: "Edit routine / recipient", exact: true })
@@ -147,10 +143,11 @@ test("recipient directory supports add, deduplication, search, deletion and rout
 test("temporary recipient dates must be valid and removed legacy file metadata cannot restrict typing", async ({
   page,
 }) => {
+  await seedRecipients(page);
   await page.goto("/");
   await page.getByRole("button", { name: "New email routine" }).click();
   await page.getByLabel("Routine name", { exact: true }).fill("Dates");
-  await page.getByLabel("Recipient", { exact: true }).fill("main@example.com");
+  await chooseRecipients(page, { To: "manager@example.com" });
   await page
     .getByLabel("Recipient change", { exact: true })
     .selectOption("temporary");
@@ -185,15 +182,13 @@ test("temporary recipient dates must be valid and removed legacy file metadata c
   await page
     .getByRole("button", { name: "Edit routine / recipient", exact: true })
     .click();
-  await page
-    .getByLabel("Recipient", { exact: true })
-    .fill("changed@example.com");
+  await chooseRecipients(page, { To: "manager@example.com" });
   await page.getByRole("button", { name: "Save routine", exact: true }).click();
   const saved = await page.evaluate(
     () =>
       JSON.parse(localStorage.getItem("taskhub.email-routines.preview.v1")!)[0]
         .settings,
   );
-  expect(saved.recipient).toBe("changed@example.com");
+  expect(saved.recipient).toBe("manager@example.com");
   expect(saved.recipient_file).toBeUndefined();
 });

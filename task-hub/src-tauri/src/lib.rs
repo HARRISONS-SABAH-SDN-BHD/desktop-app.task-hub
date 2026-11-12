@@ -396,6 +396,19 @@ mod desktop {
         )
     }
     #[tauri::command]
+    async fn send_missed_routine(
+        app: tauri::AppHandle,
+        id: String,
+        due: String,
+        parameters: Parameters,
+    ) -> Result<Run> {
+        tauri::async_runtime::spawn_blocking(move || {
+            email_routines::send_missed(&app.state::<AppState>(), &id, &due, parameters)
+        })
+        .await
+        .map_err(|e| e.to_string())?
+    }
+    #[tauri::command]
     async fn run_email_routine(
         app: tauri::AppHandle,
         id: String,
@@ -526,6 +539,7 @@ mod desktop {
                 handle_email_routine,
                 delete_email_routine,
                 run_email_routine,
+                send_missed_routine,
                 test_email_notification,
                 retry_calendar_sync,
                 gmail_status,

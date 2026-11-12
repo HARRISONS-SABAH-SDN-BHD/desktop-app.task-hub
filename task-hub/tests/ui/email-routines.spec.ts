@@ -1,4 +1,9 @@
+import { chooseRecipients, seedRecipients } from "./recipient-selection";
 import { expect, test } from "@playwright/test";
+
+test.beforeEach(async ({ page }) => {
+  await seedRecipients(page);
+});
 
 test("automatic sending is explicitly enabled, persisted, and not executed by browser preview", async ({
   page,
@@ -11,7 +16,7 @@ test("automatic sending is explicitly enabled, persisted, and not executed by br
   await page
     .getByLabel("Routine name", { exact: true })
     .fill("Scheduled email");
-  await page.getByLabel("Recipient", { exact: true }).fill("team@example.com");
+  await chooseRecipients(page, { To: "team@example.com" });
   await page.getByLabel("First date", { exact: true }).fill("2099-01-01");
   await expect(
     page.getByRole("checkbox", {
@@ -54,7 +59,7 @@ test("a due routine can prepare a draft directly without a review or send approv
     .click();
   await page.getByRole("button", { name: "New email routine" }).click();
   await page.getByLabel("Routine name", { exact: true }).fill("One-time draft");
-  await page.getByLabel("Recipient", { exact: true }).fill("team@example.com");
+  await chooseRecipients(page, { To: "team@example.com" });
   await page.getByLabel("First date", { exact: true }).fill("2020-01-01");
   await page
     .getByRole("combobox", { name: "Repeat", exact: true })
@@ -85,9 +90,7 @@ test("a saved due routine reuses templates, keeps selected recipients and persis
     .click();
   await page.getByRole("button", { name: "New email routine" }).click();
   await page.getByLabel("Routine name", { exact: true }).fill("Monthly report");
-  await page
-    .getByLabel("Recipient", { exact: true })
-    .fill("manager@example.com");
+  await chooseRecipients(page, { To: "manager@example.com" });
   await page.getByLabel("First date", { exact: true }).fill("2020-01-31");
   await page.getByRole("button", { name: "Save routine" }).click();
   await expect(
@@ -129,9 +132,7 @@ test("weekly routine requires selected days and fits a narrow screen", async ({
     .click();
   await page.getByRole("button", { name: "New email routine" }).click();
   await page.getByLabel("Routine name", { exact: true }).fill("Weekly report");
-  await page
-    .getByLabel("Recipient", { exact: true })
-    .fill("manager@example.com");
+  await chooseRecipients(page, { To: "manager@example.com" });
   await page
     .getByRole("combobox", { name: "Repeat", exact: true })
     .selectOption("weekly");

@@ -825,3 +825,78 @@
 .routine-list {
   margin-top: 10px;
 }
+
+.routine-address-summary {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.routine-address-summary > button {
+  justify-self: start;
+}
+.routine-address-summary p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.routine-recipient-dialog {
+  width: min(800px, calc(100vw - 32px));
+  max-height: 86vh;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  color: #e6eaf1;
+}
+.routine-recipient-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.routine-recipient-dialog::backdrop {
+  background: #000a;
+}
+.routine-recipient-dialog header,
+.routine-recipient-dialog footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+.routine-recipient-dialog h2,
+.routine-recipient-dialog p {
+  margin: 0;
+}
+.recipient-modal-scroll {
+  overflow: auto;
+  min-height: 80px;
+}
+.routine-recipient-dialog table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.routine-recipient-dialog th,
+.routine-recipient-dialog td {
+  padding: 10px 6px;
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+.routine-recipient-dialog th:first-child,
+.routine-recipient-dialog td:first-child {
+  text-align: left;
+  width: 70%;
+  overflow-wrap: anywhere;
+}
+.routine-recipient-dialog td span,
+.routine-recipient-dialog td small {
+  display: block;
+}
+.routine-recipient-dialog td small {
+  color: var(--muted);
+}
+.routine-recipient-dialog input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  min-height: 20px;
+  padding: 0;
+}

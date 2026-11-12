@@ -4,7 +4,7 @@ Open Recipients in the sidebar to scan addresses from a connected Gmail or IMAP/
 
 Scanning reads From, To, CC and Reply-To headers from up to 50 recent emails. It does not read message bodies or attachments and does not send, mark read or delete messages. Gmail scans recent received and sent messages; reconnect with Read email addresses and attachments enabled if needed. IMAP uses the folder configured in Connect. POP3 only sees messages still on the server. Your own account address is excluded. Repeated addresses are merged. Deleting an address removes it from the saved list. Scanning a mailbox that contains the address adds it again, including addresses deleted before this update.
 
-Routine Recipient: select a saved address or type an address. Multiple regular recipients can be separated by commas. Saved addresses are suggestions, not a restriction.
+Routine Recipient: click Choose Recipient to open the searchable email list. Assign one or more addresses to To, CC or BCC, then Apply recipients and save the routine. Cancel keeps the previous selections. Add new addresses on the Recipients page.
 
 Recipient changes: choose Temporary or Permanent, choose or type a replacement address, then set its effective date. Temporary changes include their end date and then return to the regular recipient. Remove recipient change clears the override. Save the routine to apply changes.
 
@@ -18,4 +18,4 @@ Older scan results without a recorded mailbox stay under Earlier scans — accou
 
 Routine saved-address choices are restricted to the selected sender's provider and exact scanned mailbox. Manually added contacts remain shared. Contacts from unknown earlier accounts must be rescanned before appearing in a sender-specific dropdown. The same filter applies to the regular recipient, replacement recipient, CC and BCC. Changing sender updates choices but does not erase typed addresses.
 
-CC and BCC are optional and support saved-address selection or typed addresses, separated by commas. Selecting another saved CC or BCC address adds it to that field. BCC is included in the delivery envelope; SMTP strips the Bcc header from the outgoing message. Drafts retain BCC for the sender's review.
+CC and BCC are optional selections in the same popup. Each address has one role; switching its role removes it from the other roles. At least one To address is required. BCC delivery privacy is unchanged.

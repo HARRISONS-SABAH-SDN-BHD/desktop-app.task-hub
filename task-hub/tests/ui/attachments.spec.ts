@@ -1,4 +1,9 @@
+import { chooseRecipients, seedRecipients } from "./recipient-selection";
 import { expect, test } from "@playwright/test";
+test.beforeEach(async ({ page }) => {
+  await seedRecipients(page);
+});
+
 test("saved routine retains attachment details after reload and uses them in the due preview", async ({
   page,
 }) => {
@@ -10,13 +15,9 @@ test("saved routine retains attachment details after reload and uses them in the
   await page
     .getByLabel("Routine name", { exact: true })
     .fill("Report with file");
-  await page
-    .getByLabel("Recipient", { exact: true })
-    .fill("manager@example.com");
+  await chooseRecipients(page, { To: "manager@example.com" });
   await page.getByLabel("First date", { exact: true }).fill("2020-01-01");
-  await page
-    .getByLabel("CC (optional)", { exact: true })
-    .fill("copy@example.com, team@example.com");
+  await chooseRecipients(page, { CC: "copy@example.com, team@example.com" });
   await page.getByLabel("Attachment files").setInputFiles({
     name: "monthly.csv",
     mimeType: "text/csv",

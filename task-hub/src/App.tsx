@@ -182,6 +182,17 @@ export default function App() {
       setBusy(false);
     }
   }
+  async function resendMissed(id: string, due: string) {
+    setBusy(true);
+    try {
+      const outcome = await emailRoutines.sendMissed(id, due);
+      setResult(outcome);
+      setSnapshot(await bridge.snapshot());
+      await refreshRoutines();
+    } finally {
+      setBusy(false);
+    }
+  }
   async function retryReports(id: string, due: string) {
     setBusy(true);
     try {
@@ -372,6 +383,7 @@ export default function App() {
                 recipients={recipients}
                 runs={snapshot.runs}
                 onRetry={retryReports}
+                onResend={resendMissed}
                 calendarLinks={snapshot.calendar_links ?? []}
                 busy={busy}
                 handoff={handoff}

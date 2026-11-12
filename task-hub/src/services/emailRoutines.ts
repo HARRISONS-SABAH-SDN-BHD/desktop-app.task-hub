@@ -24,6 +24,22 @@ function write(routines: EmailRoutine[]) {
   localStorage.setItem(storageKey, JSON.stringify(routines));
 }
 export const emailRoutines = {
+  async sendMissed(id: string, due: string): Promise<Run> {
+    if (!bridge.native)
+      throw new Error(
+        "Use the desktop app to send a missed occurrence. No email was sent.",
+      );
+    const plan = await this.preview(id);
+    if (plan.due !== due)
+      throw new Error(
+        "This occurrence changed. Refresh the routine before sending.",
+      );
+    return invoke("send_missed_routine", {
+      id,
+      due,
+      parameters: plan.parameters,
+    });
+  },
   async retryReports(id: string, due: string): Promise<Run> {
     if (!bridge.native)
       throw new Error(

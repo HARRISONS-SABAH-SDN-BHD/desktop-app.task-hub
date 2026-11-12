@@ -1,3 +1,4 @@
+import { RoutineRecipientPicker } from "./RoutineRecipientPicker";
 import { routineRecipients } from "../domain/recipientGroups";
 import { RecipientField } from "./RecipientField";
 import {
@@ -30,6 +31,7 @@ export function EmailRoutines({
   routines,
   runs = [],
   onRetry,
+  onResend,
   calendarLinks = [],
   busy,
   native,
@@ -45,6 +47,7 @@ export function EmailRoutines({
   recipients?: Recipient[];
   runs?: Run[];
   onRetry: (id: string, due: string) => Promise<void>;
+  onResend: (id: string, due: string) => Promise<void>;
   calendarLinks?: CalendarLink[];
   busy: boolean;
   native: boolean;
@@ -137,7 +140,7 @@ export function EmailRoutines({
         tray menu to reopen or quit. The computer must stay awake with internet
         access; browsers may be closed and Windows may be locked. Draft routines
         wait for your click; automatic routines send when due. Occurrences over
-        five minutes late need rescheduling.
+        five minutes late require Resend now or rescheduling.
       </Help>
       {native && (
         <div className="routine-actions">
@@ -498,8 +501,9 @@ export function EmailRoutines({
                   )}
                   {missedAutomatic && !routine.attempt && (
                     <p className="routine-change">
-                      The automatic send window was missed. Edit the date or
-                      time to reschedule; this occurrence will not send late.
+                      The automatic send window was missed. Choose Resend now to
+                      send this occurrence immediately, or edit the date or time
+                      to reschedule.
                     </p>
                   )}
                   <div className="button-row routine-actions">
@@ -541,6 +545,26 @@ export function EmailRoutines({
                         {settings.auto_send ? "sending" : "draft"}
                       </button>
                     )}
+                    {missedAutomatic &&
+                      !routine.attempt &&
+                      routine.next_due &&
+                      settings.enabled &&
+                      ["gmail", "mailserver"].includes(
+                        settings.provider ?? "gmail",
+                      ) && (
+                        <button
+                          className="primary"
+                          disabled={locked || !native}
+                          title="Send this missed occurrence once, using its scheduled date and saved email details"
+                          onClick={() =>
+                            void act(() =>
+                              onResend(routine.id, routine.next_due!),
+                            )
+                          }
+                        >
+                          Resend now
+                        </button>
+                      )}
                     {routine.next_due && (
                       <button
                         className="secondary"
@@ -798,38 +822,17 @@ function RoutineForm({
             placeholder="Monthly progress report"
           />
         </label>
-        <RecipientField
-          label="Recipient"
-          value={settings.recipient}
-          onChange={(value) => update("recipient", value)}
+        <RoutineRecipientPicker
+          value={{
+            recipient: settings.recipient,
+            cc: settings.cc,
+            bcc: settings.bcc,
+          }}
           recipients={senderRecipients}
-          multiple
+          onChange={(addresses) =>
+            setSettings((current) => ({ ...current, ...addresses }))
+          }
         />
-        <RecipientField
-          label="CC (optional)"
-          value={settings.cc}
-          onChange={(value) => update("cc", value)}
-          recipients={senderRecipients}
-          multiple
-          appendSelection
-          required={false}
-        />
-        <RecipientField
-          label="BCC (optional)"
-          value={settings.bcc}
-          onChange={(value) => update("bcc", value)}
-          recipients={senderRecipients}
-          multiple
-          appendSelection
-          required={false}
-        />
-        <Help label="Saved address choices">
-          Saved choices match the selected sender mailbox. Manually added
-          contacts are also available. Previously entered addresses are kept
-          when changing sender; review them before saving. Older scanned
-          contacts without an account must be rescanned to appear here. BCC
-          recipients receive the email without being listed to other recipients.
-        </Help>
         <h3 className="form-section-title">2. Write your message</h3>
         <label>
           Subject template

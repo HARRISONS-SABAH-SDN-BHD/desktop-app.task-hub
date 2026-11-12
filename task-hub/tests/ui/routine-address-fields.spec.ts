@@ -68,48 +68,78 @@ test("routine To CC BCC and recipient changes offer only sender-specific saved a
   await page
     .getByRole("button", { name: "Edit routine / recipient", exact: true })
     .click();
-  const to = page.getByLabel("Choose saved recipient", { exact: true });
-  const cc = page.getByLabel("Choose saved cc (optional)", { exact: true });
-  const bcc = page.getByLabel("Choose saved bcc (optional)", { exact: true });
-  for (const select of [to, cc, bcc]) {
-    await expect(
-      select.locator('option[value="google-contact@example.com"]'),
-    ).toHaveCount(1);
-    await expect(
-      select.locator('option[value="other-google@example.com"]'),
-    ).toHaveCount(0);
-    await expect(
-      select.locator('option[value="work-contact@example.com"]'),
-    ).toHaveCount(0);
-  }
-  await to.selectOption("google-contact@example.com");
-  await cc.selectOption("shared-manual@example.com");
-  await cc.selectOption("google-contact@example.com");
-  await expect(page.getByLabel("CC (optional)", { exact: true })).toHaveValue(
-    /shared-manual@example\.com,\s*google-contact@example\.com/,
+
+  await expect(page.getByLabel("Recipient", { exact: true })).toHaveCount(0);
+  await expect(page.getByLabel("CC (optional)", { exact: true })).toHaveCount(
+    0,
   );
-  await bcc.selectOption("shared-manual@example.com");
   await page
-    .getByLabel("BCC (optional)", { exact: true })
-    .fill("hidden-typed@example.com");
-  await page
-    .getByLabel("Recipient change", { exact: true })
-    .selectOption("temporary");
+    .getByRole("button", { name: "Choose Recipient", exact: true })
+    .click();
+  let dialog = page.getByRole("dialog", {
+    name: "Choose recipients",
+    exact: true,
+  });
   await expect(
-    page
-      .getByLabel("Choose saved replacement recipient", { exact: true })
-      .locator('option[value="work-contact@example.com"]'),
+    dialog.getByRole("checkbox", {
+      name: "To other-google@example.com",
+      exact: true,
+    }),
   ).toHaveCount(0);
+  await expect(
+    dialog.getByRole("checkbox", {
+      name: "To work-contact@example.com",
+      exact: true,
+    }),
+  ).toHaveCount(0);
+  await dialog
+    .getByRole("checkbox", {
+      name: "To google-contact@example.com",
+      exact: true,
+    })
+    .check();
+  await dialog
+    .getByRole("checkbox", {
+      name: "BCC shared-manual@example.com",
+      exact: true,
+    })
+    .check();
+  await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
+  await expect(
+    page.getByRole("region", { name: "Recipient selection", exact: true }),
+  ).toContainText("No recipients selected");
   await page
-    .getByRole("button", { name: "Remove recipient change", exact: true })
+    .getByRole("button", { name: "Choose Recipient", exact: true })
+    .click();
+  await dialog
+    .getByRole("button", { name: "Apply recipients", exact: true })
+    .click();
+  await expect(dialog.getByRole("alert")).toContainText("at least one To");
+  await dialog
+    .getByRole("checkbox", {
+      name: "To google-contact@example.com",
+      exact: true,
+    })
+    .check();
+  await dialog.getByLabel("Search recipient emails").fill("shared");
+  await dialog
+    .getByRole("checkbox", {
+      name: "BCC shared-manual@example.com",
+      exact: true,
+    })
+    .check();
+  await dialog.getByLabel("Search recipient emails").fill("");
+  await dialog
+    .getByRole("button", { name: "Apply recipients", exact: true })
     .click();
   await page.getByRole("button", { name: "Save routine", exact: true }).click();
   await page.reload();
   await page
     .getByRole("button", { name: "Preview next email", exact: true })
     .click();
-  const preview = page.getByRole("region", { name: "Routine email preview" });
-  await expect(preview).toContainText("hidden-typed@example.com");
+  await expect(
+    page.getByRole("region", { name: "Routine email preview" }),
+  ).toContainText("shared-manual@example.com");
   await page
     .getByRole("button", { name: "Email routines", exact: true })
     .click();
@@ -124,24 +154,57 @@ test("routine To CC BCC and recipient changes offer only sender-specific saved a
   await page
     .getByRole("button", { name: "Edit routine / recipient", exact: true })
     .click();
-  for (const select of [to, cc, bcc]) {
-    await expect(
-      select.locator('option[value="work-contact@example.com"]'),
-    ).toHaveCount(1);
-    await expect(
-      select.locator('option[value="google-contact@example.com"]'),
-    ).toHaveCount(0);
-  }
-  await expect(page.getByLabel("BCC (optional)", { exact: true })).toHaveValue(
-    "hidden-typed@example.com",
-  );
   await page
-    .getByLabel("CC (optional)", { exact: true })
-    .fill("manual-copy@example.com");
+    .getByRole("button", { name: "Choose Recipient", exact: true })
+    .click();
+  await expect(
+    dialog.getByRole("checkbox", {
+      name: "To work-contact@example.com",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(
+    dialog.getByRole("checkbox", {
+      name: "To other-google@example.com",
+      exact: true,
+    }),
+  ).toHaveCount(0);
+  await expect(dialog).toContainText("Previously selected address");
+  await dialog
+    .getByRole("checkbox", {
+      name: "To google-contact@example.com",
+      exact: true,
+    })
+    .uncheck();
+  await dialog
+    .getByRole("checkbox", { name: "To work-contact@example.com", exact: true })
+    .check();
+  await dialog
+    .getByRole("checkbox", {
+      name: "CC shared-manual@example.com",
+      exact: true,
+    })
+    .check();
+  await expect(
+    dialog.getByRole("checkbox", {
+      name: "BCC shared-manual@example.com",
+      exact: true,
+    }),
+  ).not.toBeChecked();
   await page.setViewportSize({ width: 390, height: 844 });
-  expect(
-    await page.evaluate(
-      () => document.documentElement.scrollWidth <= innerWidth,
-    ),
-  ).toBe(true);
+  expect(await dialog.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(
+    true,
+  );
+  await dialog
+    .getByRole("button", { name: "Apply recipients", exact: true })
+    .click();
+  await page.getByRole("button", { name: "Save routine", exact: true }).click();
+  const saved = await page.evaluate(
+    () =>
+      JSON.parse(localStorage.getItem("taskhub.email-routines.preview.v1")!)[0]
+        .settings,
+  );
+  expect(saved.recipient).toBe("work-contact@example.com");
+  expect(saved.cc).toBe("shared-manual@example.com");
+  expect(saved.bcc).toBe("");
 });

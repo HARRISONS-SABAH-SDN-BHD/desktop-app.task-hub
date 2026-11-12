@@ -445,6 +445,15 @@ pub fn retry_reports(state: &AppState, id: &str, due: &str) -> Result<Run> {
     }
     Ok(result)
 }
+pub fn send_missed(state: &AppState, id: &str, due: &str, expected: Parameters) -> Result<Run> {
+    let (task, run, direct) =
+        claim_with_late(state, id, due, expected, true, Utc::now(), None, true)?;
+    let outcome = crate::gmail::execute(state, task, run, direct)?;
+    if outcome.status == "succeeded" {
+        handle(state, id, due)?;
+    }
+    Ok(outcome)
+}
 fn claim(
     state: &AppState,
     id: &str,
@@ -453,6 +462,18 @@ fn claim(
     automatic: bool,
     now: DateTime<Utc>,
     retry_run: Option<&str>,
+) -> Result<(Task, Run, bool)> {
+    claim_with_late(state, id, due, expected, automatic, now, retry_run, false)
+}
+fn claim_with_late(
+    state: &AppState,
+    id: &str,
+    due: &str,
+    expected: Parameters,
+    automatic: bool,
+    now: DateTime<Utc>,
+    retry_run: Option<&str>,
+    explicit_late: bool,
 ) -> Result<(Task, Run, bool)> {
     // Claim occurrence and run together before any visible input. A failed or
     // uncertain attempt stays blocked until the user explicitly handles it.
@@ -471,7 +492,11 @@ fn claim(
             return Err("Routine is paused or this occurrence has already been attempted".into());
         }
         if routine.settings.auto_send != automatic { return Err("Automatic routines run only from their saved schedule. Turn off automatic sending to prepare a draft manually.".into()); }
-        if automatic && !report_retry && !automatic_eligible(routine, now) { return Err("The automatic send window has expired. Reschedule this occurrence; it was not sent.".into()); }
+        if explicit_late {
+            let stamp=routine.next_due.as_deref().and_then(|d|DateTime::parse_from_rfc3339(d).ok()).ok_or("No missed occurrence exists")?.with_timezone(&Utc);
+            if !automatic || !routine.settings.auto_send || retry_run.is_some() || now.signed_duration_since(stamp).num_seconds()<=AUTO_SEND_GRACE_SECONDS {return Err("Resend now is available only for an unattempted missed automatic occurrence".into());}
+        }
+        if automatic && !explicit_late && !report_retry && !automatic_eligible(routine, now) { return Err("The automatic send window has expired. Reschedule this occurrence; it was not sent.".into()); }
         let plan = preview(routine)?;
         if plan.due != due || plan.parameters != expected {
             return Err("Routine changed. Open its preview again before starting".into());
@@ -511,6 +536,7 @@ fn claim(
         run.parameters.insert("_provider".into(), serde_json::json!(routine.settings.provider));
         let sender = routine.settings.sender_account.as_deref().ok_or("Connect Gmail, then edit and save this routine with its sender account")?;
         run.parameters.insert("_sender_account".into(), serde_json::json!(sender));
+        if explicit_late { run.logs.push("User clicked Resend now for this missed occurrence. Send once immediately; never retry automatically.".into()); }
         if automatic { run.logs.push("Automatic sending was enabled in the saved routine. This occurrence is claimed before any browser input; failed or uncertain sends are never retried automatically.".into()); }
         runner::insert(store, run.clone())?;
         store
@@ -784,6 +810,80 @@ mod tests {
             })
             .unwrap();
         (dir, state, now)
+    }
+    #[test]
+    fn missed_send_is_explicit_and_claimed_once() {
+        let (_dir, state, now) = setup_due_automatic();
+        let routine = state.lock().unwrap().email_routines[0].clone();
+        let plan = preview(&routine).unwrap();
+        let later = now + chrono::Duration::seconds(AUTO_SEND_GRACE_SECONDS + 1);
+        assert!(claim(
+            &state,
+            &plan.id,
+            &plan.due,
+            plan.parameters.clone(),
+            true,
+            later,
+            None
+        )
+        .is_err());
+        let (_, run, direct) = claim_with_late(
+            &state,
+            &plan.id,
+            &plan.due,
+            plan.parameters.clone(),
+            true,
+            later,
+            None,
+            true,
+        )
+        .unwrap();
+        assert!(direct);
+        assert_eq!(run.parameters["delivery"], "Send directly");
+        assert!(claim_with_late(
+            &state,
+            &plan.id,
+            &plan.due,
+            plan.parameters.clone(),
+            true,
+            later,
+            None,
+            true
+        )
+        .is_err());
+        drop(state);
+    }
+    #[test]
+    fn resend_rejects_not_yet_missed_and_changed_occurrences() {
+        let (_dir, state, now) = setup_due_automatic();
+        let routine = state.lock().unwrap().email_routines[0].clone();
+        let plan = preview(&routine).unwrap();
+        assert!(claim_with_late(
+            &state,
+            &plan.id,
+            &plan.due,
+            plan.parameters.clone(),
+            true,
+            now,
+            None,
+            true
+        )
+        .is_err());
+        assert!(state.lock().unwrap().runs.is_empty());
+        let mut stale = plan.parameters.clone();
+        stale.insert("recipient".into(), serde_json::json!("wrong@example.com"));
+        assert!(claim_with_late(
+            &state,
+            &plan.id,
+            &plan.due,
+            stale,
+            true,
+            now + chrono::Duration::seconds(301),
+            None,
+            true
+        )
+        .is_err());
+        assert!(state.lock().unwrap().runs.is_empty());
     }
     #[test]
     fn automatic_send_claims_the_occurrence_once_and_uses_the_resolved_address() {

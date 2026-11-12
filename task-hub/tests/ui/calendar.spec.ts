@@ -1,4 +1,9 @@
+import { chooseRecipients, seedRecipients } from "./recipient-selection";
 import { expect, test } from "@playwright/test";
+
+test.beforeEach(async ({ page }) => {
+  await seedRecipients(page);
+});
 
 test("calendar sync is optional, persists its reminder, and remains preview-only in a browser", async ({
   page,
@@ -8,7 +13,7 @@ test("calendar sync is optional, persists its reminder, and remains preview-only
   await page
     .getByLabel("Routine name", { exact: true })
     .fill("Calendar report");
-  await page.getByLabel("Recipient", { exact: true }).fill("team@example.com");
+  await chooseRecipients(page, { To: "team@example.com" });
   const sync = page.getByRole("checkbox", { name: "Sync to Google Calendar" });
   await expect(sync).not.toBeChecked();
   await sync.check();
