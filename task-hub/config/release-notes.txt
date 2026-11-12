@@ -1,4 +1,4 @@
-Pending next release
+Task Hub 0.7.6
 - Added a Recipients sidebar page to scan recent email headers, add addresses manually, search and delete saved contacts.
 - Restored typed or saved-list routine recipients and optional temporary/permanent recipient changes, including removal of a change.
 - Removed recipient file import and the routine email-history/file suggestion panel. Existing saved recipient addresses and attachments are retained.
