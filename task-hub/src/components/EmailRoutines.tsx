@@ -1,3 +1,4 @@
+import type { RecipientUserGroup } from "../domain/recipientUserGroups";
 import { RoutineRecipientPicker } from "./RoutineRecipientPicker";
 import { routineRecipients } from "../domain/recipientGroups";
 import { RecipientField } from "./RecipientField";
@@ -42,9 +43,11 @@ export function EmailRoutines({
   handoff,
   onHandoffUsed,
   recipients = [],
+  groups = [],
 }: {
   routines: EmailRoutine[];
   recipients?: Recipient[];
+  groups?: RecipientUserGroup[];
   runs?: Run[];
   onRetry: (id: string, due: string) => Promise<void>;
   onResend: (id: string, due: string) => Promise<void>;
@@ -178,6 +181,7 @@ export function EmailRoutines({
         <RoutineForm
           settings={editing.settings}
           recipients={recipients}
+          groups={groups}
           mailserverEmail={mailserverEmail}
           senderEmail={senderEmail}
           native={native}
@@ -629,6 +633,7 @@ export function EmailRoutines({
 function RoutineForm({
   settings: initial,
   recipients,
+  groups,
   native,
   senderEmail,
   mailserverEmail = null,
@@ -638,6 +643,7 @@ function RoutineForm({
 }: {
   settings: RoutineSettings;
   recipients: Recipient[];
+  groups: RecipientUserGroup[];
   native: boolean;
   senderEmail: string | null;
   mailserverEmail?: string | null;
@@ -810,6 +816,7 @@ function RoutineForm({
           />
         </label>
         <RoutineRecipientPicker
+          groups={groups}
           value={{
             recipient: settings.recipient,
             cc: settings.cc,

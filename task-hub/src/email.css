@@ -900,3 +900,30 @@
   min-height: 20px;
   padding: 0;
 }
+
+.user-group-members {
+  display: grid;
+  gap: 8px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+.user-group-members label {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  overflow-wrap: anywhere;
+}
+.user-group-members input[type="checkbox"] {
+  width: 20px;
+  min-width: 20px;
+  height: 20px;
+  min-height: 20px;
+}
+.popup-user-groups {
+  max-height: 180px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+.popup-user-groups .recipient-card {
+  margin-top: 8px;
+}

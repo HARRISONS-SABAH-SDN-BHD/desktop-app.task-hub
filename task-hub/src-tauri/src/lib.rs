@@ -18,6 +18,7 @@ mod mailserver;
 mod model;
 #[cfg(feature = "desktop")]
 mod notifications;
+mod recipient_groups;
 mod recipients;
 #[cfg(feature = "desktop")]
 mod routine_scheduler;
@@ -40,6 +41,23 @@ mod desktop {
     use tauri::{Manager, State};
     use tauri_plugin_opener::OpenerExt;
 
+    #[tauri::command]
+    fn list_recipient_groups(state: State<'_, AppState>) -> Result<Vec<recipient_groups::Group>> {
+        recipient_groups::list(&state)
+    }
+    #[tauri::command]
+    fn save_recipient_group(
+        state: State<'_, AppState>,
+        id: Option<String>,
+        name: String,
+        members: Vec<String>,
+    ) -> Result<()> {
+        recipient_groups::save(&state, id, name, members)
+    }
+    #[tauri::command]
+    fn delete_recipient_group(state: State<'_, AppState>, id: String) -> Result<()> {
+        recipient_groups::remove(&state, id)
+    }
     #[tauri::command]
     fn list_recipients(state: State<'_, AppState>) -> Result<Vec<recipients::Contact>> {
         recipients::list(&state)
@@ -520,6 +538,9 @@ mod desktop {
             })
             .on_window_event(background::on_window_event)
             .invoke_handler(tauri::generate_handler![
+                list_recipient_groups,
+                save_recipient_group,
+                delete_recipient_group,
                 list_recipients,
                 save_recipient,
                 delete_recipient,

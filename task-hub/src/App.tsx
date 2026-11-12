@@ -1,3 +1,5 @@
+import { userGroups } from "./services/recipientUserGroups";
+import type { RecipientUserGroup } from "./domain/recipientUserGroups";
 import { Recipients } from "./components/Recipients";
 import { recipientBook } from "./services/recipients";
 import type { Recipient } from "./domain/recipients";
@@ -57,8 +59,14 @@ export default function App() {
   const [manualBusy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [recipients, setRecipients] = useState<Recipient[]>([]);
+  const [groups, setGroups] = useState<RecipientUserGroup[]>([]);
   async function refreshRecipients() {
-    setRecipients(await recipientBook.list());
+    const [contacts, groups] = await Promise.all([
+      recipientBook.list(),
+      userGroups.list(),
+    ]);
+    setRecipients(contacts);
+    setGroups(groups);
   }
   useEffect(() => {
     void refreshRecipients().catch((e) => setError(String(e)));
@@ -381,6 +389,7 @@ export default function App() {
               <EmailRoutines
                 routines={routines}
                 recipients={recipients}
+                groups={groups}
                 runs={snapshot.runs}
                 onRetry={retryReports}
                 onResend={resendMissed}
@@ -401,6 +410,7 @@ export default function App() {
             ) : page === "recipients" ? (
               <Recipients
                 recipients={recipients}
+                groups={groups}
                 refresh={refreshRecipients}
                 gmailEmail={gmailStatus.email}
                 mailserverEmail={mailStatus.config?.email ?? null}

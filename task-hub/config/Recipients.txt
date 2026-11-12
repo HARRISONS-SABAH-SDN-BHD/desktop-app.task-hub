@@ -21,3 +21,7 @@ Routine saved-address choices are restricted to the selected sender's provider a
 CC and BCC are optional selections in the same popup. Each address has one role; switching its role removes it from the other roles. At least one To address is required. BCC delivery privacy is unchanged.
 
 Current update: BCC has been removed. The routine picker now offers To and CC only. Any earlier BCC instructions above apply only to older versions; saved BCC values are ignored.
+
+User groups: in Recipients, choose Create group, enter a name and select 1–100 saved addresses. Groups can be edited or deleted. In Choose Recipient, use the group's To or CC button to add its members. Addresses are deduplicated, and assigning a group to one role moves its members out of the other role. A group is available only if every member is in the selected sender's saved list; edit the group or scan the correct mailbox if members are missing.
+
+Applying a group copies its members into the routine. Editing/deleting a group later does not change saved routines or previously scheduled recipient addresses. Reopen the recipient picker to apply an updated group explicitly.
