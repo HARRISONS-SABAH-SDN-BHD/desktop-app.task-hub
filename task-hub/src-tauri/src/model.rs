@@ -87,6 +87,8 @@ pub struct Schedule {
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Store {
     #[serde(default)]
+    pub recipient_groups: Vec<crate::recipient_groups::Group>,
+    #[serde(default)]
     pub recipients: Vec<crate::recipients::Contact>,
     #[serde(default)]
     pub calendar_links: Vec<crate::gmail::calendar::CalendarLink>,

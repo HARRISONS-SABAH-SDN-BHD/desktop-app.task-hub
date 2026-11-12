@@ -1,3 +1,5 @@
+import { RecipientUserGroups } from "./RecipientUserGroups";
+import type { RecipientUserGroup } from "../domain/recipientUserGroups";
 import { useState, type FormEvent } from "react";
 import { Help } from "./Help";
 import { recipientBook } from "../services/recipients";
@@ -13,6 +15,7 @@ import type { RecipientProvider } from "../domain/recipients";
 import type { Recipient } from "../domain/recipients";
 export function Recipients({
   recipients,
+  groups,
   refresh,
   gmailEmail,
   mailserverEmail,
@@ -20,6 +23,7 @@ export function Recipients({
   busy,
 }: {
   recipients: Recipient[];
+  groups: RecipientUserGroup[];
   refresh: () => Promise<void>;
   gmailEmail: string | null;
   mailserverEmail: string | null;
@@ -210,6 +214,12 @@ export function Recipients({
           </button>
         </fieldset>
       </form>
+      <RecipientUserGroups
+        groups={groups}
+        recipients={recipients}
+        refresh={refresh}
+        busy={locked}
+      />
       {error && (
         <p className="error" role="alert">
           {error}

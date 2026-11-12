@@ -1,3 +1,8 @@
+import {
+  addGroupAddresses,
+  groupFitsSender,
+  type RecipientUserGroup,
+} from "../domain/recipientUserGroups";
 import { useEffect, useRef, useState } from "react";
 import type { Recipient } from "../domain/recipients";
 type Addresses = { recipient: string; cc: string };
@@ -14,10 +19,12 @@ const split = (value: string) =>
 export function RoutineRecipientPicker({
   value,
   recipients,
+  groups,
   onChange,
 }: {
   value: Addresses;
   recipients: Recipient[];
+  groups: RecipientUserGroup[];
   onChange: (value: Addresses) => void;
 }) {
   const [open, setOpen] = useState(false);
@@ -41,6 +48,7 @@ export function RoutineRecipientPicker({
         <RecipientDialog
           value={value}
           recipients={recipients}
+          groups={groups}
           onCancel={() => setOpen(false)}
           onApply={(next) => {
             onChange(next);
@@ -54,11 +62,13 @@ export function RoutineRecipientPicker({
 function RecipientDialog({
   value,
   recipients,
+  groups,
   onCancel,
   onApply,
 }: {
   value: Addresses;
   recipients: Recipient[];
+  groups: RecipientUserGroup[];
   onCancel: () => void;
   onApply: (value: Addresses) => void;
 }) {
@@ -124,6 +134,50 @@ function RecipientDialog({
       <p>
         Select one or more addresses for To or CC. Choose one role per address.
       </p>
+      {!!groups.length && (
+        <section className="popup-user-groups" aria-label="Choose user group">
+          <h3>User groups</h3>
+          <p>
+            Groups are available when all members belong to this sender's saved
+            list.
+          </p>
+          {groups.map((group) => (
+            <div className="recipient-card" key={group.id}>
+              <span>
+                <strong>{group.name}</strong> ({group.members.length})
+                {!groupFitsSender(group, recipients) && (
+                  <small>
+                    Some members are missing from this sender's list.
+                  </small>
+                )}
+              </span>
+              <div className="button-row">
+                {roles.map((role) => (
+                  <button
+                    key={role.key}
+                    className="secondary"
+                    type="button"
+                    disabled={!groupFitsSender(group, recipients)}
+                    aria-label={`Add ${group.name} to ${role.title}`}
+                    onClick={() => {
+                      try {
+                        setDraft(
+                          addGroupAddresses(draft, group.members, role.key),
+                        );
+                        setError("");
+                      } catch (e) {
+                        setError(String(e));
+                      }
+                    }}
+                  >
+                    {role.title}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </section>
+      )}
       <label className="recipient-search">
         Search emails
         <input

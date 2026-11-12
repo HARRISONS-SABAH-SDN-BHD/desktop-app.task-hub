@@ -1,4 +1,4 @@
-Task Hub 0.7.9
-- Removed BCC from recipient selection and delivery. Legacy saved BCC values are ignored.
-- Configures Windows WebView software rendering internally before startup; users do not need to change hardware-acceleration settings.
-- Retains To/CC selection, sender-specific recipient lists, missed-schedule Resend now, compact UI, attachments, schedules, calendar and ExcelFlow workflows.
+Task Hub 0.7.10
+- Create, edit and delete saved recipient groups on the Recipients page.
+- Add a group's members to To or CC in Choose Recipient, with duplicate addresses removed.
+- Groups respect the selected sender's available contacts. Existing routines keep their selected addresses when a group changes.
