@@ -30,6 +30,7 @@ mod update_policy;
 #[cfg(feature = "desktop")]
 mod updates;
 mod validation;
+mod webview_runtime;
 
 #[cfg(feature = "desktop")]
 mod desktop {
@@ -489,6 +490,7 @@ mod desktop {
             .map_err(|e| e.to_string())
     }
     pub fn run() {
+        webview_runtime::configure();
         tauri::Builder::default()
             .plugin(tauri_plugin_single_instance::init(|app, _, _| {
                 if let Some(window) = app.get_webview_window("main") {

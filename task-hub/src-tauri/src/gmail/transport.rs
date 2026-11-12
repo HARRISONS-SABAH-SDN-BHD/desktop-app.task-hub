@@ -21,7 +21,6 @@ pub(super) fn mime(
     from: &str,
     to: &str,
     cc: &str,
-    bcc: &str,
     subject: &str,
     body: &str,
     id: &str,
@@ -44,12 +43,6 @@ pub(super) fn mime(
     for address in validation::cc_addresses(cc)? {
         builder = builder.cc(address.parse().map_err(|_| "Invalid CC email address")?);
     }
-    // Gmail API derives its delivery envelope from the raw message headers.
-    // SMTP removes Bcc from the wire copy separately while retaining its envelope.
-    for address in validation::bcc_addresses(bcc)? {
-        builder = builder.bcc(address.parse().map_err(|_| "Invalid BCC email address")?);
-    }
-    builder = builder.keep_bcc();
     let body = body.replace("\r\n", "\n").replace('\r', "\n");
     let message = if attachments.is_empty() {
         builder.body(body)
@@ -105,48 +98,11 @@ mod tests {
         thread,
     };
     #[test]
-    fn bcc_is_retained_for_gmail_envelope_and_rejects_header_injection() {
-        let raw = mime(
-            "sender@example.com",
-            "to@example.com",
-            "cc@example.com",
-            "hidden@example.com, private@example.com",
-            "Report",
-            "Body",
-            "bcc-test",
-            &[],
-        )
-        .unwrap();
-        let mail = String::from_utf8(URL_SAFE_NO_PAD.decode(raw).unwrap()).unwrap();
-        assert!(mail.contains("Bcc: hidden@example.com, private@example.com"));
-        assert!(mail.contains("To: to@example.com"));
-        assert!(mail.contains("Cc: cc@example.com"));
-        for bcc in [
-            "bad",
-            "hidden@example.com,",
-            "hidden@example.com\r\nCc: injected@example.com",
-        ] {
-            assert!(mime(
-                "sender@example.com",
-                "to@example.com",
-                "",
-                bcc,
-                "Report",
-                "Body",
-                "bcc-test",
-                &[]
-            )
-            .unwrap_err()
-            .contains("BCC"));
-        }
-    }
-    #[test]
     fn multiple_to_recipients_have_separate_mailboxes_and_reject_empty_or_duplicate_selection() {
         let raw = mime(
             "sender@example.com",
             "one@example.com, two@example.com",
             "cc@example.com",
-            "",
             "Report",
             "Body",
             "123",
@@ -162,17 +118,7 @@ mod tests {
             "one@example.com,",
             "one@example.com\r\nBcc: other@example.com",
         ] {
-            assert!(mime(
-                "sender@example.com",
-                to,
-                "",
-                "",
-                "Report",
-                "Body",
-                "123",
-                &[]
-            )
-            .is_err());
+            assert!(mime("sender@example.com", to, "", "Report", "Body", "123", &[]).is_err());
         }
         let task = crate::email_profile::default_config()
             .unwrap()
@@ -187,7 +133,6 @@ mod tests {
             "sender@example.com",
             "to@example.com",
             "one@example.com, two@example.com",
-            "",
             "Report",
             "Body",
             "123",
@@ -200,7 +145,6 @@ mod tests {
         let raw = mime(
             "sender@example.com",
             "to@example.com",
-            "",
             "",
             "Report",
             "Body",
@@ -219,7 +163,6 @@ mod tests {
                 "sender@example.com",
                 "to@example.com",
                 cc,
-                "",
                 "Report",
                 "Body",
                 "123",
@@ -245,7 +188,6 @@ mod tests {
             "sender@example.com",
             "to@example.com",
             "",
-            "",
             "Report",
             "Hello\n\nAttached",
             "123",
@@ -267,7 +209,6 @@ mod tests {
             "sender@example.com",
             "new@example.com",
             "",
-            "",
             "Report",
             "Hello\n\nReport body",
             "123",
@@ -281,7 +222,6 @@ mod tests {
         assert!(mime(
             "sender@example.com",
             "new@example.com",
-            "",
             "",
             "Hi\r\nBcc: other@example.com",
             "Body",

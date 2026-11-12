@@ -1,5 +1,4 @@
-Task Hub 0.7.8
-- Replaced routine To, CC and BCC fields with Choose Recipient and a searchable selection popup.
-- Select multiple addresses with To, CC and BCC checkboxes; apply or cancel changes. Sender-specific filtering and BCC privacy are retained.
-- Added Resend now for missed, unattempted automatic routines. Explicit sending is claimed once; successful sends advance the schedule. Failed or uncertain attempts cannot be resent through this action.
-- Preserves compact UI spacing, saved contacts, recipient changes, attachments, schedules, calendar and ExcelFlow workflows.
+Task Hub 0.7.9
+- Removed BCC from recipient selection and delivery. Legacy saved BCC values are ignored.
+- Configures Windows WebView software rendering internally before startup; users do not need to change hardware-acceleration settings.
+- Retains To/CC selection, sender-specific recipient lists, missed-schedule Resend now, compact UI, attachments, schedules, calendar and ExcelFlow workflows.

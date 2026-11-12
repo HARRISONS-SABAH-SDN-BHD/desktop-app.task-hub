@@ -19,3 +19,5 @@ Older scan results without a recorded mailbox stay under Earlier scans — accou
 Routine saved-address choices are restricted to the selected sender's provider and exact scanned mailbox. Manually added contacts remain shared. Contacts from unknown earlier accounts must be rescanned before appearing in a sender-specific dropdown. The same filter applies to the regular recipient, replacement recipient, CC and BCC. Changing sender updates choices but does not erase typed addresses.
 
 CC and BCC are optional selections in the same popup. Each address has one role; switching its role removes it from the other roles. At least one To address is required. BCC delivery privacy is unchanged.
+
+Current update: BCC has been removed. The routine picker now offers To and CC only. Any earlier BCC instructions above apply only to older versions; saved BCC values are ignored.

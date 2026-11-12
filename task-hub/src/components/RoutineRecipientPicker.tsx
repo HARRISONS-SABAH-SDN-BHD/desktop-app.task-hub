@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import type { Recipient } from "../domain/recipients";
-type Addresses = { recipient: string; cc: string; bcc: string };
+type Addresses = { recipient: string; cc: string };
 type Role = keyof Addresses;
 const roles: { key: Role; title: string }[] = [
   { key: "recipient", title: "To" },
   { key: "cc", title: "CC" },
-  { key: "bcc", title: "BCC" },
 ];
 const split = (value: string) =>
   value
@@ -69,7 +68,6 @@ function RecipientDialog({
   const [draft, setDraft] = useState<Record<Role, string[]>>(() => ({
     recipient: split(value.recipient),
     cc: split(value.cc),
-    bcc: split(value.bcc),
   }));
   useEffect(() => {
     const element = dialog.current!;
@@ -124,8 +122,7 @@ function RecipientDialog({
         </button>
       </header>
       <p>
-        Select one or more addresses for To, CC or BCC. Choose one role per
-        address.
+        Select one or more addresses for To or CC. Choose one role per address.
       </p>
       <label className="recipient-search">
         Search emails
@@ -210,7 +207,6 @@ function RecipientDialog({
             onApply({
               recipient: draft.recipient.join(", "),
               cc: draft.cc.join(", "),
-              bcc: draft.bcc.join(", "),
             });
           }}
         >

@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-test("routine To CC BCC and recipient changes offer only sender-specific saved addresses and preserve typed values", async ({
+test("routine To and CC popup uses sender-specific addresses and drops legacy BCC", async ({
   page,
 }) => {
   await page.goto("/");
@@ -100,7 +100,7 @@ test("routine To CC BCC and recipient changes offer only sender-specific saved a
     .check();
   await dialog
     .getByRole("checkbox", {
-      name: "BCC shared-manual@example.com",
+      name: "CC shared-manual@example.com",
       exact: true,
     })
     .check();
@@ -124,7 +124,7 @@ test("routine To CC BCC and recipient changes offer only sender-specific saved a
   await dialog.getByLabel("Search recipient emails").fill("shared");
   await dialog
     .getByRole("checkbox", {
-      name: "BCC shared-manual@example.com",
+      name: "CC shared-manual@example.com",
       exact: true,
     })
     .check();
@@ -187,10 +187,10 @@ test("routine To CC BCC and recipient changes offer only sender-specific saved a
     .check();
   await expect(
     dialog.getByRole("checkbox", {
-      name: "BCC shared-manual@example.com",
+      name: "CC shared-manual@example.com",
       exact: true,
     }),
-  ).not.toBeChecked();
+  ).toBeChecked();
   await page.setViewportSize({ width: 390, height: 844 });
   expect(await dialog.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(
     true,
@@ -206,5 +206,5 @@ test("routine To CC BCC and recipient changes offer only sender-specific saved a
   );
   expect(saved.recipient).toBe("work-contact@example.com");
   expect(saved.cc).toBe("shared-manual@example.com");
-  expect(saved.bcc).toBe("");
+  expect(saved.bcc).toBeUndefined();
 });

@@ -70,7 +70,6 @@ export function EmailRoutines({
         settings.name,
         settings.recipient,
         settings.cc ?? "",
-        settings.bcc ?? "",
         settings.subject,
       ].some((value) =>
         value.toLowerCase().includes(query.trim().toLowerCase()),
@@ -228,12 +227,7 @@ export function EmailRoutines({
                 <dd>{plan.parameters.cc}</dd>
               </>
             )}
-            {plan.parameters.bcc && (
-              <>
-                <dt>BCC</dt>
-                <dd>{plan.parameters.bcc}</dd>
-              </>
-            )}
+
             <dt>Subject</dt>
             <dd>{plan.parameters.subject}</dd>
             <dt>Message</dt>
@@ -421,11 +415,6 @@ export function EmailRoutines({
                     {settings.cc && (
                       <p>
                         CC: <strong>{settings.cc}</strong>
-                      </p>
-                    )}
-                    {settings.bcc && (
-                      <p>
-                        BCC: <strong>{settings.bcc}</strong>
                       </p>
                     )}
                     {(settings.calendar?.enabled || calendarLink) && (
@@ -664,7 +653,6 @@ function RoutineForm({
     report_rules: initial.report_rules ?? [],
     calendar: initial.calendar ?? { enabled: false, reminder_minutes: 1440 },
     cc: initial.cc ?? "",
-    bcc: initial.bcc ?? "",
     attachments: initial.attachments ?? [],
     sender_account:
       initial.sender_account ??
@@ -709,7 +697,6 @@ function RoutineForm({
     }
     try {
       validateCc(settings.cc);
-      validateCc(settings.bcc, "BCC");
       validateAttachments(settings.attachments);
       recipientAddresses(settings.recipient);
       const change = settings.recipient_change;
@@ -826,7 +813,6 @@ function RoutineForm({
           value={{
             recipient: settings.recipient,
             cc: settings.cc,
-            bcc: settings.bcc,
           }}
           recipients={senderRecipients}
           onChange={(addresses) =>

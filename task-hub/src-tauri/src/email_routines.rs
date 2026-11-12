@@ -28,8 +28,6 @@ pub struct RoutineSettings {
     pub calendar: Option<CalendarSettings>,
     #[serde(default)]
     pub cc: String,
-    #[serde(default)]
-    pub bcc: String,
     pub name: String,
     pub recipient: String,
     pub subject: String,
@@ -111,7 +109,6 @@ fn render(template: &str, due: NaiveDate) -> Result<String> {
 }
 fn validate(settings: &RoutineSettings) -> Result<()> {
     validation::cc_addresses(&settings.cc)?;
-    validation::bcc_addresses(&settings.bcc)?;
     if settings
         .calendar
         .as_ref()
@@ -370,7 +367,7 @@ fn preview(routine: &EmailRoutine) -> Result<RoutinePreview> {
         }
     }
     let parameters = serde_json::from_value(serde_json::json!({
-        "recipient": recipient, "cc": routine.settings.cc, "bcc": routine.settings.bcc, "subject": render(&routine.settings.subject, day)?,
+        "recipient": recipient, "cc": routine.settings.cc, "subject": render(&routine.settings.subject, day)?,
         "message": render(&routine.settings.message, day)?, "delivery": if routine.settings.auto_send { "Send directly" } else { "Draft" },
         "_provider": routine.settings.provider,
         "_sender_account": routine.settings.sender_account.as_deref().unwrap_or_default(),
@@ -1172,7 +1169,6 @@ mod tests {
             report_rules: Vec::new(),
             calendar: None,
             cc: String::new(),
-            bcc: String::new(),
             name: "Report".into(),
             recipient: "a@example.com".into(),
             subject: "{{previous_month}} {{previous_year}} report".into(),
@@ -1189,26 +1185,11 @@ mod tests {
         }
     }
     #[test]
-    fn bcc_survives_restart_and_defaults_blank_for_older_routines() {
-        let dir = tempfile::tempdir().unwrap();
-        let state = AppState::initialize(dir.path().into()).unwrap();
-        let mut s = settings();
-        s.bcc = "hidden@example.com, private@example.com".into();
-        save(&state, None, s).unwrap();
-        drop(state);
-        let state = AppState::initialize(dir.path().into()).unwrap();
-        let routine = state.lock().unwrap().email_routines[0].clone();
-        assert_eq!(
-            preview(&routine).unwrap().parameters["bcc"],
-            "hidden@example.com, private@example.com"
-        );
-        let mut legacy = serde_json::to_value(settings()).unwrap();
-        legacy.as_object_mut().unwrap().remove("bcc");
-        let old: RoutineSettings = serde_json::from_value(legacy).unwrap();
-        assert!(old.bcc.is_empty());
-        let mut invalid = settings();
-        invalid.bcc = "bad".into();
-        assert!(validate(&invalid).unwrap_err().contains("BCC"));
+    fn removed_bcc_is_ignored_in_legacy_settings() {
+        let mut old = serde_json::to_value(settings()).unwrap();
+        old["bcc"] = serde_json::json!("hidden@example.com");
+        let saved: RoutineSettings = serde_json::from_value(old).unwrap();
+        assert!(serde_json::to_value(saved).unwrap().get("bcc").is_none());
     }
     #[test]
     fn legacy_file_metadata_is_ignored_and_saved_addresses_remain_editable() {

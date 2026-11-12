@@ -191,10 +191,6 @@ fn deliver(state: &AppState, run: &mut Run, direct: bool) -> Result<(String, Vec
             .get("cc")
             .and_then(|v| v.as_str())
             .unwrap_or_default(),
-        run.parameters
-            .get("bcc")
-            .and_then(|v| v.as_str())
-            .unwrap_or_default(),
         text("subject")?,
         text("message")?,
         &run.id,
@@ -223,12 +219,6 @@ fn deliver(state: &AppState, run: &mut Run, direct: bool) -> Result<(String, Vec
             Ok(())
         })?;
     }
-    let custom_bcc = run
-        .parameters
-        .get("bcc")
-        .and_then(|v| v.as_str())
-        .unwrap_or_default()
-        .to_owned();
     let custom_summary;
     let (provider, id, summary) = if let Some(credential) = &custom_credential {
         custom_summary = crate::mailserver::deliver(
@@ -237,7 +227,6 @@ fn deliver(state: &AppState, run: &mut Run, direct: bool) -> Result<(String, Vec
             &raw,
             &custom_recipient,
             &custom_cc,
-            &custom_bcc,
             send,
             &run.id,
         )?;

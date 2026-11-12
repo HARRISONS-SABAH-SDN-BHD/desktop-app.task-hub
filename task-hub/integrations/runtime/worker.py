@@ -15,7 +15,7 @@ def dispatch(req):
         if operation=='mail_messages':return mailboxes.messages(config,password)
         if operation=='mail_attachments':return mailboxes.attachments(config,password,req['message_id'])
         if operation=='mail_download':return mailboxes.attachments(config,password,req['message_id'],req['attachment_id'],req['destination'])
-        if operation=='mail_deliver':return mailboxes.deliver(config,password,base64.b64decode(req['raw']),req['recipient'],req['cc'],req['send'],req.get('bcc',[]))
+        if operation=='mail_deliver':return mailboxes.deliver(config,password,base64.b64decode(req['raw']),req['recipient'],req['cc'],req['send'])
     if operation in ['generate','settings','save_agencies']:
         import engine
         from decimal import Decimal

@@ -281,9 +281,6 @@ mod tests {
 pub(crate) fn cc_addresses(value: &str) -> Result<Vec<&str>> {
     optional_addresses(value, "CC")
 }
-pub(crate) fn bcc_addresses(value: &str) -> Result<Vec<&str>> {
-    optional_addresses(value, "BCC")
-}
 fn optional_addresses<'a>(value: &'a str, field: &str) -> Result<Vec<&'a str>> {
     let error = || {
         format!("Enter valid {field} email addresses separated by commas (up to 100), or leave {field} blank.")
@@ -304,7 +301,9 @@ fn optional_addresses<'a>(value: &'a str, field: &str) -> Result<Vec<&'a str>> {
 /// Required To list: bounded, distinct and validated before MIME or SMTP submission.
 pub(crate) fn to_addresses(value: &str) -> Result<Vec<&str>> {
     if value.len() > 8000 || value.chars().any(char::is_control) {
-        return Err("Select 1–100 valid recipient addresses (up to 8,000 characters total)".into());
+        return Err(
+            "Select 1â€“100 valid recipient addresses (up to 8,000 characters total)".into(),
+        );
     }
     let addresses: Vec<_> = value.split(',').map(str::trim).collect();
     let mut seen = HashSet::new();
@@ -314,7 +313,7 @@ pub(crate) fn to_addresses(value: &str) -> Result<Vec<&str>> {
             .iter()
             .any(|v| v.len() > 254 || !valid_email(v) || !seen.insert(v.to_lowercase()))
     {
-        return Err("Select 1–100 distinct, valid recipient email addresses".into());
+        return Err("Select 1â€“100 distinct, valid recipient email addresses".into());
     }
     Ok(addresses)
 }

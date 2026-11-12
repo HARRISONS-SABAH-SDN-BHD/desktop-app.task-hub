@@ -202,9 +202,9 @@ def attachments(config,password,key,index=None,destination=None):
     if index is not None:raise ValueError('Selected workbook attachment is no longer available.')
     return items
 
-def deliver(config,password,raw,recipient,cc,send,bcc=None):
+def deliver(config,password,raw,recipient,cc,send):
     if send:
-        # BCC is an SMTP envelope recipient only. Never expose it in wire headers.
+        # Strip obsolete blind-copy headers. Only To and CC are supported.
         message=BytesParser(policy=policy.default).parsebytes(raw)
         for header in ('Bcc','Resent-Bcc'):
             if header in message:del message[header]
@@ -212,7 +212,7 @@ def deliver(config,password,raw,recipient,cc,send,bcc=None):
         client=smtp(config,password)
         try:
             recipients=recipient if isinstance(recipient,list) else [recipient]
-            envelope=list({address.lower():address for address in recipients+cc+(bcc or [])}.values())
+            envelope=list({address.lower():address for address in recipients+cc}.values())
             refused=client.sendmail(config['email'],envelope,wire)
             if refused:raise ValueError('Some recipients were refused. Inspect your provider before retrying; no retry was attempted.')
         except Exception:raise ValueError('SMTP submission failed or its outcome is uncertain. Inspect your provider before retrying. No retry was attempted.')

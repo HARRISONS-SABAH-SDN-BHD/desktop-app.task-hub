@@ -68,12 +68,17 @@ export const emailRoutines = {
   },
   async save(id: string | null, settings: RoutineSettings): Promise<void> {
     // Retain the addresses, but discard obsolete imported-file metadata on save.
-    const { recipient_file: _removed, ...current } =
-      settings as RoutineSettings & { recipient_file?: unknown };
+    const {
+      recipient_file: _removed,
+      bcc: _removedBcc,
+      ...current
+    } = settings as RoutineSettings & {
+      recipient_file?: unknown;
+      bcc?: unknown;
+    };
     settings = current;
     recipientAddresses(settings.recipient);
     validateCc(settings.cc ?? "");
-    validateCc(settings.bcc ?? "", "BCC");
     validateReportRules(
       settings.report_rules ?? [],
       settings.attachments?.length ?? 0,

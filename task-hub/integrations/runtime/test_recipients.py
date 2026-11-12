@@ -29,13 +29,8 @@ class RecipientTests(unittest.TestCase):
         with patch('mailboxes.smtp',return_value=client):
             worker.dispatch({'operation':'mail_deliver','config':self.config(),'password':'test','raw':__import__('base64').b64encode(message.as_bytes()).decode(),'recipient':['to@example.com'],'cc':['cc@example.com'],'bcc':['hidden@example.com','private@example.com','TO@example.com'],'send':True})
         client.sendmail.assert_called_once();envelope=client.sendmail.call_args.args[1];wire=client.sendmail.call_args.args[2]
-        self.assertEqual([a.lower() for a in envelope],['to@example.com','cc@example.com','hidden@example.com','private@example.com'])
+        self.assertEqual([a.lower() for a in envelope],['to@example.com','cc@example.com'])
         parsed=BytesParser(policy=policy.default).parsebytes(wire)
         self.assertIsNone(parsed.get('Bcc'));self.assertNotIn(b'hidden@example.com',wire);self.assertNotIn(b'private@example.com',wire)
         self.assertEqual(next(parsed.iter_attachments()).get_payload(decode=True),data)
-    def test_imap_draft_keeps_bcc_for_sender_review_without_smtp_submission(self):
-        client=Mock();client.append.return_value=('OK',[]);config=self.config();config['protocol']='imap';raw=b'From: me@example.com\r\nTo: to@example.com\r\nBcc: hidden@example.com\r\n\r\nBody'
-        with patch('mailboxes.incoming',return_value=client),patch('mailboxes.smtp') as smtp:
-            mailboxes.deliver(config,'test',raw,['to@example.com'],[],False,['hidden@example.com'])
-        self.assertIn(b'Bcc: hidden@example.com',client.append.call_args.args[3]);smtp.assert_not_called()
 if __name__=='__main__':unittest.main()

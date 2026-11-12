@@ -21,7 +21,6 @@ export interface RoutineSettings {
   report_rules?: ReportRule[];
   calendar?: { enabled: boolean; reminder_minutes: number } | null;
   cc?: string;
-  bcc?: string;
   name: string;
   recipient: string;
   subject: string;
@@ -60,7 +59,6 @@ export function newRoutine(): RoutineSettings {
     calendar: { enabled: false, reminder_minutes: 1440 },
     recipient: "",
     cc: "",
-    bcc: "",
     subject: "{{previous_month}} {{previous_year}} report",
     message:
       "Hello,\n\nHere is the report for {{previous_month}} {{previous_year}}.\n\nRegards,",
@@ -146,7 +144,6 @@ export function previewRoutine(routine: EmailRoutine): RoutinePreview {
     parameters: {
       recipient: active ? change.recipient : settings.recipient,
       cc: settings.cc ?? "",
-      bcc: settings.bcc ?? "",
       subject: renderTemplate(settings.subject, due),
       message: renderTemplate(settings.message, due),
       delivery: settings.auto_send ? "Send directly" : "Draft",
@@ -169,7 +166,7 @@ export function isRoutineDue(routine: EmailRoutine): boolean {
   );
 }
 
-export function validateCc(value: string, field: "CC" | "BCC" = "CC"): void {
+export function validateCc(value: string, field: "CC" = "CC"): void {
   if (!value.trim()) return;
   const addresses = value.split(",").map((address) => address.trim());
   if (
