@@ -121,7 +121,7 @@ export function EmailRoutines({
   const current = plan ? routines.find((r) => r.id === plan.id) : undefined;
   return (
     <>
-      <div className="page-heading compact">
+      <div className="page-heading compact routine-page-heading">
         <span className="eyebrow">SAVE ONCE · RUN ON SCHEDULE</span>
         <h1>Email routines</h1>
         <p>

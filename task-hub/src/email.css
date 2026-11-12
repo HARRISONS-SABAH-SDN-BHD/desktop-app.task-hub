@@ -9,15 +9,15 @@
   border: 1px solid var(--line);
   border-radius: 16px;
   background: var(--panel);
-  padding: 28px;
+  padding: 20px;
 }
 .email-panel-heading {
   display: flex;
   gap: 14px;
   align-items: center;
-  padding-bottom: 24px;
+  padding-bottom: 16px;
   border-bottom: 1px solid var(--line);
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 .email-panel-heading > div {
   flex: 1;
@@ -43,7 +43,7 @@
   padding: 0;
   margin: 0;
   display: grid;
-  gap: 22px;
+  gap: 14px;
   min-width: 0;
 }
 .email-field {
@@ -239,7 +239,7 @@
 .routine-card,
 .routine-form,
 .routine-review {
-  padding: 28px;
+  padding: 20px;
 }
 .routine-card-heading {
   display: flex;
@@ -253,11 +253,11 @@
 }
 .routine-actions {
   flex-wrap: wrap;
-  margin-top: 20px;
+  margin-top: 14px;
 }
 .routine-form label {
   display: grid;
-  gap: 8px;
+  gap: 5px;
 }
 .routine-form input,
 .routine-form select,
@@ -431,20 +431,20 @@
 }
 .form-intro {
   color: var(--muted);
-  margin: 10px 0 28px;
+  margin: 6px 0 16px;
   max-width: 68ch;
 }
 .form-section-title {
   font-size: 21px;
   line-height: 1.4;
-  padding-top: 28px;
-  margin-top: 10px;
+  padding-top: 18px;
+  margin-top: 6px;
   border-top: 1px solid var(--line);
   color: #f3f7fc;
 }
 .email-fields > label {
   display: grid;
-  gap: 8px;
+  gap: 5px;
   font-size: 16px;
   font-weight: 600;
 }
@@ -484,7 +484,7 @@
   max-width: 980px;
 }
 .routine-form-grid {
-  gap: 20px;
+  gap: 12px;
 }
 .report-rules {
   padding: 22px;
@@ -529,7 +529,7 @@
   align-items: center;
   gap: 8px;
   min-width: 0;
-  margin: 10px 0;
+  margin: 4px 0;
   color: var(--muted);
   font-weight: 400;
 }
@@ -771,4 +771,57 @@
 .ig-editor {
   max-height: 350px;
   overflow-y: auto;
+}
+
+/* Compact form rhythm without shrinking text or focus targets. */
+.routine-form small,
+.routine-card p {
+  line-height: 1.5;
+}
+.routine-card p {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+.routine-form > h2,
+.recipients-page .email-panel > h2 {
+  margin-bottom: 8px;
+}
+@media (max-width: 760px) {
+  .email-panel,
+  .routine-card,
+  .routine-form,
+  .routine-review {
+    padding: 16px;
+  }
+}
+
+/* Keep the routine introduction and toolbar close together. */
+.content:has(.routine-page-heading) {
+  padding-top: 16px;
+}
+.routine-page-heading.compact {
+  margin: 0 0 10px;
+}
+.routine-page-heading .eyebrow {
+  margin-bottom: 6px;
+}
+.routine-page-heading.compact h1 {
+  margin-top: 6px;
+}
+.routine-page-heading.compact > p {
+  margin-top: 6px;
+}
+.routine-essential {
+  margin: 0 0 4px;
+}
+.routine-page-heading ~ .routine-actions {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+.routine-toolbar {
+  margin-top: 10px;
+  gap: 12px;
+}
+.routine-list {
+  margin-top: 10px;
 }
