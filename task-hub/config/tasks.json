@@ -21,6 +21,13 @@
           "placeholder": "colleague@example.com, team@example.com"
         },
         {
+          "id": "bcc",
+          "type": "text",
+          "prompt": "BCC (optional)",
+          "required": false,
+          "placeholder": "private-copy@example.com"
+        },
+        {
           "id": "subject",
           "type": "text",
           "prompt": "What's the subject?",

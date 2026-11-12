@@ -8,14 +8,7 @@ test("calendar sync is optional, persists its reminder, and remains preview-only
   await page
     .getByLabel("Routine name", { exact: true })
     .fill("Calendar report");
-  await page
-    .getByLabel("Recipient file", { exact: true })
-    .setInputFiles({
-      name: "recipients.txt",
-      mimeType: "text/plain",
-      buffer: Buffer.from("team@example.com"),
-    });
-  await expect(page.getByText(/of 1 selected/)).toBeVisible();
+  await page.getByLabel("Recipient", { exact: true }).fill("team@example.com");
   const sync = page.getByRole("checkbox", { name: "Sync to Google Calendar" });
   await expect(sync).not.toBeChecked();
   await sync.check();

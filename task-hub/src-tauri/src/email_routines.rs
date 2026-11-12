@@ -28,10 +28,10 @@ pub struct RoutineSettings {
     pub calendar: Option<CalendarSettings>,
     #[serde(default)]
     pub cc: String,
+    #[serde(default)]
+    pub bcc: String,
     pub name: String,
     pub recipient: String,
-    #[serde(default)]
-    pub recipient_file: Option<crate::recipients::RecipientFile>,
     pub subject: String,
     pub message: String,
     pub start_date: String,
@@ -111,6 +111,7 @@ fn render(template: &str, due: NaiveDate) -> Result<String> {
 }
 fn validate(settings: &RoutineSettings) -> Result<()> {
     validation::cc_addresses(&settings.cc)?;
+    validation::bcc_addresses(&settings.bcc)?;
     if settings
         .calendar
         .as_ref()
@@ -143,7 +144,7 @@ fn validate(settings: &RoutineSettings) -> Result<()> {
     if settings.name.trim().is_empty() || settings.name.chars().count() > 100 {
         return Err("Give the routine a name of up to 100 characters".into());
     }
-    crate::recipients::validate(&settings.recipient_file, &settings.recipient)?;
+    validation::to_addresses(&settings.recipient)?;
     date(&settings.start_date)?;
     NaiveTime::parse_from_str(&settings.time, "%H:%M").map_err(|_| "Choose a valid time")?;
     if !["once", "daily", "weekly", "monthly"].contains(&settings.repeat.as_str()) {
@@ -369,7 +370,7 @@ fn preview(routine: &EmailRoutine) -> Result<RoutinePreview> {
         }
     }
     let parameters = serde_json::from_value(serde_json::json!({
-        "recipient": recipient, "cc": routine.settings.cc, "subject": render(&routine.settings.subject, day)?,
+        "recipient": recipient, "cc": routine.settings.cc, "bcc": routine.settings.bcc, "subject": render(&routine.settings.subject, day)?,
         "message": render(&routine.settings.message, day)?, "delivery": if routine.settings.auto_send { "Send directly" } else { "Draft" },
         "_provider": routine.settings.provider,
         "_sender_account": routine.settings.sender_account.as_deref().unwrap_or_default(),
@@ -1071,9 +1072,9 @@ mod tests {
             report_rules: Vec::new(),
             calendar: None,
             cc: String::new(),
+            bcc: String::new(),
             name: "Report".into(),
             recipient: "a@example.com".into(),
-            recipient_file: None,
             subject: "{{previous_month}} {{previous_year}} report".into(),
             message: "Report for {{month}} {{year}}.\n\nPrepared {{date}}.".into(),
             start_date: "2026-01-31".into(),
@@ -1088,41 +1089,39 @@ mod tests {
         }
     }
     #[test]
-    fn recipient_file_and_subset_survive_restart_without_becoming_attachments() {
+    fn bcc_survives_restart_and_defaults_blank_for_older_routines() {
         let dir = tempfile::tempdir().unwrap();
         let state = AppState::initialize(dir.path().into()).unwrap();
         let mut s = settings();
-        s.recipient = "b@example.com, c@example.com".into();
-        s.recipient_file = Some(crate::recipients::RecipientFile {
-            name: "team.csv".into(),
-            recipients: vec![
-                "a@example.com".into(),
-                "b@example.com".into(),
-                "c@example.com".into(),
-            ],
-        });
+        s.bcc = "hidden@example.com, private@example.com".into();
         save(&state, None, s).unwrap();
         drop(state);
         let state = AppState::initialize(dir.path().into()).unwrap();
         let routine = state.lock().unwrap().email_routines[0].clone();
         assert_eq!(
-            routine
-                .settings
-                .recipient_file
-                .as_ref()
-                .unwrap()
-                .recipients
-                .len(),
-            3
+            preview(&routine).unwrap().parameters["bcc"],
+            "hidden@example.com, private@example.com"
         );
-        assert_eq!(
-            preview(&routine).unwrap().parameters["recipient"],
-            "b@example.com, c@example.com"
-        );
-        assert!(routine.settings.attachments.is_empty());
-        let mut invalid = routine.settings.clone();
-        invalid.recipient = "other@example.com".into();
-        assert!(save(&state, Some(routine.id), invalid).is_err());
+        let mut legacy = serde_json::to_value(settings()).unwrap();
+        legacy.as_object_mut().unwrap().remove("bcc");
+        let old: RoutineSettings = serde_json::from_value(legacy).unwrap();
+        assert!(old.bcc.is_empty());
+        let mut invalid = settings();
+        invalid.bcc = "bad".into();
+        assert!(validate(&invalid).unwrap_err().contains("BCC"));
+    }
+    #[test]
+    fn legacy_file_metadata_is_ignored_and_saved_addresses_remain_editable() {
+        let mut value = serde_json::to_value(settings()).unwrap();
+        value["recipient_file"] =
+            serde_json::json!({"name":"team.csv","recipients":["a@example.com"]});
+        let mut saved: RoutineSettings = serde_json::from_value(value).unwrap();
+        saved.recipient = "different@example.com".into();
+        assert!(validate(&saved).is_ok());
+        assert!(serde_json::to_value(saved)
+            .unwrap()
+            .get("recipient_file")
+            .is_none());
     }
     #[test]
     fn templates_use_occurrence_not_current_month_and_preserve_blank_lines() {

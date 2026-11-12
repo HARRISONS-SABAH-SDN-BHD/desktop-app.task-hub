@@ -279,21 +279,24 @@ mod tests {
 
 /// Optional comma-separated bare email addresses; reject header injection.
 pub(crate) fn cc_addresses(value: &str) -> Result<Vec<&str>> {
-    if value.chars().any(|c| c.is_control()) || value.len() > 8000 {
-        return Err(
-            "Enter valid CC email addresses separated by commas (up to 100), or leave CC blank."
-                .into(),
-        );
+    optional_addresses(value, "CC")
+}
+pub(crate) fn bcc_addresses(value: &str) -> Result<Vec<&str>> {
+    optional_addresses(value, "BCC")
+}
+fn optional_addresses<'a>(value: &'a str, field: &str) -> Result<Vec<&'a str>> {
+    let error = || {
+        format!("Enter valid {field} email addresses separated by commas (up to 100), or leave {field} blank.")
+    };
+    if value.chars().any(char::is_control) || value.len() > 8000 {
+        return Err(error());
     }
     if value.trim().is_empty() {
         return Ok(Vec::new());
     }
     let addresses: Vec<_> = value.split(',').map(str::trim).collect();
-    if addresses.len() > 100 || addresses.iter().any(|address| !valid_email(address)) {
-        return Err(
-            "Enter valid CC email addresses separated by commas (up to 100), or leave CC blank."
-                .into(),
-        );
+    if addresses.len() > 100 || addresses.iter().any(|a| !valid_email(a)) {
+        return Err(error());
     }
     Ok(addresses)
 }

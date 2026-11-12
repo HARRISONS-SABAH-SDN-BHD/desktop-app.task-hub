@@ -1,94 +1,199 @@
 import { test, expect } from "@playwright/test";
-test("recipient file choices persist, search does not lose selections, invalid replacement keeps the valid list", async ({
+test("recipient directory supports add, deduplication, search, deletion and routine selection", async ({
   page,
 }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "New email routine" }).click();
+  await page.getByRole("button", { name: "Recipients", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Scan emails", exact: true }),
+  ).toBeDisabled();
+  await page.getByLabel("Recipient name", { exact: true }).fill("Manager");
   await page
-    .getByLabel("Routine name", { exact: true })
-    .fill("Recipient selection test");
-  const input = page.getByLabel("Recipient file", { exact: true });
-  await input.setInputFiles({
-    name: "team.csv",
-    mimeType: "text/csv",
-    buffer: Buffer.from(
-      "Name,Email\nOne,one@example.com\nTwo,two@example.com\nDuplicate,ONE@example.com\nThree,three@example.com",
-    ),
-  });
-  await expect(
-    page.getByText("3 of 3 selected", { exact: true }),
-  ).toBeVisible();
+    .getByLabel("Recipient email address", { exact: true })
+    .fill("manager@example.com");
   await page
-    .getByRole("checkbox", { name: "two@example.com", exact: true })
-    .uncheck();
-  await page.getByLabel("Search recipients").fill("three");
-  await expect(
-    page.getByRole("checkbox", { name: "one@example.com", exact: true }),
-  ).toHaveCount(0);
-  await expect(
-    page.getByText("2 of 3 selected", { exact: true }),
-  ).toBeVisible();
-  await input.setInputFiles({
-    name: "bad.csv",
-    mimeType: "text/csv",
-    buffer: Buffer.from("Email\ninvalid"),
-  });
-  await expect(page.getByRole("alert")).toContainText("row 2");
-  await expect(
-    page.getByText("2 of 3 selected", { exact: true }),
-  ).toBeVisible();
-  await page.getByLabel("Search recipients").fill("");
-  await page
-    .getByRole("button", { name: "Clear selection", exact: true })
+    .getByRole("button", { name: "Add recipient", exact: true })
     .click();
-  await page.getByRole("button", { name: "Save routine", exact: true }).click();
-  await expect(page.getByRole("alert")).toContainText("Select 1–100");
-  await page.getByRole("button", { name: "Select all", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Saved recipients (1)" }),
+  ).toBeVisible();
   await page
-    .getByRole("checkbox", { name: "two@example.com", exact: true })
-    .uncheck();
-  await page.getByLabel("First date", { exact: true }).fill("2099-01-01");
+    .getByLabel("Recipient email address", { exact: true })
+    .fill("MANAGER@example.com");
+  await page
+    .getByRole("button", { name: "Add recipient", exact: true })
+    .click();
   await expect(
-    page.getByRole("combobox", { name: "Recipient change", exact: true }),
-  ).toHaveCount(0);
+    page.getByRole("heading", { name: "Saved recipients (1)" }),
+  ).toBeVisible();
+  await page.getByLabel("Recipient name", { exact: true }).fill("Cover");
+  await page
+    .getByLabel("Recipient email address", { exact: true })
+    .fill("cover@example.com");
+  await page
+    .getByRole("button", { name: "Add recipient", exact: true })
+    .click();
   await expect(
-    page.getByRole("region", { name: "ExcelFlow report import" }),
-  ).toHaveCount(0);
-  await page.getByRole("button", { name: "Save routine", exact: true }).click();
+    page.getByRole("heading", { name: "Saved recipients (2)" }),
+  ).toBeVisible();
   await page.reload();
+  await page.getByRole("button", { name: "Recipients", exact: true }).click();
+  await page.getByLabel("Search saved recipients").fill("cover");
+  await expect(
+    page.getByRole("button", {
+      name: "Delete manager@example.com",
+      exact: true,
+    }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("button", { name: "Delete cover@example.com", exact: true }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Email routines", exact: true })
+    .click();
+  await page.getByRole("button", { name: "New email routine" }).click();
+  await page.getByLabel("Routine name", { exact: true }).fill("New routine");
+  await expect(page.getByLabel("Recipient file", { exact: true })).toHaveCount(
+    0,
+  );
+  await expect(
+    page.getByRole("region", { name: "Email history suggestions" }),
+  ).toHaveCount(0);
+  await page
+    .getByLabel("Choose saved recipient", { exact: true })
+    .selectOption("manager@example.com");
+  await expect(page.getByLabel("Recipient", { exact: true })).toHaveValue(
+    "manager@example.com",
+  );
+  await page
+    .getByLabel("Recipient change", { exact: true })
+    .selectOption("temporary");
+  await page
+    .getByLabel("Choose saved replacement recipient", { exact: true })
+    .selectOption("cover@example.com");
+  await page.getByLabel("Effective from", { exact: true }).fill("2099-01-01");
+  await page
+    .getByLabel("Through (inclusive)", { exact: true })
+    .fill("2099-01-07");
+  await page.getByLabel("First date", { exact: true }).fill("2099-01-01");
+  await page.getByRole("button", { name: "Save routine", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Preview next email", exact: true })
+    .click();
+  await expect(
+    page.getByRole("region", { name: "Routine email preview" }),
+  ).toContainText("cover@example.com");
+  await page.getByRole("button", { name: "Recipients", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Delete cover@example.com", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Saved recipients (1)" }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Email routines", exact: true })
+    .click();
   await page
     .getByRole("button", { name: "Edit routine / recipient", exact: true })
     .click();
   await expect(
-    page.getByRole("checkbox", { name: "one@example.com", exact: true }),
-  ).toBeChecked();
+    page.getByLabel("Replacement recipient", { exact: true }),
+  ).toHaveValue("cover@example.com");
+  await page
+    .getByRole("button", { name: "Remove recipient change", exact: true })
+    .click();
   await expect(
-    page.getByRole("checkbox", { name: "two@example.com", exact: true }),
-  ).not.toBeChecked();
-  await expect(
-    page.getByRole("checkbox", { name: "three@example.com", exact: true }),
-  ).toBeChecked();
+    page.getByLabel("Replacement recipient", { exact: true }),
+  ).toHaveCount(0);
+  await page.getByLabel("Recipient", { exact: true }).fill("typed@example.com");
   await page.getByRole("button", { name: "Save routine", exact: true }).click();
-  const settings = await page.evaluate(
+  let settings = await page.evaluate(
     () =>
       JSON.parse(localStorage.getItem("taskhub.email-routines.preview.v1")!)[0]
         .settings,
   );
-  expect(settings.recipient).toBe("one@example.com, three@example.com");
-  expect(settings.attachments).toEqual([]);
-  expect(settings.report_rules).toEqual([]);
   expect(settings.recipient_change).toBeNull();
-  expect(settings.recipient_file.name).toBe("team.csv");
+  expect(settings.recipient).toBe("typed@example.com");
+  expect(settings.recipient_file).toBeUndefined();
+  await page
+    .getByRole("button", { name: "Edit routine / recipient", exact: true })
+    .click();
+  await page
+    .getByLabel("Recipient change", { exact: true })
+    .selectOption("permanent");
+  await page
+    .getByLabel("Replacement recipient", { exact: true })
+    .fill("new@example.com");
+  await page.getByLabel("Effective from", { exact: true }).fill("2099-01-01");
+  await expect(
+    page.getByLabel("Through (inclusive)", { exact: true }),
+  ).toHaveCount(0);
+  await page.getByRole("button", { name: "Save routine", exact: true }).click();
+  await page.reload();
   await page
     .getByRole("button", { name: "Preview next email", exact: true })
     .click();
-  const preview = page.getByRole("region", { name: "Routine email preview" });
-  await expect(preview).toContainText("one@example.com, three@example.com");
-  await expect(preview).not.toContainText("two@example.com");
+  await expect(
+    page.getByRole("region", { name: "Routine email preview" }),
+  ).toContainText("new@example.com");
+  await page.getByRole("button", { name: "Recipients", exact: true }).click();
   await page.setViewportSize({ width: 390, height: 844 });
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
+});
+test("temporary recipient dates must be valid and removed legacy file metadata cannot restrict typing", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "New email routine" }).click();
+  await page.getByLabel("Routine name", { exact: true }).fill("Dates");
+  await page.getByLabel("Recipient", { exact: true }).fill("main@example.com");
+  await page
+    .getByLabel("Recipient change", { exact: true })
+    .selectOption("temporary");
+  await page
+    .getByLabel("Replacement recipient", { exact: true })
+    .fill("cover@example.com");
+  await page.getByLabel("Effective from", { exact: true }).fill("2099-01-07");
+  await page
+    .getByLabel("Through (inclusive)", { exact: true })
+    .fill("2099-01-01");
+  await page.getByRole("button", { name: "Save routine", exact: true }).click();
+  expect(
+    await page
+      .getByLabel("Through (inclusive)", { exact: true })
+      .evaluate((input: HTMLInputElement) => input.validity.rangeUnderflow),
+  ).toBe(true);
+  await page
+    .getByRole("button", { name: "Remove recipient change", exact: true })
+    .click();
+  await page.getByLabel("First date", { exact: true }).fill("2099-01-01");
+  await page.getByRole("button", { name: "Save routine", exact: true }).click();
+  await page.evaluate(() => {
+    const key = "taskhub.email-routines.preview.v1";
+    const rows = JSON.parse(localStorage.getItem(key)!);
+    rows[0].settings.recipient_file = {
+      name: "old.csv",
+      recipients: ["main@example.com"],
+    };
+    localStorage.setItem(key, JSON.stringify(rows));
+  });
+  await page.reload();
+  await page
+    .getByRole("button", { name: "Edit routine / recipient", exact: true })
+    .click();
+  await page
+    .getByLabel("Recipient", { exact: true })
+    .fill("changed@example.com");
+  await page.getByRole("button", { name: "Save routine", exact: true }).click();
+  const saved = await page.evaluate(
+    () =>
+      JSON.parse(localStorage.getItem("taskhub.email-routines.preview.v1")!)[0]
+        .settings,
+  );
+  expect(saved.recipient).toBe("changed@example.com");
+  expect(saved.recipient_file).toBeUndefined();
 });

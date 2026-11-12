@@ -1,0 +1,21 @@
+Recipients
+
+Open Recipients in the sidebar to scan addresses from a connected Gmail or IMAP/POP3 mailbox, add an address manually, search the list or delete an address.
+
+Scanning reads From, To, CC and Reply-To headers from up to 50 recent emails. It does not read message bodies or attachments and does not send, mark read or delete messages. Gmail scans recent received and sent messages; reconnect with Read email addresses and attachments enabled if needed. IMAP uses the folder configured in Connect. POP3 only sees messages still on the server. Your own account address is excluded. Repeated addresses are merged. Deleting an address removes it from the saved list. Scanning a mailbox that contains the address adds it again, including addresses deleted before this update.
+
+Routine Recipient: select a saved address or type an address. Multiple regular recipients can be separated by commas. Saved addresses are suggestions, not a restriction.
+
+Recipient changes: choose Temporary or Permanent, choose or type a replacement address, then set its effective date. Temporary changes include their end date and then return to the regular recipient. Remove recipient change clears the override. Save the routine to apply changes.
+
+Deleting a saved contact does not rewrite existing routines or their recipient changes. Existing recipients remain editable even when they are no longer listed.
+
+Recipient file import and the Find recipients and files from email panel have been removed. Existing selected addresses and outgoing attachments are preserved. Attachments use Add files.
+
+Saved recipients are grouped into Gmail and IMAP / POP3 tabs. Each tab has an account dropdown with the currently connected mailbox and previously scanned mailboxes. The same address can belong to more than one mailbox. Scanning records the provider and mailbox; switching a connected account does not mix its scan results with another account's results. Reconnect a previously scanned account to scan it again; these dropdowns do not sign in multiple mailboxes simultaneously.
+
+Older scan results without a recorded mailbox stay under Earlier scans — account unknown. Rescanning associates matching addresses with the current account. Manually added contacts remain available in both tabs. Deleting an address removes it from the saved list across groups; routines keep their saved addresses.
+
+Routine saved-address choices are restricted to the selected sender's provider and exact scanned mailbox. Manually added contacts remain shared. Contacts from unknown earlier accounts must be rescanned before appearing in a sender-specific dropdown. The same filter applies to the regular recipient, replacement recipient, CC and BCC. Changing sender updates choices but does not erase typed addresses.
+
+CC and BCC are optional and support saved-address selection or typed addresses, separated by commas. Selecting another saved CC or BCC address adds it to that field. BCC is included in the delivery envelope; SMTP strips the Bcc header from the outgoing message. Drafts retain BCC for the sender's review.

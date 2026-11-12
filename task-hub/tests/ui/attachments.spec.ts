@@ -11,13 +11,8 @@ test("saved routine retains attachment details after reload and uses them in the
     .getByLabel("Routine name", { exact: true })
     .fill("Report with file");
   await page
-    .getByLabel("Recipient file", { exact: true })
-    .setInputFiles({
-      name: "recipients.txt",
-      mimeType: "text/plain",
-      buffer: Buffer.from("manager@example.com"),
-    });
-  await expect(page.getByText(/of 1 selected/)).toBeVisible();
+    .getByLabel("Recipient", { exact: true })
+    .fill("manager@example.com");
   await page.getByLabel("First date", { exact: true }).fill("2020-01-01");
   await page
     .getByLabel("CC (optional)", { exact: true })

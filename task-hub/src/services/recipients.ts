@@ -1,37 +1,57 @@
 import { invoke } from "@tauri-apps/api/core";
 import { bridge } from "./bridge";
-import {
-  MAX_RECIPIENT_FILE,
-  parseRecipientText,
-  validateRecipientFile,
-  type RecipientFile,
-} from "../domain/recipients";
-export async function importRecipientFile(file: File): Promise<RecipientFile> {
-  if (!/\.(csv|txt|xlsx)$/i.test(file.name))
-    throw new Error("Choose a CSV, TXT or XLSX recipient file.");
-  if (file.size > MAX_RECIPIENT_FILE)
-    throw new Error("Recipient files must be 2 MB or smaller.");
-  let recipients: string[];
-  if (bridge.native) {
-    const bytes = new Uint8Array(await file.arrayBuffer());
-    let binary = "";
-    for (let i = 0; i < bytes.length; i += 8192)
-      binary += String.fromCharCode(...bytes.subarray(i, i + 8192));
-    recipients = await invoke<string[]>("import_recipient_file", {
-      name: file.name,
-      data: btoa(binary),
-    });
-  } else {
-    if (/\.xlsx$/i.test(file.name))
-      throw new Error(
-        "Excel recipient import is available in the desktop app. Use CSV or TXT in browser preview.",
-      );
-    recipients = parseRecipientText(
-      await file.text(),
-      /\.csv$/i.test(file.name),
-    );
-  }
-  const result = { name: file.name, recipients };
-  validateRecipientFile(result, recipients.join(", "));
-  return result;
+import { validRecipient, type Recipient } from "../domain/recipients";
+const key = "taskhub.recipients.preview.v1";
+interface Book {
+  recipients: Recipient[];
 }
+function read(): Book {
+  return JSON.parse(localStorage.getItem(key) ?? '{"recipients":[]}') as Book;
+}
+export const recipientBook = {
+  async list(): Promise<Recipient[]> {
+    return bridge.native
+      ? invoke("list_recipients")
+      : read().recipients.sort((a, b) =>
+          (a.name || a.email).localeCompare(b.name || b.email),
+        );
+  },
+  async save(email: string, name: string): Promise<void> {
+    email = email.trim().toLowerCase();
+    name = name.trim();
+    if (
+      !validRecipient(email) ||
+      name.length > 100 ||
+      /[\x00-\x1f\x7f]/.test(name)
+    )
+      throw new Error(
+        "Enter a valid email address and a name of up to 100 characters.",
+      );
+    if (bridge.native) return invoke("save_recipient", { email, name });
+    const book = read();
+    const index = book.recipients.findIndex((c) => c.email === email);
+    const contact: Recipient = { email, name, source: "manual" };
+    if (index >= 0)
+      book.recipients[index] = {
+        ...contact,
+        accounts: book.recipients[index].accounts,
+      };
+    else {
+      if (book.recipients.length >= 10000)
+        throw new Error("The recipient list is full.");
+      book.recipients.push(contact);
+    }
+    localStorage.setItem(key, JSON.stringify({ recipients: book.recipients }));
+  },
+  async remove(email: string): Promise<void> {
+    if (bridge.native) return invoke("delete_recipient", { email });
+    const book = read();
+    book.recipients = book.recipients.filter((c) => c.email !== email);
+    localStorage.setItem(key, JSON.stringify({ recipients: book.recipients }));
+  },
+  async scan(provider: string, sender: string): Promise<number> {
+    if (!bridge.native)
+      throw new Error("Email scanning is available in the desktop app.");
+    return invoke("scan_recipients", { provider, sender });
+  },
+};

@@ -1,5 +1,10 @@
-import { RecipientPicker } from "./RecipientPicker";
-import { validateRecipientFile } from "../domain/recipients";
+import { routineRecipients } from "../domain/recipientGroups";
+import { RecipientField } from "./RecipientField";
+import {
+  recipientAddresses,
+  validRecipient,
+  type Recipient,
+} from "../domain/recipients";
 import type { AttachmentRef } from "../domain/attachments";
 import { Help } from "./Help";
 import { useEffect, useState, type FormEvent } from "react";
@@ -34,8 +39,10 @@ export function EmailRoutines({
   onRun,
   handoff,
   onHandoffUsed,
+  recipients = [],
 }: {
   routines: EmailRoutine[];
+  recipients?: Recipient[];
   runs?: Run[];
   onRetry: (id: string, due: string) => Promise<void>;
   calendarLinks?: CalendarLink[];
@@ -60,6 +67,7 @@ export function EmailRoutines({
         settings.name,
         settings.recipient,
         settings.cc ?? "",
+        settings.bcc ?? "",
         settings.subject,
       ].some((value) =>
         value.toLowerCase().includes(query.trim().toLowerCase()),
@@ -167,6 +175,7 @@ export function EmailRoutines({
       {editing ? (
         <RoutineForm
           settings={editing.settings}
+          recipients={recipients}
           mailserverEmail={mailserverEmail}
           senderEmail={senderEmail}
           native={native}
@@ -214,6 +223,12 @@ export function EmailRoutines({
               <>
                 <dt>CC</dt>
                 <dd>{plan.parameters.cc}</dd>
+              </>
+            )}
+            {plan.parameters.bcc && (
+              <>
+                <dt>BCC</dt>
+                <dd>{plan.parameters.bcc}</dd>
               </>
             )}
             <dt>Subject</dt>
@@ -403,6 +418,11 @@ export function EmailRoutines({
                     {settings.cc && (
                       <p>
                         CC: <strong>{settings.cc}</strong>
+                      </p>
+                    )}
+                    {settings.bcc && (
+                      <p>
+                        BCC: <strong>{settings.bcc}</strong>
                       </p>
                     )}
                     {(settings.calendar?.enabled || calendarLink) && (
@@ -595,6 +615,7 @@ export function EmailRoutines({
 
 function RoutineForm({
   settings: initial,
+  recipients,
   native,
   senderEmail,
   mailserverEmail = null,
@@ -603,6 +624,7 @@ function RoutineForm({
   onCancel,
 }: {
   settings: RoutineSettings;
+  recipients: Recipient[];
   native: boolean;
   senderEmail: string | null;
   mailserverEmail?: string | null;
@@ -618,6 +640,7 @@ function RoutineForm({
     report_rules: initial.report_rules ?? [],
     calendar: initial.calendar ?? { enabled: false, reminder_minutes: 1440 },
     cc: initial.cc ?? "",
+    bcc: initial.bcc ?? "",
     attachments: initial.attachments ?? [],
     sender_account:
       initial.sender_account ??
@@ -631,6 +654,11 @@ function RoutineForm({
   ) {
     setSettings((s) => ({ ...s, [key]: value }));
   }
+  const senderRecipients = routineRecipients(
+    recipients,
+    settings.provider,
+    settings.sender_account,
+  );
   function save(event: FormEvent) {
     event.preventDefault();
     setError("");
@@ -657,8 +685,22 @@ function RoutineForm({
     }
     try {
       validateCc(settings.cc);
+      validateCc(settings.bcc, "BCC");
       validateAttachments(settings.attachments);
-      validateRecipientFile(settings.recipient_file, settings.recipient);
+      recipientAddresses(settings.recipient);
+      const change = settings.recipient_change;
+      if (change) {
+        if (!validRecipient(change.recipient))
+          throw new Error("Enter a valid replacement recipient email address.");
+        if (
+          !change.from ||
+          (change.until !== null &&
+            (!change.until || change.until < change.from))
+        )
+          throw new Error(
+            "Recipient change end date must be on or after its start date.",
+          );
+      }
     } catch (e) {
       setError(String(e));
       return;
@@ -667,7 +709,7 @@ function RoutineForm({
       setError("Wait for the files to finish adding.");
       return;
     }
-    onSave({ ...settings, report_rules: [], recipient_change: null });
+    onSave({ ...settings, report_rules: [] });
   }
   return (
     <form className="email-panel routine-form" onSubmit={save}>
@@ -676,11 +718,10 @@ function RoutineForm({
         Choose who receives the email, what to include, and when it should run.
         Optional settings can be left as they are.
       </Help>
-      {(!!initial.report_rules?.length || !!initial.recipient_change) && (
+      {!!initial.report_rules?.length && (
         <p className="notice">
-          Saving this routine removes its previous report rules and recipient
-          changes. Confirm the selected recipients and add all files you want to
-          send below.
+          Saving this routine removes its previous report rules. Add all files
+          you want to send below.
         </p>
       )}
       <fieldset disabled={locked || attachmentBusy} className="email-fields">
@@ -757,32 +798,38 @@ function RoutineForm({
             placeholder="Monthly progress report"
           />
         </label>
-        <RecipientPicker
-          file={settings.recipient_file}
-          selected={settings.recipient}
-          disabled={locked}
-          onBusyChange={setAttachmentBusy}
-          onChange={(file, selected) =>
-            setSettings((s) => ({
-              ...s,
-              recipient_file: file,
-              recipient: selected,
-            }))
-          }
+        <RecipientField
+          label="Recipient"
+          value={settings.recipient}
+          onChange={(value) => update("recipient", value)}
+          recipients={senderRecipients}
+          multiple
         />
-        <label>
-          CC (optional)
-          <input
-            type="email"
-            multiple
-            aria-label="CC (optional)"
-            maxLength={8000}
-            value={settings.cc}
-            onChange={(e) => update("cc", e.target.value)}
-            placeholder="colleague@example.com, team@example.com"
-          />
-          <small>Separate multiple email addresses with commas.</small>
-        </label>
+        <RecipientField
+          label="CC (optional)"
+          value={settings.cc}
+          onChange={(value) => update("cc", value)}
+          recipients={senderRecipients}
+          multiple
+          appendSelection
+          required={false}
+        />
+        <RecipientField
+          label="BCC (optional)"
+          value={settings.bcc}
+          onChange={(value) => update("bcc", value)}
+          recipients={senderRecipients}
+          multiple
+          appendSelection
+          required={false}
+        />
+        <Help label="Saved address choices">
+          Saved choices match the selected sender mailbox. Manually added
+          contacts are also available. Previously entered addresses are kept
+          when changing sender; review them before saving. Older scanned
+          contacts without an account must be rescanned to appear here. BCC
+          recipients receive the email without being listed to other recipients.
+        </Help>
         <h3 className="form-section-title">2. Write your message</h3>
         <label>
           Subject template
@@ -958,6 +1005,122 @@ function RoutineForm({
               calendar event when Task Hub is running and connected. Email
               contents, recipients and files are not copied to the calendar.
             </Help>
+          </>
+        )}
+        <h3 className="form-section-title">6. Recipient changes (optional)</h3>
+        <Help label="Recipient changes">
+          Use a replacement address from an effective date, temporarily or
+          permanently. The scheduled occurrence date determines which address is
+          used. A temporary change includes its end date, then returns to the
+          regular Recipient. Remove the change to use the regular Recipient for
+          future occurrences.
+        </Help>
+        <label>
+          Recipient change
+          <select
+            aria-label="Recipient change"
+            value={
+              !settings.recipient_change
+                ? "none"
+                : settings.recipient_change.until === null
+                  ? "permanent"
+                  : "temporary"
+            }
+            onChange={(e) => {
+              const mode = e.target.value;
+              update(
+                "recipient_change",
+                mode === "none"
+                  ? null
+                  : {
+                      recipient: settings.recipient_change?.recipient ?? "",
+                      from:
+                        settings.recipient_change?.from ?? settings.start_date,
+                      until:
+                        mode === "permanent"
+                          ? null
+                          : (settings.recipient_change?.until ??
+                            settings.recipient_change?.from ??
+                            settings.start_date),
+                      note: settings.recipient_change?.note ?? "",
+                    },
+              );
+            }}
+          >
+            <option value="none">Use the regular recipient</option>
+            <option value="temporary">Temporarily use another recipient</option>
+            <option value="permanent">Permanently change from a date</option>
+          </select>
+        </label>
+        {settings.recipient_change && (
+          <>
+            <RecipientField
+              label="Replacement recipient"
+              value={settings.recipient_change.recipient}
+              recipients={senderRecipients}
+              onChange={(value) =>
+                update("recipient_change", {
+                  ...settings.recipient_change!,
+                  recipient: value,
+                })
+              }
+            />
+            <div className="routine-form-grid">
+              <label>
+                Effective from
+                <input
+                  aria-label="Effective from"
+                  type="date"
+                  required
+                  value={settings.recipient_change.from}
+                  onChange={(e) =>
+                    update("recipient_change", {
+                      ...settings.recipient_change!,
+                      from: e.target.value,
+                    })
+                  }
+                />
+              </label>
+              {settings.recipient_change.until !== null && (
+                <label>
+                  Through (inclusive)
+                  <input
+                    aria-label="Through (inclusive)"
+                    type="date"
+                    required
+                    min={settings.recipient_change.from}
+                    value={settings.recipient_change.until}
+                    onChange={(e) =>
+                      update("recipient_change", {
+                        ...settings.recipient_change!,
+                        until: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+              )}
+            </div>
+            <label>
+              Reminder note (optional)
+              <input
+                aria-label="Reminder note"
+                maxLength={500}
+                value={settings.recipient_change.note}
+                onChange={(e) =>
+                  update("recipient_change", {
+                    ...settings.recipient_change!,
+                    note: e.target.value,
+                  })
+                }
+              />
+            </label>
+            <button
+              type="button"
+              className="secondary"
+              onClick={() => update("recipient_change", null)}
+            >
+              Remove recipient change
+            </button>
           </>
         )}
       </fieldset>

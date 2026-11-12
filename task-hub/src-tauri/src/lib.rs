@@ -40,10 +40,28 @@ mod desktop {
     use tauri_plugin_opener::OpenerExt;
 
     #[tauri::command]
-    async fn import_recipient_file(name: String, data: String) -> Result<Vec<String>> {
-        tauri::async_runtime::spawn_blocking(move || recipients::import(name, data))
-            .await
-            .map_err(|e| e.to_string())?
+    fn list_recipients(state: State<'_, AppState>) -> Result<Vec<recipients::Contact>> {
+        recipients::list(&state)
+    }
+    #[tauri::command]
+    fn save_recipient(state: State<'_, AppState>, email: String, name: String) -> Result<()> {
+        recipients::save(&state, email, name)
+    }
+    #[tauri::command]
+    fn delete_recipient(state: State<'_, AppState>, email: String) -> Result<()> {
+        recipients::remove(&state, email)
+    }
+    #[tauri::command]
+    async fn scan_recipients(
+        app: tauri::AppHandle,
+        provider: String,
+        sender: String,
+    ) -> Result<usize> {
+        tauri::async_runtime::spawn_blocking(move || {
+            recipients::scan(&app.state::<AppState>(), &provider, &sender)
+        })
+        .await
+        .map_err(|e| e.to_string())?
     }
     #[tauri::command]
     fn update_status(app: tauri::AppHandle) -> Result<updates::UpdateStatus> {
@@ -487,7 +505,10 @@ mod desktop {
             })
             .on_window_event(background::on_window_event)
             .invoke_handler(tauri::generate_handler![
-                import_recipient_file,
+                list_recipients,
+                save_recipient,
+                delete_recipient,
+                scan_recipients,
                 update_status,
                 check_updates,
                 install_update,

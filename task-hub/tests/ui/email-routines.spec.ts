@@ -11,14 +11,7 @@ test("automatic sending is explicitly enabled, persisted, and not executed by br
   await page
     .getByLabel("Routine name", { exact: true })
     .fill("Scheduled email");
-  await page
-    .getByLabel("Recipient file", { exact: true })
-    .setInputFiles({
-      name: "recipients.txt",
-      mimeType: "text/plain",
-      buffer: Buffer.from("team@example.com"),
-    });
-  await expect(page.getByText(/of 1 selected/)).toBeVisible();
+  await page.getByLabel("Recipient", { exact: true }).fill("team@example.com");
   await page.getByLabel("First date", { exact: true }).fill("2099-01-01");
   await expect(
     page.getByRole("checkbox", {
@@ -61,14 +54,7 @@ test("a due routine can prepare a draft directly without a review or send approv
     .click();
   await page.getByRole("button", { name: "New email routine" }).click();
   await page.getByLabel("Routine name", { exact: true }).fill("One-time draft");
-  await page
-    .getByLabel("Recipient file", { exact: true })
-    .setInputFiles({
-      name: "recipients.txt",
-      mimeType: "text/plain",
-      buffer: Buffer.from("team@example.com"),
-    });
-  await expect(page.getByText(/of 1 selected/)).toBeVisible();
+  await page.getByLabel("Recipient", { exact: true }).fill("team@example.com");
   await page.getByLabel("First date", { exact: true }).fill("2020-01-01");
   await page
     .getByRole("combobox", { name: "Repeat", exact: true })
@@ -100,13 +86,8 @@ test("a saved due routine reuses templates, keeps selected recipients and persis
   await page.getByRole("button", { name: "New email routine" }).click();
   await page.getByLabel("Routine name", { exact: true }).fill("Monthly report");
   await page
-    .getByLabel("Recipient file", { exact: true })
-    .setInputFiles({
-      name: "recipients.txt",
-      mimeType: "text/plain",
-      buffer: Buffer.from("manager@example.com"),
-    });
-  await expect(page.getByText(/of 1 selected/)).toBeVisible();
+    .getByLabel("Recipient", { exact: true })
+    .fill("manager@example.com");
   await page.getByLabel("First date", { exact: true }).fill("2020-01-31");
   await page.getByRole("button", { name: "Save routine" }).click();
   await expect(
@@ -149,13 +130,8 @@ test("weekly routine requires selected days and fits a narrow screen", async ({
   await page.getByRole("button", { name: "New email routine" }).click();
   await page.getByLabel("Routine name", { exact: true }).fill("Weekly report");
   await page
-    .getByLabel("Recipient file", { exact: true })
-    .setInputFiles({
-      name: "recipients.txt",
-      mimeType: "text/plain",
-      buffer: Buffer.from("manager@example.com"),
-    });
-  await expect(page.getByText(/of 1 selected/)).toBeVisible();
+    .getByLabel("Recipient", { exact: true })
+    .fill("manager@example.com");
   await page
     .getByRole("combobox", { name: "Repeat", exact: true })
     .selectOption("weekly");

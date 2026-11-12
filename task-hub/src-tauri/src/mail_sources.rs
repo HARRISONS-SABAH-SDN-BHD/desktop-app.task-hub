@@ -155,7 +155,7 @@ fn bounded(path: &Path, limit: u64) -> Result<Vec<u8>> {
     }
     Ok(bytes)
 }
-fn json_response(response: reqwest::blocking::Response, limit: u64) -> Result<Value> {
+pub(crate) fn json_response(response: reqwest::blocking::Response, limit: u64) -> Result<Value> {
     if !response.status().is_success() {
         return Err(format!(
             "Mail source returned HTTP {}. Check the connection and permissions.",
@@ -172,7 +172,7 @@ fn json_response(response: reqwest::blocking::Response, limit: u64) -> Result<Va
     }
     serde_json::from_slice(&bytes).map_err(|_| "Mail source returned an unreadable response".into())
 }
-fn endpoint(base: &str, segments: &[&str]) -> Result<url::Url> {
+pub(crate) fn endpoint(base: &str, segments: &[&str]) -> Result<url::Url> {
     let mut url = url::Url::parse(base).map_err(|_| "Invalid mail API URL")?;
     {
         let mut path = url.path_segments_mut().map_err(|_| "Invalid API path")?;
