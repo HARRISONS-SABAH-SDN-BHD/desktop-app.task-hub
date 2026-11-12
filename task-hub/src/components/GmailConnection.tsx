@@ -228,7 +228,7 @@ export function GmailConnection({
                 checked={readAccess}
                 onChange={(e) => setReadAccess(e.target.checked)}
               />
-              Read email attachments for ExcelFlow
+              Read email addresses and attachments (Recipients / ExcelFlow)
             </label>
             <label className="routine-check">
               <input

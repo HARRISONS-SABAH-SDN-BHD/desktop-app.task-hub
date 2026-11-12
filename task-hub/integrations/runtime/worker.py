@@ -7,17 +7,15 @@ def progress(message,percent):print(json.dumps({'type':'progress','message':str(
 def dispatch(req):
     operation=req.get('operation')
     if operation=='ping':return {'version':1}
-    if operation=='read_recipients':
-        import recipients
-        return recipients.read(req.get('name'),req.get('data'))
     if operation.startswith('mail_'):
         import mailboxes
         config=req['config'];password=req['password'];mailboxes.validate(config,password)
+        if operation=='mail_contacts':return [contact for message in mailboxes.messages(config,password) for contact in message.get('contacts',[])]
         if operation=='mail_connect':return mailboxes.connect(config,password)
         if operation=='mail_messages':return mailboxes.messages(config,password)
         if operation=='mail_attachments':return mailboxes.attachments(config,password,req['message_id'])
         if operation=='mail_download':return mailboxes.attachments(config,password,req['message_id'],req['attachment_id'],req['destination'])
-        if operation=='mail_deliver':return mailboxes.deliver(config,password,base64.b64decode(req['raw']),req['recipient'],req['cc'],req['send'])
+        if operation=='mail_deliver':return mailboxes.deliver(config,password,base64.b64decode(req['raw']),req['recipient'],req['cc'],req['send'],req.get('bcc',[]))
     if operation in ['generate','settings','save_agencies']:
         import engine
         from decimal import Decimal

@@ -1,4 +1,4 @@
-import { validateRecipientFile } from "../domain/recipients";
+import { recipientAddresses } from "../domain/recipients";
 import { validateAttachments } from "../domain/attachments";
 import { reportFiles } from "./reportFiles";
 import { localDate } from "../domain/emailRoutines";
@@ -51,8 +51,13 @@ export const emailRoutines = {
     return read();
   },
   async save(id: string | null, settings: RoutineSettings): Promise<void> {
-    validateRecipientFile(settings.recipient_file, settings.recipient);
+    // Retain the addresses, but discard obsolete imported-file metadata on save.
+    const { recipient_file: _removed, ...current } =
+      settings as RoutineSettings & { recipient_file?: unknown };
+    settings = current;
+    recipientAddresses(settings.recipient);
     validateCc(settings.cc ?? "");
+    validateCc(settings.bcc ?? "", "BCC");
     validateReportRules(
       settings.report_rules ?? [],
       settings.attachments?.length ?? 0,

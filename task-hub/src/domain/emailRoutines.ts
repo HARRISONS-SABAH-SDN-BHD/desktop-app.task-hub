@@ -2,8 +2,6 @@ import type { ReportRule } from "./reportRules";
 import type { Parameters } from "./types";
 import type { AttachmentRef } from "./attachments";
 
-import type { RecipientFile } from "./recipients";
-
 export interface RecipientChange {
   recipient: string;
   from: string;
@@ -23,9 +21,9 @@ export interface RoutineSettings {
   report_rules?: ReportRule[];
   calendar?: { enabled: boolean; reminder_minutes: number } | null;
   cc?: string;
+  bcc?: string;
   name: string;
   recipient: string;
-  recipient_file?: RecipientFile;
   subject: string;
   message: string;
   start_date: string;
@@ -62,6 +60,7 @@ export function newRoutine(): RoutineSettings {
     calendar: { enabled: false, reminder_minutes: 1440 },
     recipient: "",
     cc: "",
+    bcc: "",
     subject: "{{previous_month}} {{previous_year}} report",
     message:
       "Hello,\n\nHere is the report for {{previous_month}} {{previous_year}}.\n\nRegards,",
@@ -147,6 +146,7 @@ export function previewRoutine(routine: EmailRoutine): RoutinePreview {
     parameters: {
       recipient: active ? change.recipient : settings.recipient,
       cc: settings.cc ?? "",
+      bcc: settings.bcc ?? "",
       subject: renderTemplate(settings.subject, due),
       message: renderTemplate(settings.message, due),
       delivery: settings.auto_send ? "Send directly" : "Draft",
@@ -169,7 +169,7 @@ export function isRoutineDue(routine: EmailRoutine): boolean {
   );
 }
 
-export function validateCc(value: string): void {
+export function validateCc(value: string, field: "CC" | "BCC" = "CC"): void {
   if (!value.trim()) return;
   const addresses = value.split(",").map((address) => address.trim());
   if (
@@ -181,6 +181,6 @@ export function validateCc(value: string): void {
     )
   )
     throw new Error(
-      "Enter valid CC email addresses separated by commas (up to 100), or leave CC blank.",
+      `Enter valid ${field} email addresses separated by commas (up to 100), or leave ${field} blank.`,
     );
 }

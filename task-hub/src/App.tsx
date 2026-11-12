@@ -1,3 +1,6 @@
+import { Recipients } from "./components/Recipients";
+import { recipientBook } from "./services/recipients";
+import type { Recipient } from "./domain/recipients";
 import { Connect } from "./components/Connect";
 import { ExcelFlow } from "./components/ExcelFlow";
 import {
@@ -35,6 +38,7 @@ import {
 
 const pages = [
   { id: "routines", title: "Email routines", icon: CalendarClock },
+  { id: "recipients", title: "Recipients", icon: Mail },
   { id: "history", title: "Email history", icon: HistoryIcon },
   { id: "excelflow", title: "ExcelFlow", icon: Mail },
   { id: "connection", title: "Connect", icon: CircleHelp },
@@ -52,6 +56,13 @@ export default function App() {
   const [result, setResult] = useState<Run>();
   const [manualBusy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [recipients, setRecipients] = useState<Recipient[]>([]);
+  async function refreshRecipients() {
+    setRecipients(await recipientBook.list());
+  }
+  useEffect(() => {
+    void refreshRecipients().catch((e) => setError(String(e)));
+  }, []);
   const [routines, setRoutines] = useState<EmailRoutine[]>([]);
   const [mailStatus, setMailStatus] = useState(emptyMailServerStatus);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -358,6 +369,7 @@ export default function App() {
             ) : page === "routines" ? (
               <EmailRoutines
                 routines={routines}
+                recipients={recipients}
                 runs={snapshot.runs}
                 onRetry={retryReports}
                 calendarLinks={snapshot.calendar_links ?? []}
@@ -373,6 +385,15 @@ export default function App() {
                 native={bridge.native}
                 refresh={refreshRoutines}
                 onRun={runRoutine}
+              />
+            ) : page === "recipients" ? (
+              <Recipients
+                recipients={recipients}
+                refresh={refreshRecipients}
+                gmailEmail={gmailStatus.email}
+                mailserverEmail={mailStatus.config?.email ?? null}
+                native={bridge.native}
+                busy={busy}
               />
             ) : page === "history" ? (
               <History

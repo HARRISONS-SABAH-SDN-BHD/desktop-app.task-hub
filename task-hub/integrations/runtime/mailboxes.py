@@ -5,7 +5,7 @@ from mail_errors import server_reply
 from email import policy
 from email.parser import BytesParser
 from email.header import decode_header, make_header
-from email.utils import parseaddr
+from email.utils import parseaddr, getaddresses
 from pathlib import Path
 MAX_MESSAGE=100*1024*1024
 
@@ -140,7 +140,11 @@ def pop_ids(client):
 
 def message_info(raw,key):
     message=BytesParser(policy=policy.default).parsebytes(raw,headersonly=True)
-    return {'id':key,'subject':text(message.get('Subject')),'sender':text(message.get('From')),'received':text(message.get('Date'))}
+    contacts=[]
+    for header in ('From','To','Cc','Reply-To'):
+        for name,address in getaddresses(message.get_all(header,[]))[:100]:
+            contacts.append({'email':address.lower(),'name':str(name)[:100],'source':'mailserver'})
+    return {'id':key,'subject':text(message.get('Subject')),'sender':text(message.get('From')),'received':text(message.get('Date')),'contacts':contacts}
 
 def messages(config,password):
     client=incoming(config,password)
@@ -150,7 +154,7 @@ def messages(config,password):
             validity=imap_select(client,config.get('folder') or 'INBOX');status,data=client.uid('search',None,'ALL')
             if status!='OK':raise ValueError('Could not search the IMAP folder.')
             for uid in reversed((data[0] or b'').split()[-50:]):
-                status,data=client.uid('fetch',uid,'(BODY.PEEK[HEADER.FIELDS (SUBJECT FROM DATE)])')
+                status,data=client.uid('fetch',uid,'(BODY.PEEK[HEADER.FIELDS (SUBJECT FROM TO CC REPLY-TO DATE)])')
                 if status=='OK':
                     raw=b''.join(item[1] for item in data if isinstance(item,tuple));result.append(message_info(raw,validity+':'+uid.decode('ascii')))
         else:
@@ -198,13 +202,18 @@ def attachments(config,password,key,index=None,destination=None):
     if index is not None:raise ValueError('Selected workbook attachment is no longer available.')
     return items
 
-def deliver(config,password,raw,recipient,cc,send):
+def deliver(config,password,raw,recipient,cc,send,bcc=None):
     if send:
+        # BCC is an SMTP envelope recipient only. Never expose it in wire headers.
+        message=BytesParser(policy=policy.default).parsebytes(raw)
+        for header in ('Bcc','Resent-Bcc'):
+            if header in message:del message[header]
+        wire=message.as_bytes(policy=policy.SMTP)
         client=smtp(config,password)
         try:
             recipients=recipient if isinstance(recipient,list) else [recipient]
-            envelope=list({address.lower():address for address in recipients+cc}.values())
-            refused=client.sendmail(config['email'],envelope,raw)
+            envelope=list({address.lower():address for address in recipients+cc+(bcc or [])}.values())
+            refused=client.sendmail(config['email'],envelope,wire)
             if refused:raise ValueError('Some recipients were refused. Inspect your provider before retrying; no retry was attempted.')
         except Exception:raise ValueError('SMTP submission failed or its outcome is uncertain. Inspect your provider before retrying. No retry was attempted.')
         finally:

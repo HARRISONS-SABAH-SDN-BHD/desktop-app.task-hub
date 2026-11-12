@@ -119,6 +119,7 @@ pub fn deliver(
     raw: &str,
     recipient: &str,
     cc: &str,
+    bcc: &str,
     send: bool,
     run_id: &str,
 ) -> Result<String> {
@@ -138,7 +139,7 @@ pub fn deliver(
         ));
     }
     let result = crate::runtime::request(
-        json!({"operation":"mail_deliver","config":credential.config,"password":credential.password,"raw":STANDARD.encode(bytes),"recipient":crate::validation::to_addresses(recipient)?,"cc":crate::validation::cc_addresses(cc)?,"send":send}),
+        json!({"operation":"mail_deliver","config":credential.config,"password":credential.password,"raw":STANDARD.encode(bytes),"recipient":crate::validation::to_addresses(recipient)?,"cc":crate::validation::cc_addresses(cc)?,"bcc":crate::validation::bcc_addresses(bcc)?,"send":send}),
     )?;
     Ok(result["detail"]
         .as_str()
