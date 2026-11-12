@@ -1578,20 +1578,20 @@ textarea::placeholder {
 
 .recipients-page {
   display: grid;
-  gap: 20px;
+  gap: 14px;
 }
 .recipient-directory {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
-  gap: 14px;
-  margin-top: 18px;
+  gap: 10px;
+  margin-top: 12px;
 }
 .recipient-card {
   border: 1px solid var(--border, #344457);
   border-radius: 10px;
-  padding: 16px;
+  padding: 12px;
   display: flex;
-  gap: 14px;
+  gap: 10px;
   align-items: flex-start;
   justify-content: space-between;
   overflow-wrap: anywhere;
@@ -1605,7 +1605,7 @@ textarea::placeholder {
 }
 .recipient-field {
   display: grid;
-  gap: 12px;
+  gap: 6px;
   min-width: 0;
 }
 .saved-recipient-select {
@@ -1613,7 +1613,7 @@ textarea::placeholder {
 }
 .recipient-search {
   display: grid;
-  gap: 8px;
+  gap: 5px;
 }
 
 .recipient-search input {
@@ -1634,8 +1634,8 @@ textarea::placeholder {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 18px;
+  gap: 10px;
+  margin-bottom: 12px;
 }
 .recipient-list-heading h2 {
   margin: 0;
@@ -1654,13 +1654,13 @@ textarea::placeholder {
   border-color: #7fdfd4;
 }
 .recipient-account-filter {
-  margin-bottom: 18px;
+  margin-bottom: 12px;
 }
 .recipient-card strong {
   display: block;
 }
 .recipient-card small {
   display: block;
-  margin-top: 8px;
+  margin-top: 4px;
   line-height: 1.6;
 }
